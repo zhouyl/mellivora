@@ -5,7 +5,7 @@ namespace Mellivora;
 use Mellivora\Config\Ini;
 use Mellivora\Config\Json;
 use Mellivora\Config\Php;
-use Mellivora\Config\xml;
+use Mellivora\Config\Xml;
 use Mellivora\Config\Yaml;
 
 /**
@@ -55,7 +55,7 @@ class Config
         'yaml' => Yaml::class,
         'ini'  => Ini::class,
         'json' => Json::class,
-        'xml'  => xml::class,
+        'xml'  => Xml::class,
     ];
 
     /**

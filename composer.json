@@ -16,7 +16,7 @@
         {
             "type": "composer",
             "url": "https://packagist.phpcomposer.com"
-        },
+        }
     ],
     "require": {
         "php": ">=7.0.0"

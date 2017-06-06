@@ -1,0 +1,32 @@
+{
+    "name": "mellivora/framework",
+    "type": "library",
+    "description": "Mellivora Framework of SlimPHP",
+    "homepage": "http://git.eformax.com/mellivora/framework",
+    "authors": [
+        {
+            "name": "zhouyl",
+            "email": "81438567@qq.com"
+        }
+    ],
+    "repositories": [
+        {
+            "packagist": false
+        },
+        {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        },
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mellivora\\": ""
+        },
+        "files": [
+            "functions.php"
+        ]
+    },
+}

@@ -1,12 +1,6 @@
 <?php
 
-namespace Mellivora;
-
-use Mellivora\Config\Ini;
-use Mellivora\Config\Json;
-use Mellivora\Config\Php;
-use Mellivora\Config\Xml;
-use Mellivora\Config\Yaml;
+namespace Mellivora\Config;
 
 /**
  * 配置文件处理类
@@ -15,7 +9,7 @@ use Mellivora\Config\Yaml;
  *
  * <code>
  * // 设定加载规则
- * Config::setup([
+ * $config = new Mellivora\Config\Autoloader([
  *     'paths'   => [
  *         dirname(__DIR__) . '/config',
  *         dirname(__DIR__) . '/config/production',
@@ -30,27 +24,27 @@ use Mellivora\Config\Yaml;
  * ]);
  *
  *  // 加载配置文件
- *  var_dump(Config::load('db'));
+ *  var_dump($config->load('db'));
  *
  *  // 加载配置数据
- *  var_dump(Config::get('db.default.host'));
+ *  var_dump($config->get('db.default.host'));
  * </code>
  */
-class Config
+class Autoloader
 {
     /**
      * 默认的配置文件的查找路径，查找顺序从最后注册的路径开始（数组的底部）
      *
      * @var array
      */
-    protected static $paths = [];
+    protected $paths = [];
 
     /**
      * 配置文件将按照扩展名的先后顺序查找并载入
      *
      * @var array
      */
-    protected static $parsers = [
+    protected $parsers = [
         'php'  => Php::class,
         'yaml' => Yaml::class,
         'ini'  => Ini::class,
@@ -65,49 +59,82 @@ class Config
      *
      * @param array $options
      */
-    public static function setup(array $options)
+    public function setup(array $options)
     {
         foreach ($options as $method => $value) {
-            method_exists(self::class, $method) && self::$method($value);
+            $method = 'set' . ucfirst($method);
+            if (method_exists($this, $method)) {
+                $this->$method($value);
+            }
         }
+    }
+
+    /**
+     * 设定配置查找路径
+     *
+     * @param  array                         $paths
+     * @return Mellivora\Config\Autoloader
+     */
+    public function setPaths(array $paths)
+    {
+        $this->paths = $paths;
+
+        return $this;
     }
 
     /**
      * 新增配置查找路径，最后增加的路径会被优先查找
      *
-     * @param array $paths
+     * @param  string                        $path
+     * @return Mellivora\Config\Autoloader
      */
-    public static function paths(array $paths)
+    public function addPath($path)
     {
-        foreach ($paths as $path) {
-            array_push(self::$paths, $path);
-        }
+        array_push($this->paths, $path);
+
+        return $this;
     }
 
     /**
      * 设定配置文件解释器
      *
-     * @param array $parsers
+     * @param array                        $parsers
+     * @param Mellivora\Config\NativeArray $parser
      */
-    public static function parsers(array $parsers)
+    public function setParsers(array $parsers)
     {
-        self::$parsers = $parsers;
+        $this->parsers = $parsers;
+
+        return $this;
+    }
+
+    /**
+     * 新增配置解释器
+     *
+     * @param string                       $ext
+     * @param Mellivora\Config\NativeArray $parser
+     */
+    public function addParser($ext, NativeArray $parser)
+    {
+        $this->parsers[$ext] = $parser;
+
+        return $this;
     }
 
     /**
      * 根据名称，自动查找并载入配置
      *
      * <code>
-     * Mellivora\Config::load('db');
+     * $config->load('db');
      * </code>
      *
      * @param  string         $name
      * @return Object|false
      */
-    public static function load($name)
+    public function load($name)
     {
-        foreach (array_reverse(self::$paths) as $path) {
-            foreach (self::$parsers as $ext => $parser) {
+        foreach (array_reverse($this->paths) as $path) {
+            foreach ($this->parsers as $ext => $parser) {
                 $file = "$path/$name.$ext";
                 if (is_file($file)) {
                     return new $parser($file);
@@ -122,17 +149,17 @@ class Config
      * 根据配置名称及路径，加载配置数据
      *
      * <code>
-     * Mellivora\Config::get('db.default.host');
+     * $config->get('db.default.host');
      * </code>
      *
      * @param  string  $namePath
      * @param  mixed   $default
      * @return mixed
      */
-    public static function get($namePath, $default = null)
+    public function get($namePath, $default = null)
     {
         $parts  = explode('.', $namePath);
-        $config = self::load(array_shift($parts));
+        $config = $this->load(array_shift($parts));
 
         if ($config === false) {
             return $default;

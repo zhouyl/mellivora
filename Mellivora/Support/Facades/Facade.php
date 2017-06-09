@@ -1,9 +1,9 @@
 <?php
 
-namespace Mellivora\Facades;
+namespace Mellivora\Support\Facades;
 
 use Mellivora\Application\App;
-use Mellivora\Exception;
+use RuntimeException;
 
 /**
  * 仿 Laravel 的 Facades 设计的伪装类
@@ -37,12 +37,12 @@ class Facade
     /**
      * Get the registered name of the component.
      *
-     * @throws Mellivora\Exception
+     * @throws RuntimeException
      * @return string
      */
     protected static function getFacadeAccessor()
     {
-        throw new Exception('Facade does not implement getFacadeAccessor method.');
+        throw new RuntimeException('Facade does not implement getFacadeAccessor method.');
     }
 
     /**
@@ -105,9 +105,9 @@ class Facade
     /**
      * Handle dynamic, static calls to the object.
      *
-     * @param  string                $method
-     * @param  array                 $args
-     * @throws Mellivora\Exception
+     * @param  string             $method
+     * @param  array              $args
+     * @throws RuntimeException
      * @return mixed
      */
     public static function __callStatic($method, $args)
@@ -115,7 +115,7 @@ class Facade
         $instance = static::getFacadeRoot();
 
         if (!$instance) {
-            throw new Exception('A facade root has not been set.');
+            throw new RuntimeException('A facade root has not been set.');
         }
 
         return $instance->$method(...$args);

@@ -2,7 +2,7 @@
 
 namespace Mellivora\Application;
 
-use Mellivora\Facades\Facade;
+use Mellivora\Support\Facades\Facade;
 use Slim\App as SlimApp;
 
 /**

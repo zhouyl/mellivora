@@ -2,6 +2,8 @@
 
 namespace Mellivora\Config;
 
+use RuntimeException;
+
 /**
  * yaml 格式配置文件解释器
  */
@@ -10,14 +12,14 @@ class Yaml extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string                            $file
-     * @param  Closure[]                         $callbacks
-     * @throws Mellivora\Config\ParseException
+     * @param  string             $file
+     * @param  Closure[]          $callbacks
+     * @throws RuntimeException
      */
     public function __construct($file, array $callbacks = [])
     {
         if (!extension_loaded('yaml')) {
-            throw new Exception('Yaml extension not loaded');
+            throw new RuntimeException('Yaml extension not loaded');
         }
 
         if ($callbacks) {

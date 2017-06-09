@@ -3,17 +3,17 @@
 namespace Mellivora\Facades;
 
 /**
- * @see Mellivora\Config\Autoloader
+ * @see Mellivora\Application\App
  */
-class Config extends Facade
+class App extends Facade
 {
     /**
      * Get the registered name of the component.
      *
-     * @return string
+     * @return Mellivora\Application\App
      */
     protected static function getFacadeAccessor()
     {
-        return 'config';
+        return parent::getFacadeApplication();
     }
 }

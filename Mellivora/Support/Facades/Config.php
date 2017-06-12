@@ -1,6 +1,6 @@
 <?php
 
-namespace Mellivora\Support\\Facades;
+namespace Mellivora\Support\Facades;
 
 /**
  * @see Mellivora\Config\Autoloader

@@ -45,4 +45,44 @@ class Container extends SlimContainer
             }
         }
     }
+
+    /**
+     * 调用 Container 的 offsetSet 方法
+     *
+     * @see   Pimple\Container::offsetSet
+     *
+     * @param string $id
+     * @param mixed  $value
+     */
+    public function set($id, $value)
+    {
+        return parent::offsetSet($id, $value);
+    }
+
+    /**
+     * 调用 Container 的 offsetUnset 方法
+     *
+     * @see   Pimple\Container::offsetUnset
+     *
+     * @param string $id
+     * @param mixed  $value
+     */
+    public function remove($id)
+    {
+        return parent::offsetUnset($id);
+    }
+
+    /********************************************************************************
+     * 魔术方法补充，__get/__isset 已经在 Slim\Container 中实现
+     *******************************************************************************/
+
+    public function __set($id, $value)
+    {
+        return parent::offsetSet($id, $value);
+    }
+
+    public function __unset($id)
+    {
+        return parent::offsetUnset($id);
+    }
 }

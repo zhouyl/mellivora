@@ -41,7 +41,7 @@ class Container extends SlimContainer
     {
         if ($this->has('providers')) {
             foreach ($this->get('providers') as $class) {
-                (new $class())->register($this);
+                $this->register(new $class);
             }
         }
     }

@@ -2,10 +2,13 @@
 
 namespace Mellivora\Config;
 
+use ArrayAccess;
+use Countable;
+
 /**
  * 使用原生数组构建的配置基础类
  */
-class NativeArray implements \ArrayAccess, \Countable
+class NativeArray implements ArrayAccess, Countable
 {
     /**
      * 构造方法

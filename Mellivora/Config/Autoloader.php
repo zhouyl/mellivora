@@ -2,6 +2,9 @@
 
 namespace Mellivora\Config;
 
+use ArrayAccess;
+use RuntimeException;
+
 /**
  * 配置文件处理类
  *
@@ -30,7 +33,7 @@ namespace Mellivora\Config;
  *  var_dump($config->get('db.default.host'));
  * </code>
  */
-class Autoloader
+class Autoloader implements ArrayAccess
 {
     /**
      * 默认的配置文件的查找路径，查找顺序从最后注册的路径开始（数组的底部）
@@ -51,6 +54,16 @@ class Autoloader
         'json' => Json::class,
         'xml'  => Xml::class,
     ];
+
+    /**
+     * 构造方法
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        $this->setup($options);
+    }
 
     /**
      * 配置文件自动加载参数配置
@@ -170,5 +183,29 @@ class Autoloader
         }
 
         return $config->get(implode('.', $parts), $default);
+    }
+
+    /********************************************************************************
+     * 通过对 ArrayAccess 的支持，使配置加载更自由
+     *******************************************************************************/
+
+    public function offsetGet($index)
+    {
+        return $this->get($index);
+    }
+
+    public function offsetSet($index, $value)
+    {
+        throw new RuntimeException('Can not set the config data');
+    }
+
+    public function offsetUnset($index)
+    {
+        throw new RuntimeException('Can not unset the config data');
+    }
+
+    public function offsetExists($index)
+    {
+        return $this->get($index) !== null;
     }
 }

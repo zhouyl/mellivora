@@ -16,7 +16,7 @@ trait Singleton
         return self::$instance;
     }
 
-    public function asSingleton()
+    public function registerSingleton()
     {
         self::$instance = $this;
 

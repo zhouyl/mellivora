@@ -5,29 +5,6 @@ use Mellivora\Support\Collection;
 use Mellivora\Support\HigherOrderTapProxy;
 use Mellivora\Support\Str;
 
-if (!function_exists('append_config')) {
-    /**
-     * Assign high numeric IDs to a config item to force appending.
-     *
-     * @param  array   $array
-     * @return array
-     */
-    function append_config(array $array)
-    {
-        $start = 9999;
-
-        foreach ($array as $key => $value) {
-            if (is_numeric($key)) {
-                $start++;
-
-                $array[$start] = Arr::pull($array, $key);
-            }
-        }
-
-        return $array;
-    }
-}
-
 if (!function_exists('array_add')) {
     /**
      * Add an element to an array using "dot" notation if it doesn't exist.
@@ -339,6 +316,19 @@ if (!function_exists('class_basename')) {
         $class = is_object($class) ? get_class($class) : $class;
 
         return basename(str_replace('\\', '/', $class));
+    }
+}
+
+if (!function_exists('normalize_path')) {
+    /**
+     * Normalized the path string.
+     *
+     * @param  string   $path
+     * @return string
+     */
+    function normalize_path($path)
+    {
+        return preg_replace('/[\\\\\/]+/', DIRECTORY_SEPARATOR, (string) $path);
     }
 }
 

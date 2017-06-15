@@ -4,6 +4,7 @@ namespace Mellivora\Support;
 
 use ArrayAccess;
 use Mellivora\Support\Traits\Macroable;
+use Traversable;
 
 class Arr
 {
@@ -526,5 +527,37 @@ class Arr
     public static function wrap($value)
     {
         return !is_array($value) ? [$value] : $value;
+    }
+
+    /**
+     * 将对像转换为数组
+     *
+     * @param  mixed   $object
+     * @return array
+     */
+    public static function convert($object)
+    {
+        if ($object instanceof \Traversable) {
+            $array = iterator_to_array($object);
+        } elseif (method_exists($object, 'toArray')) {
+            $array = $object->toArray();
+        } elseif (method_exists($object, 'asArray')) {
+            $array = $object->toArray();
+        } elseif (method_exists($object, 'as_array')) {
+            $array = $object->toArray();
+        } elseif (method_exists($object, 'getArrayCopy')) {
+            $array = $object->toArray();
+        } elseif (is_object($object)) {
+            $array = get_object_vars($object);
+        } else {
+            $array = (array) $object;
+        }
+
+        $data = [];
+        foreach ($array as $key => $value) {
+            $data[$key] = is_object($value) ? self::convert($value) : $value;
+        }
+
+        return $data;
     }
 }

@@ -4,6 +4,7 @@ namespace Mellivora\Config;
 
 use ArrayAccess;
 use Countable;
+use Mellivora\Support\Arr;
 
 /**
  * 使用原生数组构建的配置基础类
@@ -118,27 +119,7 @@ class NativeArray implements ArrayAccess, Countable
      */
     public function toArray()
     {
-        $data = [];
-
-        foreach (get_object_vars($this) as $key => $value) {
-            if (is_object($value)) {
-                if (method_exists($value, 'toArray')) {
-                    $value = $value->toArray();
-                } elseif (method_exists($value, 'getArrayCopy')) {
-                    $value = $value->getArrayCopy();
-                } elseif (method_exists($value, 'asArray')) {
-                    $value = $value->asArray();
-                } elseif (method_exists($value, 'as_array')) {
-                    $value = $value->as_array();
-                } else {
-                    $value = get_object_vars($value);
-                }
-            }
-
-            $data[$key] = $value;
-        }
-
-        return $data;
+        return Arr::convert(get_object_vars($this));
     }
 
     /**
@@ -172,20 +153,6 @@ class NativeArray implements ArrayAccess, Countable
             return $this->offsetGet($path);
         }
 
-        $path = trim($path, '.');
-        if (strpos($path, '.') === false) {
-            return $default;
-        }
-
-        $data = $this->toArray();
-        foreach (explode('.', $path) as $key) {
-            if (array_key_exists($key, $data)) {
-                $data = $data[$key];
-            } else {
-                return $default;
-            }
-        }
-
-        return $data;
+        return data_get($this->toArray(), $path, $default);
     }
 }

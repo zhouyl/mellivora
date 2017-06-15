@@ -2,6 +2,7 @@
 
 namespace Mellivora\Http;
 
+use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
 use Slim\Http\Request as SlimHttpRequest;
 
@@ -177,5 +178,269 @@ class Request extends SlimHttpRequest
         }
 
         return $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['REMOTE_ADDR'];
+    }
+
+    /**
+     * Retrieve post data.
+     *
+     * @return array
+     */
+    public function getPostParams()
+    {
+        if ($posts = $this->getParsedBody()) {
+            return Arr::convert($posts);
+        }
+
+        return [];
+    }
+
+    /**
+     * Fetch parameter value from post data.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return mixed
+     */
+    public function getPostParam($key, $default = null)
+    {
+        $posts = $this->getPostParams();
+
+        return $posts[$key] ?? $default;
+    }
+
+    /**
+     * Get all of the input and files for the request.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return array_replace_recursive($this->getParams(), $this->allFiles());
+    }
+
+    /**
+     * Get an array of all of the files on the request.
+     *
+     * @return array
+     */
+    public function allFiles()
+    {
+        return $this->getUploadedFiles();
+    }
+
+    /**
+     * Determine if the request contains a non-empty value for an input item.
+     *
+     * @param  string|array $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        foreach ($keys as $value) {
+            if ($this->isEmptyString($value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the request contains a given input item key.
+     *
+     * @param  string|array $key
+     * @return bool
+     */
+    public function exists($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        $input = $this->all();
+
+        foreach ($keys as $value) {
+            if (!Arr::has($input, $value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if a cookie is set on the request.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function hasCookie($key)
+    {
+        return !is_null($this->cookie($key));
+    }
+
+    /**
+     * Determine if the uploaded data contains a file.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function hasFile($key)
+    {
+        if (!is_array($files = $this->file($key))) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+            if ($this->isValidFile($file)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get a subset containing the provided keys with values from the input data.
+     *
+     * @param  array|mixed $keys
+     * @return array
+     */
+    public function only($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        $results = [];
+
+        $input = $this->all();
+
+        foreach ($keys as $key) {
+            Arr::set($results, $key, data_get($input, $key));
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get all of the input except for a specified array of items.
+     *
+     * @param  array|mixed $keys
+     * @return array
+     */
+    public function except($keys)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        $results = $this->all();
+
+        Arr::forget($results, $keys);
+
+        return $results;
+    }
+
+    /**
+     * Retrieve an input item from the request.
+     *
+     * @param  string            $key
+     * @param  string|array|null $default
+     * @return string|array
+     */
+    public function input($key = null, $default = null)
+    {
+        return data_get($this->getParams(), $key, $default);
+    }
+
+    /**
+     * Retrieve a query string item from the request.
+     *
+     * @param  string            $key
+     * @param  string|array|null $default
+     * @return string|array
+     */
+    public function query($key = null, $default = null)
+    {
+        $queries = $this->getQueryParams();
+
+        return is_null($key) ? $queries : data_get($queries, $key, $default);
+    }
+
+    /**
+     * Retrieve a post data item from the request.
+     *
+     * @param  string            $key
+     * @param  string|array|null $default
+     * @return string|array
+     */
+    public function post($key = null, $default = null)
+    {
+        $posts = $this->getPostParams();
+
+        return is_null($key) ? $posts : data_get($posts, $key, $default);
+    }
+
+    /**
+     * Retrieve a server variable from the request.
+     *
+     * @param  string            $key
+     * @param  string|array|null $default
+     * @return string|array
+     */
+    public function server($key = null, $default = null)
+    {
+        $servers = $this->getServerParams();
+
+        return is_null($key) ? $servers : data_get($servers, $key, $default);
+    }
+
+    /**
+     * Retrieve a cookie from the request.
+     *
+     * @param  string            $key
+     * @param  string|array|null $default
+     * @return string|array
+     */
+    public function cookie($key = null, $default = null)
+    {
+        $cookies = $this->getCookieParams();
+
+        return is_null($key) ? $cookies : data_get($cookies, $key, $default);
+    }
+
+    /**
+     * Retrieve a file from the request.
+     *
+     * @param  string       $key
+     * @param  mixed        $default
+     * @return array|null
+     */
+    public function file($key = null, $default = null)
+    {
+        $files = $this->getUploadedFiles();
+
+        return is_null($key) ? $files : data_get($files, $key, $default);
+    }
+
+    /**
+     * Intersect an array of items with the input data.
+     *
+     * @param  array|mixed $keys
+     * @return array
+     */
+    public function intersect($keys)
+    {
+        return array_filter($this->only(is_array($keys) ? $keys : func_get_args()));
+    }
+
+    /**
+     * Determine if the given input key is an empty string for "has".
+     *
+     * @param  string $key
+     * @return bool
+     */
+    protected function isEmptyString($key)
+    {
+        $value = $this->input($key);
+
+        return !is_bool($value) && !is_array($value) && trim((string) $value) === '';
     }
 }

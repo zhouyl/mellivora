@@ -165,13 +165,13 @@ class Autoloader implements ArrayAccess
      * $config->get('db.default.host');
      * </code>
      *
-     * @param  string  $namePath
+     * @param  string  $path
      * @param  mixed   $default
      * @return mixed
      */
-    public function get($namePath, $default = null)
+    public function get($path, $default = null)
     {
-        $parts  = explode('.', $namePath);
+        $parts  = explode('.', $path);
         $config = $this->load(array_shift($parts));
 
         if ($config === false) {

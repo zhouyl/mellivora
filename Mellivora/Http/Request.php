@@ -2,15 +2,44 @@
 
 namespace Mellivora\Http;
 
+use Mellivora\Application\App;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
 use Slim\Http\Request as SlimHttpRequest;
 
 /**
- * 继续 Slim\Http\Request 并对其进行扩展
+ * 继承 Slim\Http\Request 并对其进行扩展
  */
 class Request extends SlimHttpRequest
 {
+
+    /**
+     * 快速创建一个 Request 实例
+     *
+     * @return Mellivora\Http\Request
+     */
+    public static function newInstance()
+    {
+        return self::createFromEnvironment(
+            App::getInstance()->getContainer()->get('environment'));
+    }
+
+    /**
+     * 指定 headers 头部信息
+     *
+     * @param  array    $headers
+     * @return static
+     */
+    public function withHeaders(array $headers)
+    {
+        $clone = clone $this;
+
+        foreach ($headers as $name => $value) {
+            $clone->headers->set($name, $value);
+        }
+
+        return $clone;
+    }
 
     /**
      * Get the request method.
@@ -29,7 +58,7 @@ class Request extends SlimHttpRequest
      */
     public function root()
     {
-        return $this->getUri()->getBaseUrl();
+        return rtrim($this->getUri()->getBaseUrl(), '/');
     }
 
     /**
@@ -49,7 +78,7 @@ class Request extends SlimHttpRequest
      */
     public function fullUrl()
     {
-        return (string) $this->getUri();
+        return $this->getUri();
     }
 
     /**
@@ -63,7 +92,7 @@ class Request extends SlimHttpRequest
         parse_str($this->getUri()->getQuery(), $queryParts);
 
         return (string) $this->getUri()
-            ->withQuery(http_build_query(array_merge($queryParts, $query)));
+            ->withQuery(http_build_query($query + $queryParts));
     }
 
     /**

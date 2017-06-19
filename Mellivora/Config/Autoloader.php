@@ -43,6 +43,20 @@ class Autoloader implements ArrayAccess
     protected $paths = [];
 
     /**
+     * 文件配置缓存，避免重复加载
+     *
+     * @var array
+     */
+    protected static $cachedFiles = [];
+
+    /**
+     * 路径配置缓存
+     *
+     * @var array
+     */
+    protected static $cachedPaths = [];
+
+    /**
      * 配置文件将按照扩展名的先后顺序查找并载入
      *
      * @var array
@@ -146,16 +160,19 @@ class Autoloader implements ArrayAccess
      */
     public function load($name)
     {
-        foreach (array_reverse($this->paths) as $path) {
-            foreach ($this->parsers as $ext => $parser) {
-                $file = "$path/$name.$ext";
-                if (is_file($file)) {
-                    return new $parser($file);
+        if (!isset(self::$cachedFiles[$name])) {
+            foreach (array_reverse($this->paths) as $path) {
+                foreach ($this->parsers as $ext => $parser) {
+                    $file = "$path/$name.$ext";
+                    if (is_file($file)) {
+                        self::$cachedFiles[$name] = new $parser($file);
+                        break 2;
+                    }
                 }
             }
         }
 
-        return false;
+        return self::$cachedFiles[$name];
     }
 
     /**
@@ -171,18 +188,22 @@ class Autoloader implements ArrayAccess
      */
     public function get($path, $default = null)
     {
-        $parts  = explode('.', $path);
-        $config = $this->load(array_shift($parts));
+        if (!isset(self::$cachedPaths[$path])) {
+            $parts  = explode('.', $path);
+            $config = $this->load(array_shift($parts));
 
-        if ($config === false) {
-            return $default;
+            if ($config === false) {
+                return $default;
+            }
+
+            if (empty($parts)) {
+                return $config;
+            }
+
+            self::$cachedPaths[$path] = $config->get(implode('.', $parts), $default);
         }
 
-        if (empty($parts)) {
-            return $config;
-        }
-
-        return $config->get(implode('.', $parts), $default);
+        return self::$cachedPaths[$path];
     }
 
     /********************************************************************************

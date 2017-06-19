@@ -26,6 +26,16 @@ class Response extends SlimHttpResponse
     }
 
     /**
+     * 默认使用定义的全局 json 格式化选项输出
+     *
+     * {@inheritdoc}
+     */
+    public function withJson($data, $status = null, $encodingOptions = JSON_ENCODE_OPTION)
+    {
+        return parent::withJson($data, $status, $encodingOptions);
+    }
+
+    /**
      * 指定 headers 头部信息
      *
      * @param  array    $headers

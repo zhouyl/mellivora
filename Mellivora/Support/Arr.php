@@ -533,9 +533,10 @@ class Arr
      * 将对像转换为数组
      *
      * @param  mixed   $object
+     * @param  boolean $recursive
      * @return array
      */
-    public static function convert($object)
+    public static function convert($object, $recursive = false)
     {
         if ($object instanceof \Traversable) {
             $array = iterator_to_array($object);
@@ -551,6 +552,10 @@ class Arr
             $array = get_object_vars($object);
         } else {
             $array = (array) $object;
+        }
+
+        if (!$recursive) {
+            return $array;
         }
 
         $data = [];

@@ -217,7 +217,7 @@ class Request extends SlimHttpRequest
     public function getPostParams()
     {
         if ($posts = $this->getParsedBody()) {
-            return Arr::convert($posts);
+            return Arr::convert($posts, true);
         }
 
         return [];

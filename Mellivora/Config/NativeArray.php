@@ -119,7 +119,7 @@ class NativeArray implements ArrayAccess, Countable
      */
     public function toArray()
     {
-        return Arr::convert(get_object_vars($this));
+        return Arr::convert(get_object_vars($this), true);
     }
 
     /**

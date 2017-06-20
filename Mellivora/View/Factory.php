@@ -10,11 +10,11 @@ use Mellivora\View\Engines\EngineResolver;
 
 class Factory
 {
-    use Concerns\ManagesComponents,
-    Concerns\ManagesLayouts,
-    Concerns\ManagesLoops,
-    Concerns\ManagesStacks,
-    Concerns\ManagesTranslations;
+    use Concerns\ManagesComponents;
+    use Concerns\ManagesLayouts;
+    use Concerns\ManagesLoops;
+    use Concerns\ManagesStacks;
+    use Concerns\ManagesTranslations;
 
     /**
      * The engine implementation.
@@ -102,9 +102,7 @@ class Factory
      */
     public function make($view, $data = [], $mergeData = [])
     {
-        $path = $this->finder->find(
-            $view = $this->normalizeName($view)
-        );
+        $path = $this->finder->find($view = $this->normalizeName($view));
 
         // Next, we will create the view instance and call the view creator for the view
         // which can set any data, etc. Then we will return the view instance back to

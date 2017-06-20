@@ -7,18 +7,18 @@ use Mellivora\Support\Str;
 
 class BladeCompiler extends Compiler implements CompilerInterface
 {
-    use Concerns\CompilesAuthorizations,
-    Concerns\CompilesComments,
-    Concerns\CompilesComponents,
-    Concerns\CompilesConditionals,
-    Concerns\CompilesEchos,
-    Concerns\CompilesIncludes,
-    Concerns\CompilesInjections,
-    Concerns\CompilesLayouts,
-    Concerns\CompilesLoops,
-    Concerns\CompilesRawPhp,
-    Concerns\CompilesStacks,
-    Concerns\CompilesTranslations;
+    use Concerns\CompilesAuthorizations;
+    use Concerns\CompilesComments;
+    use Concerns\CompilesComponents;
+    use Concerns\CompilesConditionals;
+    use Concerns\CompilesEchos;
+    use Concerns\CompilesIncludes;
+    use Concerns\CompilesInjections;
+    use Concerns\CompilesLayouts;
+    use Concerns\CompilesLoops;
+    use Concerns\CompilesRawPhp;
+    use Concerns\CompilesStacks;
+    use Concerns\CompilesTranslations;
 
     /**
      * All of the registered extensions.

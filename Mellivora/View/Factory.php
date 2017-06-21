@@ -113,6 +113,19 @@ class Factory
     }
 
     /**
+     * Get the rendered content of the view based
+     *
+     * @param  string   $view
+     * @param  array    $data
+     * @param  array    $mergeData
+     * @return string
+     */
+    public function render($view, $data = [], $mergeData = [])
+    {
+        return $this->make($view, $this->parseData($data), $mergeData)->render();
+    }
+
+    /**
      * Get the rendered content of the view based on a given condition.
      *
      * @param  bool     $condition

@@ -1,21 +1,22 @@
 <?php
 
-namespace Mellivora\MVC;
+namespace Mellivora\Application;
 
-use Mellivora\Application\Container;
-
-class Controller
+abstract class ServiceProvider
 {
 
     protected $container;
+
+    protected $providers = [];
 
     public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
-    public function __get($id)
+    public function register()
     {
-        return $this->container->get($id);
+        //
     }
+
 }

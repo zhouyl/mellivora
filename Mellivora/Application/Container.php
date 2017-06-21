@@ -3,6 +3,7 @@
 namespace Mellivora\Application;
 
 use Slim\Container as SlimContainer;
+use UnexpectedValueException;
 
 /**
  * 重写 Slim\Container 容器类
@@ -41,7 +42,12 @@ class Container extends SlimContainer
     {
         if ($this->has('providers')) {
             foreach ($this->get('providers') as $class) {
-                $this->register(new $class);
+                if (is_subclass_of($class, ServiceProvider::class)) {
+                    (new $class($this))->register();
+                } else {
+                    throw new UnexpectedValueException(
+                        'Provider must return instance of ' . ServiceProvider::class);
+                }
             }
         }
     }

@@ -7,7 +7,7 @@ trait Singleton
 
     protected static $instance;
 
-    public static function getInstance()
+    public static function instance()
     {
         if (!self::$instance instanceof self) {
             self::$instance = new self;

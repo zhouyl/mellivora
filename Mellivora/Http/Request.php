@@ -14,17 +14,6 @@ class Request extends SlimHttpRequest
 {
 
     /**
-     * 快速创建一个 Request 实例
-     *
-     * @return Mellivora\Http\Request
-     */
-    public static function newInstance()
-    {
-        return self::createFromEnvironment(
-            App::getInstance()->getContainer()->get('environment'));
-    }
-
-    /**
      * 指定 headers 头部信息
      *
      * @param  array    $headers

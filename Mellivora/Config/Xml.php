@@ -5,7 +5,7 @@ namespace Mellivora\Config;
 /**
  * xml 格式配置文件解释器
  */
-class Xml extends NativeArray
+class Xml extends Parser
 {
     /**
      * 构造方法

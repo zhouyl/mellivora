@@ -85,6 +85,16 @@ class Request extends SlimHttpRequest
     }
 
     /**
+     * Retrieve the host component of the URI.
+     *
+     * @return string The URI host.
+     */
+    public function host()
+    {
+        return $this->getUri()->getHost();
+    }
+
+    /**
      * Get the current path info for the request.
      *
      * @return string

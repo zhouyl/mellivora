@@ -22,9 +22,7 @@ class Fluent implements ArrayAccess, JsonSerializable
      */
     public function __construct($attributes = [])
     {
-        foreach ($attributes as $key => $value) {
-            $this->attributes[$key] = $value;
-        }
+        $this->attributes = $attributes;
     }
 
     /**
@@ -36,11 +34,7 @@ class Fluent implements ArrayAccess, JsonSerializable
      */
     public function get($key, $default = null)
     {
-        if (array_key_exists($key, $this->attributes)) {
-            return $this->attributes[$key];
-        }
-
-        return value($default);
+        return data_get($this->attributes, $key, $default);
     }
 
     /**

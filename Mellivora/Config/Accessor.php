@@ -12,7 +12,7 @@ use RuntimeException;
  *
  * <code>
  * // 设定加载规则
- * $config = new Mellivora\Config\Autoloader([
+ * $config = new Mellivora\Config\Accessor([
  *     'paths'   => [
  *         dirname(__DIR__) . '/config',
  *         dirname(__DIR__) . '/config/production',
@@ -33,7 +33,7 @@ use RuntimeException;
  *  var_dump($config->get('db.default.host'));
  * </code>
  */
-class Autoloader implements ArrayAccess
+class Accessor implements ArrayAccess
 {
     /**
      * 默认的配置文件的查找路径，查找顺序从最后注册的路径开始（数组的底部）
@@ -43,18 +43,11 @@ class Autoloader implements ArrayAccess
     protected $paths = [];
 
     /**
-     * 文件配置缓存，避免重复加载
+     * 缓存数据
      *
      * @var array
      */
-    protected static $cachedFiles = [];
-
-    /**
-     * 路径配置缓存
-     *
-     * @var array
-     */
-    protected static $cachedPaths = [];
+    protected static $cached = [];
 
     /**
      * 配置文件将按照扩展名的先后顺序查找并载入
@@ -99,8 +92,8 @@ class Autoloader implements ArrayAccess
     /**
      * 设定配置查找路径
      *
-     * @param  array                         $paths
-     * @return Mellivora\Config\Autoloader
+     * @param  array                       $paths
+     * @return Mellivora\Config\Accessor
      */
     public function setPaths(array $paths)
     {
@@ -112,8 +105,8 @@ class Autoloader implements ArrayAccess
     /**
      * 新增配置查找路径，最后增加的路径会被优先查找
      *
-     * @param  string                        $path
-     * @return Mellivora\Config\Autoloader
+     * @param  string                      $path
+     * @return Mellivora\Config\Accessor
      */
     public function addPath($path)
     {
@@ -125,8 +118,8 @@ class Autoloader implements ArrayAccess
     /**
      * 设定配置文件解释器
      *
-     * @param array                        $parsers
-     * @param Mellivora\Config\NativeArray $parser
+     * @param array                   $parsers
+     * @param Mellivora\Config\Parser $parser
      */
     public function setParsers(array $parsers)
     {
@@ -138,10 +131,10 @@ class Autoloader implements ArrayAccess
     /**
      * 新增配置解释器
      *
-     * @param string                       $ext
-     * @param Mellivora\Config\NativeArray $parser
+     * @param string                  $ext
+     * @param Mellivora\Config\Parser $parser
      */
-    public function addParser($ext, NativeArray $parser)
+    public function addParser($ext, Parser $parser)
     {
         $this->parsers[$ext] = $parser;
 
@@ -160,19 +153,19 @@ class Autoloader implements ArrayAccess
      */
     public function load($name)
     {
-        if (!isset(self::$cachedFiles[$name])) {
+        if (!array_key_exists($name, self::$cached)) {
             foreach (array_reverse($this->paths) as $path) {
                 foreach ($this->parsers as $ext => $parser) {
                     $file = "$path/$name.$ext";
                     if (is_file($file)) {
-                        self::$cachedFiles[$name] = new $parser($file);
+                        self::$cached[$name] = new $parser($file);
                         break 2;
                     }
                 }
             }
         }
 
-        return self::$cachedFiles[$name];
+        return self::$cached[$name];
     }
 
     /**
@@ -188,22 +181,18 @@ class Autoloader implements ArrayAccess
      */
     public function get($path, $default = null)
     {
-        if (!isset(self::$cachedPaths[$path])) {
-            $parts  = explode('.', $path);
-            $config = $this->load(array_shift($parts));
+        $parts  = explode('.', $path);
+        $config = $this->load(array_shift($parts));
 
-            if ($config === false) {
-                return $default;
-            }
-
-            if (empty($parts)) {
-                return $config;
-            }
-
-            self::$cachedPaths[$path] = $config->get(implode('.', $parts), $default);
+        if ($config === false) {
+            return $default;
         }
 
-        return self::$cachedPaths[$path];
+        if (empty($parts)) {
+            return $config;
+        }
+
+        return $config->get(implode('.', $parts), $default);
     }
 
     /********************************************************************************

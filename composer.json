@@ -26,7 +26,7 @@
             "Mellivora\\": "Mellivora"
         },
         "files": [
-            "Mellivora\\Support\\helpers.php"
+            "helpers.php",
         ]
     }
 }

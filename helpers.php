@@ -7,11 +7,16 @@ use Mellivora\Support\HigherOrderTapProxy;
 use Mellivora\Support\Str;
 use Slim\Http\Uri;
 
-defined('__ROOT__') || define('__ROOT__', realpath(__DIR__ . '/../../../'));
+if (!defined('__ROOT__')) {
+    /**
+     * 定义项目根目录路径
+     */
+    define('__ROOT__', realpath(__DIR__ . '/../../../'));
+}
 
 if (!function_exists('app')) {
     /**
-     * Get the available container instance.
+     * 获取 app 容器，或者注入容器的实例
      *
      * @param  string  $id
      * @return mixed
@@ -26,7 +31,7 @@ if (!function_exists('app')) {
 
 if (!function_exists('env')) {
     /**
-     * 判断当前项目环境，或者获取当前项目环境
+     * 判断当前项目环境，或获取当前项目环境
      *
      * @param  string           $asset
      * @return boolean|string
@@ -56,7 +61,7 @@ if (!function_exists('cache')) {
 
 if (!function_exists('config')) {
     /**
-     * Get the specified configuration value.
+     * 获取配置数据
      *
      * @param  array   $key
      * @param  mixed   $default
@@ -74,14 +79,14 @@ if (!function_exists('config')) {
 
 if (!function_exists('cookie')) {
     /**
-     * Create a new cookie instance.
+     * 获取或设定 cookie 值
      *
      * @param  string  $name
      * @param  string  $value
      * @param  int     $minutes
      * @return mixed
      */
-    function cookie($name = null, $value = null, $minutes = 0)
+    function cookie($name = null, $value = null, $minutes = null)
     {
         if (func_num_args() === 0) {
             return app('cookies');
@@ -150,7 +155,7 @@ if (!function_exists('__')) {
 
 if (!function_exists('view')) {
     /**
-     * Get the evaluated view contents for the given view.
+     * 获取视图对象，或渲染视图模板
      *
      * @param  string                 $view
      * @param  array                  $data
@@ -169,7 +174,7 @@ if (!function_exists('view')) {
 
 if (!function_exists('redirect')) {
     /**
-     * Get an instance of the redirector.
+     * 重定向当前页面，response http 302 header
      *
      * @param  string                    $to
      * @param  int                       $status
@@ -183,7 +188,7 @@ if (!function_exists('redirect')) {
 
 if (!function_exists('request')) {
     /**
-     * Get an instance of the current request or an input item from the request.
+     * 获取当前 http request 输入的数据
      *
      * @param  array|string                          $key
      * @param  mixed                                 $default
@@ -205,7 +210,7 @@ if (!function_exists('request')) {
 
 if (!function_exists('response')) {
     /**
-     * Return a new response from the application.
+     * 返回 http response 的结果
      *
      * @param  string                    $content
      * @param  int                       $status
@@ -226,7 +231,7 @@ if (!function_exists('response')) {
 
 if (!function_exists('route')) {
     /**
-     * Build the path for a named route including the base path
+     * 根据路由参数，生成 route url
      *
      * @param  string   $name        Route name
      * @param  array    $data        Named argument replacement data
@@ -241,7 +246,7 @@ if (!function_exists('route')) {
 
 if (!function_exists('url')) {
     /**
-     * Generate a url for the application.
+     * URL 生成器，可通过指定 params 来生成 query string
      *
      * @param  string   $path
      * @param  array    $queryParams
@@ -285,7 +290,7 @@ if (!function_exists('url_spintf')) {
 }
 if (!function_exists('root_path')) {
     /**
-     * Get the path to the base of the install.
+     * 获取项目根目录下的路径
      *
      * @param  string   $path
      * @return string
@@ -298,7 +303,7 @@ if (!function_exists('root_path')) {
 
 if (!function_exists('app_path')) {
     /**
-     * Get the path to the application folder.
+     * 获取 app 目录下的路径
      *
      * @param  string   $path
      * @return string
@@ -311,7 +316,7 @@ if (!function_exists('app_path')) {
 
 if (!function_exists('storage_path')) {
     /**
-     * Get the data path.
+     * 获取 storage 存储目录下的路径
      *
      * @param  string   $path
      * @return string
@@ -324,7 +329,7 @@ if (!function_exists('storage_path')) {
 
 if (!function_exists('resource_path')) {
     /**
-     * Get the path to the resource folder.
+     * 获取 resources 资源目录下的路径
      *
      * @param  string   $path
      * @return string
@@ -337,7 +342,7 @@ if (!function_exists('resource_path')) {
 
 if (!function_exists('public_path')) {
     /**
-     * Get the path to the public folder.
+     * 获取 public 网站根目录下的路径
      *
      * @param  string   $path
      * @return string

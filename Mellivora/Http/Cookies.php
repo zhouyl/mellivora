@@ -3,6 +3,7 @@
 namespace Mellivora\Http;
 
 use ArrayAccess;
+use Mellivora\Support\Interfaces\EncryptionInterface;
 
 /**
  * Cookies 管理
@@ -21,7 +22,15 @@ class Cookies implements ArrayAccess
         'domain'   => null,  // 域名
         'httponly' => null,  // 仅允许 http 访问，禁止 javascript 访问
         'secure'   => false, // 启用 https 连接传输
+        'encrypt'  => false, // 是否使用 crypt 加密
     ];
+
+    /**
+     * crypt 加密类
+     *
+     * @var Mellivora\Support\Interfaces\EncryptionInterface
+     */
+    protected $encryption;
 
     /**
      * @param array $options
@@ -29,7 +38,6 @@ class Cookies implements ArrayAccess
     public function __construct(array $options = [])
     {
         $this->setOptions($options);
-        var_dump($options);
     }
 
     /**
@@ -47,6 +55,30 @@ class Cookies implements ArrayAccess
     }
 
     /**
+     * 设定 crypt 加密类
+     *
+     * @param Mellivora\Support\Interfaces\EncryptionInterface $encryption
+     */
+    public function setEncryption(EncryptionInterface $encryption)
+    {
+        $this->encryption = $encryption;
+    }
+
+    /**
+     * 获取 crypt 加密类
+     *
+     * @return Mellivora\Support\Interfaces\EncryptionInterface
+     */
+    public function getEncryption()
+    {
+        if (!$this->encryption) {
+            throw new \RuntimeException('The instance for encryption is not registered');
+        }
+
+        return $this->encryption;
+    }
+
+    /**
      * 设置 cookie 值
      *
      * @param string  $key
@@ -57,6 +89,10 @@ class Cookies implements ArrayAccess
     {
         if ($minutes === null) {
             $minutes = $this->defaults['lifetime'];
+        }
+
+        if ($this->defaults['encrypt']) {
+            $value = $this->getEncryption()->encryptBase64($value);
         }
 
         setcookie(
@@ -81,7 +117,13 @@ class Cookies implements ArrayAccess
      */
     public function get($key, $default = null)
     {
-        return $_COOKIE[$key] ?? $default;
+        $value = $_COOKIE[$key] ?? $default;
+
+        if ($this->defaults['encrypt']) {
+            $value = $this->getEncryption()->decryptBase64($value);
+        }
+
+        return $value;
     }
 
     /**

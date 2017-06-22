@@ -199,23 +199,23 @@ class Accessor implements ArrayAccess
      * 通过对 ArrayAccess 的支持，使配置加载更自由
      *******************************************************************************/
 
-    public function offsetGet($index)
+    public function offsetGet($key)
     {
-        return $this->get($index);
+        return $this->get($key);
     }
 
-    public function offsetSet($index, $value)
+    public function offsetSet($key, $value)
     {
         throw new RuntimeException('Can not set the config data');
     }
 
-    public function offsetUnset($index)
+    public function offsetUnset($key)
     {
         throw new RuntimeException('Can not unset the config data');
     }
 
-    public function offsetExists($index)
+    public function offsetExists($key)
     {
-        return $this->get($index) !== null;
+        return $this->get($key) !== null;
     }
 }

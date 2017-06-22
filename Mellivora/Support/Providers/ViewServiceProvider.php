@@ -1,8 +1,7 @@
 <?php
 
-namespace Mellivora\View;
+namespace Mellivora\Support\Providers;
 
-use Mellivora\Application\ServiceProvider;
 use Mellivora\View\Compilers\BladeCompiler;
 use Mellivora\View\Engines\CompilerEngine;
 use Mellivora\View\Engines\EngineResolver;

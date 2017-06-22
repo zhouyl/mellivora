@@ -2,6 +2,7 @@
 
 namespace Mellivora\Application;
 
+use Mellivora\Support\Providers\ServiceProvider;
 use Slim\Container as SlimContainer;
 use UnexpectedValueException;
 

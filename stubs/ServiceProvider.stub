@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Mellivora\Application\ServiceProvider;
+use Mellivora\Support\Providers\ServiceProvider;
 
 class {name}ServiceProvider extends ServiceProvider
 {

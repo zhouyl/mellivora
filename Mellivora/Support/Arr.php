@@ -560,7 +560,9 @@ class Arr
 
         $data = [];
         foreach ($array as $key => $value) {
-            $data[$key] = is_object($value) ? self::convert($value) : $value;
+            $data[$key] = is_object($value)
+                ? self::convert($value, $recursive)
+                : $value;
         }
 
         return $data;

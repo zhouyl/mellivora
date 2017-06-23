@@ -29,7 +29,9 @@ class HttpServiceProvider extends ServiceProvider
     public function registerCookies()
     {
         $this->container['cookies'] = function ($container) {
-            $cookies = new Cookies($container['config']->get('session.cookies'));
+            $config = $container['config']->get('session.cookies');
+
+            $cookies = new Cookies($config->toArray());
 
             $cookies->setEncryption($container['encryption']);
 

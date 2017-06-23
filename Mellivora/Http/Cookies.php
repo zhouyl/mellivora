@@ -2,13 +2,13 @@
 
 namespace Mellivora\Http;
 
-use ArrayAccess;
 use Mellivora\Support\Interfaces\EncryptionInterface;
+use Mellivora\Support\MagicAccess;
 
 /**
  * Cookies 管理
  */
-class Cookies implements ArrayAccess
+class Cookies extends MagicAccess
 {
 
     /**
@@ -33,10 +33,14 @@ class Cookies implements ArrayAccess
     protected $encryption;
 
     /**
+     * Constructor
+     *
      * @param array $options
      */
     public function __construct(array $options = [])
     {
+        parent::__construct($_COOKIE);
+
         $this->setOptions($options);
     }
 
@@ -79,11 +83,36 @@ class Cookies implements ArrayAccess
     }
 
     /**
+     * ookie 设置
+     *
+     * @param  string    $key
+     * @param  mixed     $value
+     * @param  integer   $expire
+     * @return boolean
+     */
+    protected function setCookie($key, $value = null, $expire = 0)
+    {
+        if ($value === null) {
+            unset($_COOKIE[$key]);
+        } else {
+            $_COOKIE[$key] = $value;
+        }
+
+        setcookie($key, $value, $expire,
+            $this->defaults['path'],
+            $this->defaults['domain'],
+            $this->defaults['secure'],
+            $this->defaults['httponly']
+        );
+    }
+
+    /**
      * 设置 cookie 值
      *
-     * @param string  $key
-     * @param mixed   $value
-     * @param integer $minutes
+     * @param  string                   $key
+     * @param  mixed                    $value
+     * @param  integer                  $minutes
+     * @return Mellivora\Http\Cookies
      */
     public function set($key, $value, $minutes = null)
     {
@@ -95,17 +124,9 @@ class Cookies implements ArrayAccess
             $value = $this->getEncryption()->encryptBase64($value);
         }
 
-        setcookie(
-            $key,
-            $value,
-            time() + $minutes,
-            $this->defaults['path'],
-            $this->defaults['domain'],
-            $this->defaults['secure'],
-            $this->defaults['httponly']
-        );
+        $this->setCookie($key, $value, time() + $minutes);
 
-        $_COOKIE[$key] = $value;
+        return parent::set($key, $value);
     }
 
     /**
@@ -117,7 +138,7 @@ class Cookies implements ArrayAccess
      */
     public function get($key, $default = null)
     {
-        $value = $_COOKIE[$key] ?? $default;
+        $value = parent::get($key, $default);
 
         if ($this->defaults['encrypt']) {
             $value = $this->getEncryption()->decryptBase64($value);
@@ -127,104 +148,16 @@ class Cookies implements ArrayAccess
     }
 
     /**
-     * 判断 cookie 是否存在
-     *
-     * @param  string    $key
-     * @return boolean
-     */
-    public function has($key)
-    {
-        return isset($_COOKIE[$key]);
-    }
-
-    /**
      * 删除 cookie
      *
-     * @param  string    $key
+     * @param  string                   $key
      * @return boolean
+     * @return Mellivora\Http\Cookies
      */
     public function delete($key)
     {
-        setcookie(
-            $key,
-            null,
-            -86400,
-            $this->defaults['path'],
-            $this->defaults['domain'],
-            $this->defaults['secure'],
-            $this->defaults['httponly']
-        );
+        $this->setCookie($key, null, -86400);
 
-        unset($_COOKIE[$key]);
-
-        return true;
-    }
-
-    /**
-     * 清空所有 cookie
-     */
-    public function clear()
-    {
-        foreach ($_COOKIE as $key => $value) {
-            $this->delete($key);
-        }
-
-        $_COOKIE = null;
-    }
-
-    /**
-     * 返回所有 cookie
-     */
-    public function toArray()
-    {
-        return $_COOKIE;
-    }
-
-    /********************************************************************************
-     * ArrayAccess 接口实现
-     *******************************************************************************/
-
-    public function offsetSet($key, $value)
-    {
-        return $this->set($key, $value);
-    }
-
-    public function offsetGet($key)
-    {
-        return $this->get($key);
-    }
-
-    public function offsetExists($key)
-    {
-        return $this->has($key);
-    }
-
-    public function offsetUnset($key)
-    {
-        return $this->delete($key);
-    }
-
-    /********************************************************************************
-     * 魔术方法实现
-     *******************************************************************************/
-
-    public function __set($key, $value)
-    {
-        return $this->set($key, $value);
-    }
-
-    public function __get($key)
-    {
-        return $this->get($key);
-    }
-
-    public function __isset($key)
-    {
-        return $this->has($key);
-    }
-
-    public function __unset($key)
-    {
-        return $this->delete($key);
+        return parent::delete($key);
     }
 }

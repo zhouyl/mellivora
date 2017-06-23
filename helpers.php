@@ -639,6 +639,20 @@ if (!function_exists('array_wrap')) {
     }
 }
 
+if (!function_exists('array_convert')) {
+    /**
+     * Convert object to array
+     *
+     * @param  mixed   $object
+     * @param  boolean $recursive
+     * @return array
+     */
+    function array_convert($object, $recursive = false)
+    {
+        return Arr::convert($object, $recursive);
+    }
+}
+
 if (!function_exists('camel_case')) {
     /**
      * Convert a value to camel case.
@@ -809,6 +823,64 @@ if (!function_exists('data_set')) {
                 }
 
                 data_set($target[$segment], $segments, $value, $overwrite);
+            } elseif ($overwrite || !Arr::exists($target, $segment)) {
+                $target[$segment] = $value;
+            }
+        } elseif (is_object($target)) {
+            if ($segments) {
+                if (!isset($target->{$segment})) {
+                    $target->{$segment} = [];
+                }
+
+                data_set($target->{$segment}, $segments, $value, $overwrite);
+            } elseif ($overwrite || !isset($target->{$segment})) {
+                $target->{$segment} = $value;
+            }
+        } else {
+            $target = [];
+
+            if ($segments) {
+                data_set($target[$segment], $segments, $value, $overwrite);
+            } elseif ($overwrite) {
+                $target[$segment] = $value;
+            }
+        }
+
+        return $target;
+    }
+}
+
+if (!function_exists('data_delete')) {
+    /**
+     * delete an item on an array or object using dot notation.
+     *
+     * @param  mixed        $target
+     * @param  string|array $key
+     * @param  mixed        $value
+     * @param  bool         $overwrite
+     * @return mixed
+     */
+    function data_delete(&$target, $key, $value, $overwrite = true)
+    {
+        $segments = is_array($key) ? $key : explode('.', $key);
+
+        if (($segment = array_shift($segments)) === '*') {
+            if (!Arr::accessible($target)) {
+                $target = [];
+            }
+
+            if ($segments) {
+                foreach ($target as &$inner) {
+                    data_delete($inner, $segments);
+                }
+            }
+        } elseif (Arr::accessible($target)) {
+            if ($segments) {
+                if (!Arr::exists($target, $segment)) {
+                    $target[$segment] = [];
+                }
+
+                data_delete($target[$segment], $segments);
             } elseif ($overwrite || !Arr::exists($target, $segment)) {
                 $target[$segment] = $value;
             }

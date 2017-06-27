@@ -43,12 +43,12 @@ class Container extends SlimContainer
     {
         if ($this->has('providers')) {
             foreach ($this->get('providers') as $class) {
-                if (is_subclass_of($class, ServiceProvider::class)) {
-                    (new $class($this))->register();
-                } else {
+                if (!is_subclass_of($class, ServiceProvider::class)) {
                     throw new UnexpectedValueException(
-                        'Provider must return instance of ' . ServiceProvider::class);
+                        $class . ' must return instance of ' . ServiceProvider::class);
                 }
+
+                (new $class($this))->register();
             }
         }
     }

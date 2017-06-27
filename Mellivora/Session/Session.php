@@ -26,7 +26,7 @@ class Session implements ArrayAccess
     public function __construct(SaveHandlerInterface $saveHandler = null)
     {
         if ($saveHandler) {
-            $this->setSaveHandler($saveHandler);
+            session_set_save_handler($saveHandler, true);
         }
     }
 
@@ -248,23 +248,6 @@ class Session implements ArrayAccess
     public function status()
     {
         return session_status();
-    }
-
-    /**
-     * 设定自定义的 session handler
-     *
-     * @param Mellivora\Session\SaveHandlerInterface $saveHandler
-     */
-    public function setSaveHandler(SaveHandlerInterface $saveHandler)
-    {
-        session_set_save_handler(
-            [ & $saveHandler, 'open'],
-            [ & $saveHandler, 'close'],
-            [ & $saveHandler, 'read'],
-            [ & $saveHandler, 'write'],
-            [ & $saveHandler, 'destroy'],
-            [ & $saveHandler, 'gc']
-        );
     }
 
     /**

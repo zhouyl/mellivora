@@ -16,11 +16,12 @@ class SessionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->container['session'] = function ($container) {
-            $session = new Session;
-
+            $handler = null;
             if ($config = $container['config']->get('session.saveHandler')) {
                 dd(class_exists($config->handler));
             }
+
+            $session = new Session($handler);
 
             $session->start();
 

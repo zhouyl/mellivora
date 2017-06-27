@@ -16,7 +16,7 @@ class Memcache implements SaveHandlerInterface
         'servers'     => [
             'host'       => '127.0.0.1', //Memcached 服务器
             'port'       => 11211,       //Memcached 通信端口
-            'persistent' => false,        //是否使用持久连接
+            'persistent' => false,       //是否使用持久连接
         ],
         'compression' => false, //是否启用压缩
     ];
@@ -24,7 +24,7 @@ class Memcache implements SaveHandlerInterface
     /**
      * Phalcon\Session\Adapter\Memcache constructor
      */
-    public function __construct(array options = [])
+    public function __construct(arrayoptions = [])
     {
         if (!extension_loaded('memcache', false)) {
             throw new RuntimeException('memcache extension is required');

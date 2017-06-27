@@ -74,7 +74,7 @@ class Dispatcher
         // controller 类型检测
         if (!is_subclass_of($class, Controller::class)) {
             throw new UnexpectedValueException(
-                'Controller must return instance of ' . Controller::class);
+                $class . ' must return instance of ' . Controller::class);
         }
 
         // 实例化 controller

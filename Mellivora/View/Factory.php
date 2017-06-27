@@ -51,6 +51,7 @@ class Factory
      */
     protected $extensions = [
         'blade.php' => 'blade',
+        'phtml'     => 'php',
         'php'       => 'php',
         'css'       => 'file',
     ];

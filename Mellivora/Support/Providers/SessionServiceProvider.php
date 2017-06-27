@@ -17,10 +17,14 @@ class SessionServiceProvider extends ServiceProvider
     {
         $this->container['session'] = function ($container) {
             $session = new Session;
+
+            if ($config = $container['config']->get('session.saveHandler')) {
+                dd(class_exists($config->handler));
+            }
+
             $session->start();
 
             return $session;
         };
     }
-
 }

@@ -3,7 +3,6 @@
 namespace Mellivora\Encryption;
 
 use InvalidArgumentException;
-use Mellivora\Support\Interfaces\EncryptionInterface;
 use RuntimeException;
 use UnexpectedValueException;
 

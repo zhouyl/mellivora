@@ -1,10 +1,10 @@
 <?php
 
-namespace Mellivora\Session;
+namespace Mellivora\Session\Handlers;
 
-use Mellivora\Support\Interfaces\SessionSaveHandlerInterface;
+use Mellivora\Session\SaveHandlerInterface;
 
-class Memcache implements SessionSaveHandlerInterface
+class Memcache implements SaveHandlerInterface
 {
 
     protected $memcache = null;
@@ -12,11 +12,11 @@ class Memcache implements SessionSaveHandlerInterface
     protected $lifetime = 8600;
 
     protected $options = [
-        'lifeTime'    => 259200, //缓存生存周期(秒)
+        'lifetime'    => 259200, //缓存生存周期(秒)
         'servers'     => [
             'host'       => '127.0.0.1', //Memcached 服务器
             'port'       => 11211,       //Memcached 通信端口
-            'persistent' => true,        //是否使用持久连接
+            'persistent' => false,        //是否使用持久连接
         ],
         'compression' => false, //是否启用压缩
     ];
@@ -24,7 +24,7 @@ class Memcache implements SessionSaveHandlerInterface
     /**
      * Phalcon\Session\Adapter\Memcache constructor
      */
-    public function __construct(arrayoptions = [])
+    public function __construct(array options = [])
     {
         if (!extension_loaded('memcache', false)) {
             throw new RuntimeException('memcache extension is required');

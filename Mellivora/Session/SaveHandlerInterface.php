@@ -1,8 +1,8 @@
 <?php
 
-namespace Mellivora\Support\Interfaces;
+namespace Mellivora\Session;
 
-interface SessionSaveHandlerInterface
+interface SaveHandlerInterface
 {
     /**
      * Open Session - retrieve resources
@@ -43,10 +43,10 @@ interface SessionSaveHandlerInterface
 
     /**
      * Garbage Collection - remove old session data older
-     * than $maxlifetime (in seconds)
+     * than $lifetime (in seconds)
      *
-     * @param int $maxlifetime
+     * @param int $lifetime
      */
-    public function gc($maxlifetime);
+    public function gc($lifetime);
 
 }

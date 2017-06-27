@@ -19,7 +19,7 @@ class Yaml extends Parser
     public function __construct($file, array $callbacks = [])
     {
         if (!extension_loaded('yaml')) {
-            throw new RuntimeException('Yaml extension not loaded');
+            throw new RuntimeException('yaml extension is required');
         }
 
         if ($callbacks) {

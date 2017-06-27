@@ -2,14 +2,17 @@
 
 namespace Mellivora\Http;
 
-use Mellivora\Support\Interfaces\EncryptionInterface;
-use Mellivora\Support\MagicAccess;
+use ArrayAccess;
+use Mellivora\Encryption\EncryptionInterface;
+use Mellivora\Support\Traits\MagicAccess;
 
 /**
  * Cookies 管理
  */
-class Cookies extends MagicAccess
+class Cookies implements ArrayAccess
 {
+
+    use MagicAccess;
 
     /**
      * 默认配置选项
@@ -28,7 +31,7 @@ class Cookies extends MagicAccess
     /**
      * crypt 加密类
      *
-     * @var Mellivora\Support\Interfaces\EncryptionInterface
+     * @var Mellivora\Encryption\EncryptionInterface
      */
     protected $encryption;
 
@@ -39,8 +42,6 @@ class Cookies extends MagicAccess
      */
     public function __construct(array $options = [])
     {
-        parent::__construct($_COOKIE);
-
         $this->setOptions($options);
     }
 
@@ -61,7 +62,7 @@ class Cookies extends MagicAccess
     /**
      * 设定 crypt 加密类
      *
-     * @param Mellivora\Support\Interfaces\EncryptionInterface $encryption
+     * @param Mellivora\Encryption\EncryptionInterface $encryption
      */
     public function setEncryption(EncryptionInterface $encryption)
     {
@@ -71,7 +72,7 @@ class Cookies extends MagicAccess
     /**
      * 获取 crypt 加密类
      *
-     * @return Mellivora\Support\Interfaces\EncryptionInterface
+     * @return Mellivora\Encryption\EncryptionInterface
      */
     public function getEncryption()
     {
@@ -85,16 +86,19 @@ class Cookies extends MagicAccess
     /**
      * ookie 设置
      *
-     * @param  string    $key
-     * @param  mixed     $value
-     * @param  integer   $expire
-     * @return boolean
+     * @param string  $key
+     * @param mixed   $value
+     * @param integer $expire
      */
     protected function setCookie($key, $value = null, $expire = 0)
     {
         if ($value === null) {
             unset($_COOKIE[$key]);
         } else {
+            if ($this->defaults['encrypt']) {
+                $value = $this->getEncryption()->encryptBase64($value);
+            }
+
             $_COOKIE[$key] = $value;
         }
 
@@ -114,19 +118,19 @@ class Cookies extends MagicAccess
      * @param  integer                  $minutes
      * @return Mellivora\Http\Cookies
      */
-    public function set($key, $value, $minutes = null)
+    public function set($key, $value = null, $minutes = null)
     {
         if ($minutes === null) {
             $minutes = $this->defaults['lifetime'];
         }
 
-        if ($this->defaults['encrypt']) {
-            $value = $this->getEncryption()->encryptBase64($value);
+        $data = is_array($key) ? $key : [$key => $value];
+
+        foreach ($data as $key => $value) {
+            $this->setCookie($key, $value, time() + $minutes);
         }
 
-        $this->setCookie($key, $value, time() + $minutes);
-
-        return parent::set($key, $value);
+        return $this;
     }
 
     /**
@@ -138,7 +142,7 @@ class Cookies extends MagicAccess
      */
     public function get($key, $default = null)
     {
-        $value = parent::get($key, $default);
+        $value = $_COOKIE[$key] ?? $default;
 
         if ($this->defaults['encrypt']) {
             $value = $this->getEncryption()->decryptBase64($value);
@@ -148,16 +152,52 @@ class Cookies extends MagicAccess
     }
 
     /**
+     * 判断 cookie 是否存在
+     *
+     * @param  string    $key
+     * @return boolean
+     */
+    public function has($key)
+    {
+        return isset($_COOKIE[$key]);
+    }
+
+    /**
      * 删除 cookie
      *
      * @param  string                   $key
-     * @return boolean
      * @return Mellivora\Http\Cookies
      */
     public function delete($key)
     {
+        unset($_COOKIE[$key]);
+
         $this->setCookie($key, null, -86400);
 
-        return parent::delete($key);
+        return $this;
+    }
+
+    /**
+     * 清空所有 cookie
+     *
+     * @return Mellivora\Http\Cookies
+     */
+    public function clear()
+    {
+        foreach ($_COOKIE as $key => $value) {
+            $this->delete($key);
+        }
+
+        return $this;
+    }
+
+    /**
+     * 返回所有 cookie
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $_COOKIE;
     }
 }

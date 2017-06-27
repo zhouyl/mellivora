@@ -2,15 +2,17 @@
 
 namespace Mellivora\Session;
 
+use ArrayAccess;
 use Mellivora\Support\Arr;
-use Mellivora\Support\Interfaces\SessionSaveHandlerInterface;
-use Mellivora\Support\MagicAccess;
+use Mellivora\Support\Traits\MagicAccess;
 
 /**
  * Session 处理，使用 php.ini 指定的处理方式
  */
-class Session extends MagicAccess
+class Session implements ArrayAccess
 {
+    use MagicAccess;
+
     /**
      * @var boolean
      */
@@ -19,9 +21,9 @@ class Session extends MagicAccess
     /**
      * Constructor
      *
-     * @param Mellivora\Support\Interfaces\SessionSaveHandlerInterface saveHandler
+     * @param Mellivora\Session\SaveHandlerInterface saveHandler
      */
-    public function __construct(SessionSaveHandlerInterface $saveHandler = null)
+    public function __construct(SaveHandlerInterface $saveHandler = null)
     {
         if ($saveHandler) {
             $this->setSaveHandler($saveHandler);
@@ -84,6 +86,29 @@ class Session extends MagicAccess
     }
 
     /**
+     * 设定 session 数据
+     *
+     * <code>
+     * $session->has("foo", "bar");
+     * $session->has("foo.bar", 1);
+     * </code>
+     *
+     * @param  string                      $key
+     * @param  mixed                       $value
+     * @return Mellivora\Session\Session
+     */
+    public function set($key, $value = null)
+    {
+        $data = is_array($key) ? $key : [$key => $value];
+
+        foreach ($data as $key => $value) {
+            Arr::set($_SESSION, $key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * 获取 session 数据
      *
      * <code>
@@ -105,31 +130,6 @@ class Session extends MagicAccess
         }
 
         return $data;
-    }
-
-    /**
-     * 设定 session 数据
-     *
-     * <code>
-     * $session->has("foo", "bar");
-     * $session->has("foo.bar", 1);
-     * </code>
-     *
-     * @param  string                      $key
-     * @param  mixed                       $value
-     * @return Mellivora\Session\Session
-     */
-    public function set($key, $value = null)
-    {
-        if (is_array($key)) {
-            foreach ($key as $k => $v) {
-                $this->set($k, $v);
-            }
-        } else {
-            Arr::set($_SESSION, $key, $value);
-        }
-
-        return $this;
     }
 
     /**
@@ -176,6 +176,16 @@ class Session extends MagicAccess
         $_SESSION = [];
 
         return $this;
+    }
+
+    /**
+     * 返回所有 session 数据
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $_SESSION;
     }
 
     /**
@@ -243,9 +253,9 @@ class Session extends MagicAccess
     /**
      * 设定自定义的 session handler
      *
-     * @param Mellivora\Support\Interfaces\SessionSaveHandlerInterface $saveHandler
+     * @param Mellivora\Session\SaveHandlerInterface $saveHandler
      */
-    public function setSaveHandler(SessionSaveHandlerInterface $saveHandler)
+    public function setSaveHandler(SaveHandlerInterface $saveHandler)
     {
         session_set_save_handler(
             [ & $saveHandler, 'open'],

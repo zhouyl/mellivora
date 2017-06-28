@@ -73,7 +73,7 @@ class Controller
      */
     public function __get($id)
     {
-        return $this->container->get($id);
+        return $this->container->{$id};
     }
 
     /**

@@ -35,9 +35,9 @@ class ViewServiceProvider extends ServiceProvider
             // Next we need to grab the engine resolver instance that will be used by the
             // environment. The resolver will be used by an environment to get each of
             // the various engine implementations such as plain PHP or Blade engine.
-            $resolver = $container['viewEngine'];
+            $resolver = $container['view.engine.resolver'];
 
-            $finder = $container['viewFinder'];
+            $finder = $container['view.finder'];
 
             $view = new Factory($resolver, $finder);
 
@@ -59,7 +59,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function registerViewFinder()
     {
-        $this->container['viewFinder'] = function ($container) {
+        $this->container['view.finder'] = function ($container) {
             return new FileViewFinder(
                 $container['config']->get('view.paths')->toArray());
         };
@@ -72,7 +72,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function registerEngineResolver()
     {
-        $this->container['viewEngine'] = function () {
+        $this->container['view.engine.resolver'] = function () {
             $resolver = new EngineResolver;
 
             // Next, we will register the various view engines with the resolver so that the

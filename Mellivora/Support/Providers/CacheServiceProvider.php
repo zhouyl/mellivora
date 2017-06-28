@@ -27,7 +27,7 @@ class CacheServiceProvider extends ServiceProvider
             return $container['cache.manager']->getDefaultCache();
         };
 
-        $this->container['simpleCache'] = function ($container) {
+        $this->container['cache.simple'] = function ($container) {
             return $container['cache.manager']->getDefaultSimpleCache();
         };
     }

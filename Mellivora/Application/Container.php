@@ -3,6 +3,7 @@
 namespace Mellivora\Application;
 
 use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\Str;
 use Slim\Container as SlimContainer;
 use UnexpectedValueException;
 
@@ -63,7 +64,7 @@ class Container extends SlimContainer
      */
     public function set($id, $value)
     {
-        return parent::offsetSet($id, $value);
+        return $this->offsetSet($id, $value);
     }
 
     /**
@@ -76,20 +77,43 @@ class Container extends SlimContainer
      */
     public function remove($id)
     {
-        return parent::offsetUnset($id);
+        return $this->offsetUnset($id);
+    }
+
+    /**
+     * 将驼峰式的 id 转变为以 . 为连接格式的 id
+     *
+     * 使得 $container->viewFinder 相当于 $container->get('view.finder')
+     *
+     * @param  string   $id
+     * @return string
+     */
+    protected function sanitizeId($id)
+    {
+        return Str::snake($id, '.');
     }
 
     /********************************************************************
-     * 魔术方法补充，__get/__isset 已经在 Slim\Container 中实现
+     * 魔术方法重写或补充
      ********************************************************************/
 
     public function __set($id, $value)
     {
-        return parent::offsetSet($id, $value);
+        return $this->offsetSet($this->sanitizeId($id), $value);
     }
 
     public function __unset($id)
     {
-        return parent::offsetUnset($id);
+        return $this->offsetUnset($this->sanitizeId($id));
+    }
+
+    public function __get($id)
+    {
+        return $this->get($this->sanitizeId($id));
+    }
+
+    public function __isset($id)
+    {
+        return $this->has($this->sanitizeId($id));
     }
 }

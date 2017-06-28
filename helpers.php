@@ -48,15 +48,33 @@ if (!function_exists('env')) {
 
 if (!function_exists('cache')) {
     /**
-     * Get / set the specified cache value.
-     *
-     * If an array is passed, we'll assume you want to put to the cache.
+     * 使用 psr-16 simple cache 进行缓存管理
      *
      * @param  dynamic      key|key,default|data,expiration|null
      * @throws \Exception
      * @return mixed
      */
-    function cache() {}
+    function cache()
+    {
+        $arguments = func_get_args();
+
+        if (empty($arguments)) {
+            return app('cache.simple');
+        }
+
+        if (is_string($arguments[0])) {
+            return app('cache.simple')->get($arguments[0], isset($arguments[1]) ? $arguments[1] : null);
+        }
+
+        if (!is_array($arguments[0])) {
+            throw new Exception(
+                'When setting a value in the cache, you must pass an array of key / value pairs.'
+            );
+        }
+
+        return app('cache.simple')->set(
+            key($arguments[0]), reset($arguments[0]), $arguments[1] ?? null);
+    }
 }
 
 if (!function_exists('config')) {
@@ -102,15 +120,24 @@ if (!function_exists('cookie')) {
 
 if (!function_exists('session')) {
     /**
-     * Get / set the specified session value.
-     *
-     * If an array is passed as the key, we will assume you want to set an array of values.
+     * 获取或设定 session 值
      *
      * @param  array|string $key
      * @param  mixed        $default
      * @return mixed
      */
-    function session($key = null, $default = null) {}
+    function session($key = null, $default = null)
+    {
+        if (is_null($key)) {
+            return app('session');
+        }
+
+        if (is_array($key)) {
+            return app('session')->set($key);
+        }
+
+        return app('session')->get($key, $default);
+    }
 }
 
 if (!function_exists('trans')) {

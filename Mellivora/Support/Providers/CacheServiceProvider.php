@@ -23,7 +23,7 @@ class CacheServiceProvider extends ServiceProvider
             $manager->setDefault($config->default);
 
             // 设置日志处理器
-            $manager->setLogger($container['logger']->get($config->logger));
+            $manager->setLogger(value($config->logger));
 
             return $manager;
         };

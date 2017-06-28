@@ -2,7 +2,8 @@
 
 namespace Mellivora\Session;
 
-use Mellivora\Cache\ConnectorInterface;
+use InvalidArgumentException;
+use Mellivora\Cache\Connector;
 use Mellivora\Cache\NullConnector;
 use SessionHandlerInterface;
 
@@ -41,9 +42,9 @@ class SimpleCacheHandler implements SessionHandlerInterface
 
         $connector = $this->options['connector'];
 
-        if (!is_subclass_of($connector, ConnectorInterface::class)) {
+        if (!is_subclass_of($connector, Connector::class)) {
             throw new InvalidArgumentException(
-                $connector . ' must implement of ' . ConnectorInterface::class);
+                $connector . ' must implement of ' . Connector::class);
         }
 
         $this->simpleCache = (new $connector($this->options))->getSimpleCacheAdapter();

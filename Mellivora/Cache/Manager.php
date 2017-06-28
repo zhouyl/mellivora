@@ -119,7 +119,7 @@ class Manager
      *
      * @param  string                                                       $name
      * @throws Symfony\Component\Cache\Exception\InvalidArgumentException
-     * @return Mellivora\Cache\ConnectorInterface
+     * @return Mellivora\Cache\Connector
      */
     protected function getConnector($name)
     {
@@ -129,9 +129,9 @@ class Manager
         }
 
         if (!isset($this->connectors[$name])) {
-            if (!is_subclass_of($config['connector'], ConnectorInterface::class)) {
+            if (!is_subclass_of($config['connector'], Connector::class)) {
                 throw new InvalidArgumentException(
-                    $config['connector'] . ' must implement of ' . ConnectorInterface::class);
+                    $config['connector'] . ' must implement of ' . Connector::class);
             }
 
             $connector = new $config['connector']($config);

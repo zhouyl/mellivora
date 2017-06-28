@@ -10,7 +10,7 @@ use Symfony\Component\Cache\Simple\RedisCache;
  *
  * @link https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html
  */
-class RedisConnector implements ConnectorInterface
+class RedisConnector extends Connector
 {
 
     /**
@@ -19,30 +19,12 @@ class RedisConnector implements ConnectorInterface
      * @var array
      */
     protected $config = [
-
-        // 缓存命名空间，用于项目隔离 (30天)
-        'namespace' => '',
-
-        // 默认的缓存生命周期
-        'lifetime'  => 0,
-
         // 格式: redis://[user:pass@][ip|host|socket[:port]][/db-index]
-        'dsn'       => 'redis://127.0.0.1:6379',
+        'dsn'     => 'redis://127.0.0.1:6379',
 
         // @link https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html#configure-the-options
-        'options'   => [],
-
+        'options' => [],
     ];
-
-    /**
-     * Constructor
-     *
-     * @param array $config
-     */
-    public function __construct(array $config)
-    {
-        $this->config = array_merge($this->config, $config);
-    }
 
     /**
      * {@inheritdoc}

@@ -8,7 +8,7 @@ use Symfony\Component\Cache\Simple\NullCache;
 /**
  * 这是一个空的缓存连接器(未使用任何缓存)
  */
-class NullConnector implements ConnectorInterface
+class NullConnector extends Connector
 {
 
     /**

@@ -14,6 +14,11 @@ class Request extends SlimHttpRequest
 {
 
     /**
+     * @var array
+     */
+    protected $languages;
+
+    /**
      * 指定 headers 头部信息
      *
      * @param  array    $headers
@@ -470,5 +475,79 @@ class Request extends SlimHttpRequest
         $value = $this->input($key);
 
         return !is_bool($value) && !is_array($value) && trim((string) $value) === '';
+    }
+
+    /**
+     * Gets a list of languages acceptable by the client browser.
+     *
+     * @return array Languages ordered in the user browser preferences
+     */
+    public function getLanguages()
+    {
+        if (null !== $this->languages) {
+            return $this->languages;
+        }
+
+        $languages       = AcceptHeader::fromString(current($this->headers->get('Accept-Language')))->all();
+        $this->languages = [];
+        foreach ($languages as $lang => $acceptHeaderItem) {
+            if (false !== strpos($lang, '-')) {
+                $codes = explode('-', $lang);
+                if ('i' === $codes[0]) {
+                    // Language not listed in ISO 639 that are not variants
+                    // of any listed language, which can be registered with the
+                    // i-prefix, such as i-cherokee
+                    if (count($codes) > 1) {
+                        $lang = $codes[1];
+                    }
+                } else {
+                    for ($i = 0, $max = count($codes); $i < $max; ++$i) {
+                        if ($i === 0) {
+                            $lang = strtolower($codes[0]);
+                        } else {
+                            $lang .= '_' . strtoupper($codes[$i]);
+                        }
+                    }
+                }
+            }
+
+            $this->languages[] = $lang;
+        }
+
+        return $this->languages;
+    }
+
+    /**
+     * Returns the preferred language.
+     *
+     * @param  array       $locales An array of ordered available locales
+     * @return string|null The preferred locale
+     */
+    public function getPreferredLanguage(array $locales = null)
+    {
+        $preferredLanguages = $this->getLanguages();
+
+        if (empty($locales)) {
+            return isset($preferredLanguages[0]) ? $preferredLanguages[0] : null;
+        }
+
+        if (!$preferredLanguages) {
+            return $locales[0];
+        }
+
+        $extendedPreferredLanguages = [];
+        foreach ($preferredLanguages as $language) {
+            $extendedPreferredLanguages[] = $language;
+            if (false !== $position = strpos($language, '_')) {
+                $superLanguage = substr($language, 0, $position);
+                if (!in_array($superLanguage, $preferredLanguages)) {
+                    $extendedPreferredLanguages[] = $superLanguage;
+                }
+            }
+        }
+
+        $preferredLanguages = array_values(array_intersect($extendedPreferredLanguages, $locales));
+
+        return isset($preferredLanguages[0]) ? $preferredLanguages[0] : $locales[0];
     }
 }

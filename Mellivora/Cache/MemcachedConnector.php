@@ -5,12 +5,18 @@ namespace Mellivora\Cache;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\Cache\Simple\MemcachedCache;
 
+/**
+ * memcached 缓存连接器
+ *
+ * @link https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html
+ */
 class MemcachedConnector implements ConnectorInterface
 {
 
     /**
+     * 配置参数
+     *
      * @var array
-     * @link https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html
      */
     protected $config = [
 
@@ -32,11 +38,19 @@ class MemcachedConnector implements ConnectorInterface
 
     ];
 
+    /**
+     * Constructor
+     *
+     * @param array $config
+     */
     public function __construct(array $config)
     {
-        $this->config = $config;
+        $this->config = array_merge($this->config, $config);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCacheAdapter()
     {
         $client = MemcachedAdapter::createConnection(
@@ -46,6 +60,9 @@ class MemcachedConnector implements ConnectorInterface
             $client, $this->config['namespace'], $this->config['lifetime']);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSimpleCacheAdapter()
     {
         $client = MemcachedCache::createConnection(

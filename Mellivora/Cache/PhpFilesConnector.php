@@ -2,15 +2,17 @@
 
 namespace Mellivora\Cache;
 
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
+use Symfony\Component\Cache\Simple\PhpFilesCache;
 
 /**
- * 文件系统缓存连接器
+ * php 文件缓存连接器
  *
- * @link https://symfony.com/doc/current/components/cache/adapters/filesystem_adapter.html
+ * 使用 php 文件返回 array 的方式来进行缓存
+ *
+ * @link https://symfony.com/doc/current/components/cache/adapters/phpfiles_adapter.html
  */
-class FilesystemConnector implements ConnectorInterface
+class PhpFilesConnector implements ConnectorInterface
 {
 
     /**
@@ -37,7 +39,7 @@ class FilesystemConnector implements ConnectorInterface
      */
     public function getCacheAdapter()
     {
-        return new FilesystemAdapter($this->config['namespace'],
+        return new PhpFilesAdapter($this->config['namespace'],
             $this->config['lifetime'], $this->config['directory']);
     }
 
@@ -46,7 +48,7 @@ class FilesystemConnector implements ConnectorInterface
      */
     public function getSimpleCacheAdapter()
     {
-        return new FilesystemCache($this->config['namespace'],
+        return new PhpFilesCache($this->config['namespace'],
             $this->config['lifetime'], $this->config['directory']);
     }
 

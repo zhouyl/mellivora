@@ -2,6 +2,7 @@
 
 namespace Mellivora\Cache;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
 
 /**
@@ -19,6 +20,13 @@ class Manager
      * @var string
      */
     protected $default = 'null';
+
+    /**
+     * 日志处理器
+     *
+     * @var Psr\Log\LoggerInterface
+     */
+    protected $logger;
 
     /**
      * 支持的缓存驱动
@@ -115,6 +123,18 @@ class Manager
     }
 
     /**
+     * 设置日志处理器
+     *
+     * @param Psr\Log\LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
      * 根据名称获取缓存构造器
      *
      * @param  string                                                       $name
@@ -150,7 +170,13 @@ class Manager
      */
     public function getCache($name)
     {
-        return $this->getConnector($name)->getCacheAdapter();
+        $cache = $this->getConnector($name)->getCacheAdapter();
+
+        if ($this->logger instanceof LoggerInterface) {
+            $cache->setLogger($this->logger);
+        }
+
+        return $cache;
     }
 
     /**
@@ -161,7 +187,13 @@ class Manager
      */
     public function getSimpleCache($name)
     {
-        return $this->getConnector($name)->getSimpleCacheAdapter();
+        $cache = $this->getConnector($name)->getSimpleCacheAdapter();
+
+        if ($this->logger instanceof LoggerInterface) {
+            $cache->setLogger($this->logger);
+        }
+
+        return $cache;
     }
 
     /**

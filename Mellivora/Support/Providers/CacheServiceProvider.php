@@ -18,7 +18,12 @@ class CacheServiceProvider extends ServiceProvider
             $config = $container['config']->get('cache');
 
             $manager = new Manager($config->drivers->toArray());
+
+            // 设置默认缓存驱动
             $manager->setDefault($config->default);
+
+            // 设置日志处理器
+            $manager->setLogger($container['logger']->get($config->logger));
 
             return $manager;
         };

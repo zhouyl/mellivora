@@ -5,6 +5,7 @@ namespace Mellivora\Session;
 use ArrayAccess;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Traits\MagicAccess;
+use SessionHandlerInterface;
 
 /**
  * Session 处理，使用 php.ini 指定的处理方式
@@ -21,9 +22,9 @@ class Session implements ArrayAccess
     /**
      * Constructor
      *
-     * @param Mellivora\Session\SaveHandlerInterface saveHandler
+     * @param SessionHandlerInterface saveHandler
      */
-    public function __construct(SaveHandlerInterface $saveHandler = null)
+    public function __construct(SessionHandlerInterface $saveHandler = null)
     {
         if ($saveHandler) {
             session_set_save_handler($saveHandler, true);

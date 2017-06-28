@@ -20,12 +20,12 @@ class Cookies implements ArrayAccess
      * @var array
      */
     protected $defaults = [
-        'lifetime' => 86400, // 默认生存周期 1 天，单位：秒
-        'path'     => '/',   // 存储路径
-        'domain'   => null,  // 域名
-        'httponly' => null,  // 仅允许 http 访问，禁止 javascript 访问
-        'secure'   => false, // 启用 https 连接传输
-        'encrypt'  => false, // 是否使用 crypt 加密
+        'lifetime' => 604800, // 默认生存周期 7 天，单位：秒
+        'path'     => '/',    // 存储路径
+        'domain'   => null,   // 域名
+        'httponly' => false,  // 仅允许 http 访问，禁止 javascript 访问
+        'secure'   => false,  // 启用 https 连接传输
+        'encrypt'  => false,  // 是否使用 crypt 加密
     ];
 
     /**

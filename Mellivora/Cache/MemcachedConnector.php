@@ -19,7 +19,6 @@ class MemcachedConnector implements ConnectorInterface
      * @var array
      */
     protected $config = [
-
         // 缓存命名空间，用于项目隔离 (30天)
         'namespace' => '',
 
@@ -35,7 +34,6 @@ class MemcachedConnector implements ConnectorInterface
         // @link http://php.net/manual/zh/memcached.setoptions.php
         // @link http://php.net/manual/zh/memcached.constants.php
         'options'   => [],
-
     ];
 
     /**

@@ -2,8 +2,10 @@
 
 namespace Mellivora\Support\Providers;
 
+use InvalidArgumentException;
 use Mellivora\Session\Session;
 use Mellivora\Support\Providers\ServiceProvider;
+use SessionHandlerInterface;
 
 class SessionServiceProvider extends ServiceProvider
 {
@@ -18,11 +20,20 @@ class SessionServiceProvider extends ServiceProvider
         $this->container['session'] = function ($container) {
             $handler = null;
             if ($config = $container['config']->get('session.saveHandler')) {
-                dd(class_exists($config->handler));
+                if (!$class = $config->handler) {
+                    throw new InvalidArgumentException(
+                        'Invalid "handler" parameter in the session save handler');
+                }
+
+                if (!is_subclass_of($class, SessionHandlerInterface::class)) {
+                    throw new InvalidArgumentException(
+                        $class . ' must implement of ' . SessionHandlerInterface::class);
+                }
+
+                $handler = new $class($config->options ? $config->options->toArray() : null);
             }
 
             $session = new Session($handler);
-
             $session->start();
 
             return $session;

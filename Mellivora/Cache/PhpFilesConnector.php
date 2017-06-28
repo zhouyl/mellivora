@@ -21,7 +21,14 @@ class PhpFilesConnector implements ConnectorInterface
      * @var array
      */
     protected $config = [
-        'directory' => null, // 缓存目录
+        // 缓存命名空间，用于项目隔离 (30天)
+        'namespace' => '',
+
+        // 默认的缓存生命周期
+        'lifetime'  => 0,
+
+        // 缓存目录
+        'directory' => null,
     ];
 
     /**

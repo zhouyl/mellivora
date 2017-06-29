@@ -2,10 +2,8 @@
 
 namespace Mellivora\Application;
 
-use Mellivora\Support\Providers\ServiceProvider;
 use Mellivora\Support\Str;
 use Slim\Container as SlimContainer;
-use UnexpectedValueException;
 
 /**
  * 重写 Slim\Container 容器类
@@ -20,38 +18,6 @@ class Container extends SlimContainer
     public function __construct(array $values = [])
     {
         parent::__construct($values);
-
-        $this->registerAliases();
-        $this->registerProviders();
-    }
-
-    /**
-     * 注册类别名
-     */
-    protected function registerAliases()
-    {
-        if ($this->has('aliases')) {
-            foreach ($this->get('aliases') as $alias => $abstract) {
-                class_alias($abstract, $alias);
-            }
-        }
-    }
-
-    /**
-     * 注册 Service Providers
-     */
-    protected function registerProviders()
-    {
-        if ($this->has('providers')) {
-            foreach ($this->get('providers') as $class) {
-                if (!is_subclass_of($class, ServiceProvider::class)) {
-                    throw new UnexpectedValueException(
-                        $class . ' must return instance of ' . ServiceProvider::class);
-                }
-
-                (new $class($this))->register();
-            }
-        }
     }
 
     /**

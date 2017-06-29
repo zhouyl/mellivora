@@ -5,6 +5,7 @@ use Mellivora\Support\Arr;
 use Mellivora\Support\Collection;
 use Mellivora\Support\HigherOrderTapProxy;
 use Mellivora\Support\Str;
+use Mellivora\View\HtmlString;
 use Slim\Http\Uri;
 
 if (!defined('__ROOT__')) {
@@ -294,6 +295,39 @@ if (!function_exists('url_spintf')) {
         return url(vsprintf($format, $args));
     }
 }
+
+if (!function_exists('csrf_field')) {
+    /**
+     * Generate a CSRF token form field.
+     *
+     * @return string
+     */
+    function csrf_field()
+    {
+        $nameKey  = app('csrf')->getTokenNameKey();
+        $valueKey = app('csrf')->getTokenValueKey();
+        $name     = app('request')->getAttribute($nameKey);
+        $value    = app('request')->getAttribute($valueKey);
+
+        return new HtmlString(join("\n", [
+            sprintf('<input type="hidden" name="%s" value="%s" />', $nameKey, $name),
+            sprintf('<input type="hidden" name="%s" value="%s" />', $valueKey, $value),
+        ]));
+    }
+}
+
+if (!function_exists('csrf_check')) {
+    /**
+     * Check the CSRF token value.
+     *
+     * @return boolean
+     */
+    function csrf_check()
+    {
+        return app('request')->getAttribute('csrf_status') !== false;
+    }
+}
+
 if (!function_exists('root_path')) {
     /**
      * 获取项目根目录下的路径
@@ -882,6 +916,10 @@ if (!function_exists('e')) {
      */
     function e($value)
     {
+        if ($value instanceof HtmlString) {
+            return $value->toHtml();
+        }
+
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
     }
 }

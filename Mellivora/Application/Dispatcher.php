@@ -49,8 +49,8 @@ class Dispatcher
         $action     = Str::camel(Arr::get($args, 'action', 'index'));
         $namespace  = Arr::get($args, 'namespace', '\\App\\Controllers');
 
-        // clone 复制一个 container
-        $container = clone $this->container;
+        // 引用 container
+        $container = &$this->container;
 
         // 需要在 container 中删除 request/response
         unset($container['request'], $container['response']);

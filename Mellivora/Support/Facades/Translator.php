@@ -14,6 +14,6 @@ class Translator extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Translator';
+        return 'translator';
     }
 }

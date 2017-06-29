@@ -118,7 +118,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
 
         if (!is_null($this->cachePath)) {
             if (!is_file($path)) {
-                throw new FileNotFoundException("File does not exist at path {$path}");
+                throw new \RuntimeException("File does not exist at path {$path}");
             }
 
             file_put_contents(

@@ -6,7 +6,7 @@ use Mellivora\Support\Arr;
 use Mellivora\Support\Providers\ServiceProvider;
 use Mellivora\Translation\Translator;
 
-class TranslationServiceProvider extends ServiceProvider
+class TranslatorServiceProvider extends ServiceProvider
 {
 
     /**
@@ -16,8 +16,8 @@ class TranslationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->container['translation'] = function ($container) {
-            $config = $container['config']->get('translation');
+        $this->container['translator'] = function ($container) {
+            $config = $container['config']->get('translator');
 
             $translator = new Translator(Arr::convert($config->paths));
 
@@ -25,9 +25,8 @@ class TranslationServiceProvider extends ServiceProvider
                 $translator->setAlias($key, $value);
             }
 
-            $translator
-                ->import(Arr::convert($config->required))
-                ->setDefault(value($config->default));
+            $translator->import(Arr::convert($config->required));
+            $translator->setDefault(value($config->default));
 
             return $translator;
         };

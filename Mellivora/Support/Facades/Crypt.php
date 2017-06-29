@@ -5,7 +5,7 @@ namespace Mellivora\Support\Facades;
 /**
  * @see Mellivora\Encryption\Crypt
  */
-class Encryption extends Facade
+class Crypt extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +14,6 @@ class Encryption extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'encryption';
+        return 'crypt';
     }
 }

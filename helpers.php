@@ -152,10 +152,10 @@ if (!function_exists('__')) {
     function __($key = null, array $replace = [], $lang = null)
     {
         if (is_null($id)) {
-            return app('translation');
+            return app('translator');
         }
 
-        return app('translation')->trans($id, $replace, $locale);
+        return app('translator')->trans($id, $replace, $locale);
     }
 }
 

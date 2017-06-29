@@ -20,7 +20,10 @@ class CookiesServiceProvider extends ServiceProvider
 
             $cookies = new Cookies($config->toArray());
 
-            $cookies->setEncryption($container['encryption']);
+            // 数据需要加密处理
+            if ($config->encrypt) {
+                $cookies->setEncryption($container['crypt']);
+            }
 
             return $cookies;
         };

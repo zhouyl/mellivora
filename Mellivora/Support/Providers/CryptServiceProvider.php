@@ -5,7 +5,7 @@ namespace Mellivora\Support\Providers;
 use Mellivora\Encryption\Crypt;
 use Mellivora\Support\Providers\ServiceProvider;
 
-class EncryptionServiceProvider extends ServiceProvider
+class CryptServiceProvider extends ServiceProvider
 {
 
     /**
@@ -15,7 +15,7 @@ class EncryptionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->container['encryption'] = function ($container) {
+        $this->container['crypt'] = function ($container) {
             $config = $container['config']->get('security.crypt');
 
             return new Crypt($config->key, $config->cipher, $config->padding);

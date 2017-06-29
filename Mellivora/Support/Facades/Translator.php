@@ -5,7 +5,7 @@ namespace Mellivora\Support\Facades;
 /**
  * @see Mellivora\Translation\Translator
  */
-class Translation extends Facade
+class Translator extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +14,6 @@ class Translation extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'translation';
+        return 'Translator';
     }
 }

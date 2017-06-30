@@ -3,6 +3,7 @@
 namespace Mellivora\Support\Providers;
 
 use Mellivora\Cache\Manager;
+use Mellivora\Support\ServiceProvider;
 
 class CacheServiceProvider extends ServiceProvider
 {

@@ -1,15 +1,14 @@
 <?php
 
-namespace Mellivora\Support\Middlewares;
+namespace Mellivora\View\Middleware;
 
 use Closure;
 use Mellivora\Application\Container;
-use Mellivora\Support\Middleware;
 use Mellivora\Support\ViewErrorBag;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ShareErrorsFromSession extends Middleware
+class ShareErrorsFromSession
 {
 
     /**
@@ -33,19 +32,12 @@ class ShareErrorsFromSession extends Middleware
      * @param  \Closure                                $next
      * @return Psr\Http\Message\ResponseInterface
      */
-    public function __invoke(ResponseInterface $request, ResponseInterface $response, callable $next)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        // If the current session has an "errors" variable bound to it, we will share
-        // its value with all view instances so the views can easily access errors
-        // without having to bind. An empty bag is set when there aren't errors.
         $this->container['view']->share(
             'errors', $this->container['session']->get('errors') ?: new ViewErrorBag
         );
 
-        // Putting the errors in the view for every view allows the developer to just
-        // assume that some errors are always available, which is convenient since
-        // they don't have to continually run checks for the presence of errors.
-
-        return $next($request);
+        return $next($request, $response);
     }
 }

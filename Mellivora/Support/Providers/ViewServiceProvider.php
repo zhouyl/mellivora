@@ -2,6 +2,7 @@
 
 namespace Mellivora\Support\Providers;
 
+use Mellivora\Support\ServiceProvider;
 use Mellivora\View\Compilers\BladeCompiler;
 use Mellivora\View\Engines\CompilerEngine;
 use Mellivora\View\Engines\EngineResolver;

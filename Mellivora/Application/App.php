@@ -11,7 +11,7 @@ use UnexpectedValueException;
 /**
  * 重写 Slim\App 类
  *
- * 对 facades/provider/middleware 进行扩展
+ * 对 facades/provider 进行扩展
  */
 class App extends SlimApp
 {

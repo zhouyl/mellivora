@@ -2,12 +2,13 @@
 
 namespace Mellivora\Support\Contracts;
 
-interface Htmlable
+interface Jsonable
 {
     /**
-     * Get content as a string of HTML.
+     * Convert the object to its JSON representation.
      *
+     * @param  int      $options
      * @return string
      */
-    public function toHtml();
+    public function toJson($options = 0);
 }

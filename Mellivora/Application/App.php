@@ -9,6 +9,13 @@ use Slim\App as SlimApp;
 use UnexpectedValueException;
 
 /**
+ * 定义 json_encode 的默认选项
+ */
+if (defined('JSON_ENCODE_OPTION')) {
+    define('JSON_ENCODE_OPTION', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+}
+
+/**
  * 重写 Slim\App 类
  *
  * 对 facades/provider 进行扩展

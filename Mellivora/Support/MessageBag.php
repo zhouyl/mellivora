@@ -367,7 +367,7 @@ class MessageBag implements Arrayable, Countable, Jsonable, JsonSerializable, Me
      * @param  int      $options
      * @return string
      */
-    public function toJson($options = 0)
+    public function toJson($options = JSON_ENCODE_OPTION)
     {
         return json_encode($this->jsonSerialize(), $options);
     }

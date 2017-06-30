@@ -199,7 +199,7 @@ class Factory
      */
     protected function parseData($data)
     {
-        return $data instanceof Arrayable ? $data->toArray() : $data;
+        return Arr::convert($data);
     }
 
     /**

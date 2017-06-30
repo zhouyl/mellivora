@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Providers;
 
 use Mellivora\Encryption\Crypt;
-use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\ServiceProvider;
 
 class CryptServiceProvider extends ServiceProvider
 {

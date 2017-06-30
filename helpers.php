@@ -3,9 +3,10 @@
 use Mellivora\Application\App;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Collection;
+use Mellivora\Support\Contracts\Htmlable;
 use Mellivora\Support\HigherOrderTapProxy;
+use Mellivora\Support\HtmlString;
 use Mellivora\Support\Str;
-use Mellivora\View\HtmlString;
 use Slim\Http\Uri;
 
 if (!defined('__ROOT__')) {
@@ -920,7 +921,7 @@ if (!function_exists('e')) {
      */
     function e($value)
     {
-        if ($value instanceof HtmlString) {
+        if ($value instanceof Htmlable) {
             return $value->toHtml();
         }
 

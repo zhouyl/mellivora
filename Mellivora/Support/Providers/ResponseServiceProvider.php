@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Providers;
 
 use Mellivora\Http\Response;
-use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\ServiceProvider;
 use Slim\Http\Headers;
 
 class ResponseServiceProvider extends ServiceProvider

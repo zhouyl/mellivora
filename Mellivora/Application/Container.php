@@ -7,8 +7,6 @@ use Slim\Container as SlimContainer;
 
 /**
  * 重写 Slim\Container 容器类
- *
- * 对 alias 及 provider 进行扩展
  */
 class Container extends SlimContainer
 {

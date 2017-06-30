@@ -10,10 +10,12 @@ use Exception;
 use InvalidArgumentException;
 use IteratorAggregate;
 use JsonSerializable;
+use Mellivora\Support\Contracts\Arrayable;
+use Mellivora\Support\Contracts\Jsonable;
 use Mellivora\Support\Traits\Macroable;
 use Traversable;
 
-class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable
+class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
 {
     use Macroable;
 

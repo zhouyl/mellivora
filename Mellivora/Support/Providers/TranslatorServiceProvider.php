@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Providers;
 
 use Mellivora\Support\Arr;
-use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\ServiceProvider;
 use Mellivora\Translation\Translator;
 
 class TranslatorServiceProvider extends ServiceProvider

@@ -6,6 +6,7 @@ use ArrayAccess;
 use BadMethodCallException;
 use Exception;
 use Mellivora\Support\Arr;
+use Mellivora\Support\MessageBag;
 use Mellivora\Support\Str;
 use Mellivora\View\Engines\EngineInterface;
 use Throwable;
@@ -181,6 +182,31 @@ class View implements ArrayAccess
     public function nest($key, $view, array $data = [])
     {
         return $this->with($key, $this->factory->make($view, $data));
+    }
+
+    /**
+     * Add validation errors to the view.
+     *
+     * @param  \Mellivora\Support\Contracts\MessageProvider|array $provider
+     * @return $this
+     */
+    public function withErrors($provider)
+    {
+        $this->with('errors', $this->formatErrors($provider));
+
+        return $this;
+    }
+
+    /**
+     * Format the given message provider into a MessageBag.
+     *
+     * @param  \Mellivora\Support\Contracts\MessageProvider|array $provider
+     * @return \Mellivora\Support\MessageBag
+     */
+    protected function formatErrors($provider)
+    {
+        return $provider instanceof MessageProvider
+            ? $provider->getMessageBag() : new MessageBag((array) $provider);
     }
 
     /**

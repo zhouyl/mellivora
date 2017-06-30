@@ -3,8 +3,7 @@
 namespace Mellivora\Application;
 
 use Mellivora\Support\Facades\Facade;
-use Mellivora\Support\Middlewares\Middleware;
-use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\ServiceProvider;
 use Mellivora\Support\Traits\Singleton;
 use Slim\App as SlimApp;
 use UnexpectedValueException;
@@ -12,7 +11,7 @@ use UnexpectedValueException;
 /**
  * 重写 Slim\App 类
  *
- * 对 facades 进行扩展
+ * 对 facades/provider/middleware 进行扩展
  */
 class App extends SlimApp
 {
@@ -41,7 +40,6 @@ class App extends SlimApp
 
         $this->registerAliases();
         $this->registerProviders();
-        $this->registerMiddlewares();
     }
 
     /**
@@ -70,25 +68,6 @@ class App extends SlimApp
                 if (!is_subclass_of($class, ServiceProvider::class)) {
                     throw new UnexpectedValueException(
                         $class . ' must return instance of ' . ServiceProvider::class);
-                }
-
-                (new $class($this))->register();
-            }
-        }
-    }
-
-    /**
-     * 注册 Middlewares
-     */
-    protected function registerMiddlewares()
-    {
-        $container = $this->getContainer();
-
-        if ($container->has('middlewares')) {
-            foreach ($container->get('middlewares') as $class) {
-                if (!is_subclass_of($class, Middleware::class)) {
-                    throw new UnexpectedValueException(
-                        $class . ' must return instance of ' . Middleware::class);
                 }
 
                 (new $class($this))->register();

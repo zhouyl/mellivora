@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Providers;
 
 use Mellivora\Config\Accessor;
-use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\ServiceProvider;
 
 class ConfigServiceProvider extends ServiceProvider
 {

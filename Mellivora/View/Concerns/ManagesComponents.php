@@ -2,7 +2,7 @@
 
 namespace Mellivora\View\Concerns;
 
-use Mellivora\View\HtmlString;
+use Mellivora\Support\HtmlString;
 
 trait ManagesComponents
 {

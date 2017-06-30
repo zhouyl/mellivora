@@ -1,10 +1,13 @@
 <?php
 
-namespace Mellivora\Support\Middlewares;
+namespace Mellivora\Support;
 
 use Mellivora\Application\App;
 
-abstract class Middleware
+/**
+ * 服务提供者基类
+ */
+abstract class ServiceProvider
 {
 
     /**
@@ -27,7 +30,7 @@ abstract class Middleware
     }
 
     /**
-     * Register the middleware.
+     * Register the service provider.
      *
      * @return void
      */

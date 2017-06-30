@@ -4,8 +4,10 @@ namespace Mellivora\Support;
 
 use ArrayAccess;
 use JsonSerializable;
+use Mellivora\Support\Contracts\Arrayable;
+use Mellivora\Support\Contracts\Jsonable;
 
-class Fluent implements ArrayAccess, JsonSerializable
+class Fluent implements ArrayAccess, JsonSerializable, Jsonable, Arrayable
 {
     /**
      * All of the attributes set on the container.

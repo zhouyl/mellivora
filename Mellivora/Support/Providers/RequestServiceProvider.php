@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Providers;
 
 use Mellivora\Http\Request;
-use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\ServiceProvider;
 
 class RequestServiceProvider extends ServiceProvider
 {

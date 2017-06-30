@@ -1,8 +1,10 @@
 <?php
 
-namespace Mellivora\View;
+namespace Mellivora\Support;
 
-class HtmlString
+use Mellivora\Support\Contracts\Htmlable;
+
+class HtmlString implements Htmlable
 {
     /**
      * The HTML string.

@@ -4,7 +4,7 @@ namespace Mellivora\Support\Providers;
 
 use InvalidArgumentException;
 use Mellivora\Session\Session;
-use Mellivora\Support\Providers\ServiceProvider;
+use Mellivora\Support\ServiceProvider;
 use SessionHandlerInterface;
 
 class SessionServiceProvider extends ServiceProvider

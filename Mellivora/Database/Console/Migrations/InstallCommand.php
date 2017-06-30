@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Mellivora\Database\Console\Migrations;
 
-use Illuminate\Console\Command;
+use Mellivora\Console\Command;
+use Mellivora\Database\Migrations\MigrationRepositoryInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Database\Migrations\MigrationRepositoryInterface;
 
 class InstallCommand extends Command
 {
@@ -25,14 +25,14 @@ class InstallCommand extends Command
     /**
      * The repository instance.
      *
-     * @var \Illuminate\Database\Migrations\MigrationRepositoryInterface
+     * @var \Mellivora\Database\Migrations\MigrationRepositoryInterface
      */
     protected $repository;
 
     /**
      * Create a new migration install command instance.
      *
-     * @param  \Illuminate\Database\Migrations\MigrationRepositoryInterface  $repository
+     * @param  \Mellivora\Database\Migrations\MigrationRepositoryInterface $repository
      * @return void
      */
     public function __construct(MigrationRepositoryInterface $repository)

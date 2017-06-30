@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Mellivora\Database\Query;
 
 use InvalidArgumentException;
 
@@ -27,7 +27,7 @@ class JsonExpression extends Expression
     /**
      * Translate the given value into the appropriate JSON binding parameter.
      *
-     * @param  mixed  $value
+     * @param  mixed    $value
      * @return string
      */
     protected function getJsonBindingParameter($value)
@@ -45,7 +45,7 @@ class JsonExpression extends Expression
                 return '?';
         }
 
-        throw new InvalidArgumentException('JSON value is of illegal type: '.$type);
+        throw new InvalidArgumentException('JSON value is of illegal type: ' . $type);
     }
 
     /**

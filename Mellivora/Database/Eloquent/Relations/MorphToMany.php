@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
-use Illuminate\Support\Arr;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Model;
+use Mellivora\Support\Arr;
 
 class MorphToMany extends BelongsToMany
 {
@@ -34,20 +34,20 @@ class MorphToMany extends BelongsToMany
     /**
      * Create a new morph to many relationship instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Model  $parent
-     * @param  string  $name
-     * @param  string  $table
-     * @param  string  $foreignKey
-     * @param  string  $relatedKey
-     * @param  string  $relationName
-     * @param  bool  $inverse
+     * @param  \Mellivora\Database\Eloquent\Builder $query
+     * @param  \Mellivora\Database\Eloquent\Model   $parent
+     * @param  string                               $name
+     * @param  string                               $table
+     * @param  string                               $foreignKey
+     * @param  string                               $relatedKey
+     * @param  string                               $relationName
+     * @param  bool                                 $inverse
      * @return void
      */
     public function __construct(Builder $query, Model $parent, $name, $table, $foreignKey, $relatedKey, $relationName = null, $inverse = false)
     {
-        $this->inverse = $inverse;
-        $this->morphType = $name.'_type';
+        $this->inverse    = $inverse;
+        $this->morphType  = $name . '_type';
         $this->morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
 
         parent::__construct($query, $parent, $table, $foreignKey, $relatedKey, $relationName);
@@ -62,7 +62,7 @@ class MorphToMany extends BelongsToMany
     {
         parent::addWhereConstraints();
 
-        $this->query->where($this->table.'.'.$this->morphType, $this->morphClass);
+        $this->query->where($this->table . '.' . $this->morphType, $this->morphClass);
 
         return $this;
     }
@@ -77,14 +77,14 @@ class MorphToMany extends BelongsToMany
     {
         parent::addEagerConstraints($models);
 
-        $this->query->where($this->table.'.'.$this->morphType, $this->morphClass);
+        $this->query->where($this->table . '.' . $this->morphType, $this->morphClass);
     }
 
     /**
      * Create a new pivot attachment record.
      *
-     * @param  int   $id
-     * @param  bool  $timed
+     * @param  int     $id
+     * @param  bool    $timed
      * @return array
      */
     protected function baseAttachRecord($id, $timed)
@@ -97,22 +97,22 @@ class MorphToMany extends BelongsToMany
     /**
      * Add the constraints for a relationship count query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed  $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
+     * @param  array|mixed                            $columns
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         return parent::getRelationExistenceQuery($query, $parentQuery, $columns)->where(
-            $this->table.'.'.$this->morphType, $this->morphClass
+            $this->table . '.' . $this->morphType, $this->morphClass
         );
     }
 
     /**
      * Create a new query builder for the pivot table.
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Mellivora\Database\Query\Builder
      */
     protected function newPivotQuery()
     {
@@ -122,17 +122,17 @@ class MorphToMany extends BelongsToMany
     /**
      * Create a new pivot model instance.
      *
-     * @param  array  $attributes
-     * @param  bool   $exists
-     * @return \Illuminate\Database\Eloquent\Relations\Pivot
+     * @param  array                                          $attributes
+     * @param  bool                                           $exists
+     * @return \Mellivora\Database\Eloquent\Relations\Pivot
      */
     public function newPivot(array $attributes = [], $exists = false)
     {
         $pivot = new MorphPivot($this->parent, $attributes, $this->table, $exists);
 
         $pivot->setPivotKeys($this->foreignKey, $this->relatedKey)
-              ->setMorphType($this->morphType)
-              ->setMorphClass($this->morphClass);
+            ->setMorphType($this->morphType)
+            ->setMorphClass($this->morphClass);
 
         return $pivot;
     }

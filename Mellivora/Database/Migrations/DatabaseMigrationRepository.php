@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database\Migrations;
+namespace Mellivora\Database\Migrations;
 
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
+use Mellivora\Database\ConnectionResolverInterface as Resolver;
 
 class DatabaseMigrationRepository implements MigrationRepositoryInterface
 {
     /**
      * The database connection resolver instance.
      *
-     * @var \Illuminate\Database\ConnectionResolverInterface
+     * @var \Mellivora\Database\ConnectionResolverInterface
      */
     protected $resolver;
 
@@ -30,13 +30,13 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Create a new database migration repository instance.
      *
-     * @param  \Illuminate\Database\ConnectionResolverInterface  $resolver
-     * @param  string  $table
+     * @param  \Mellivora\Database\ConnectionResolverInterface $resolver
+     * @param  string                                          $table
      * @return void
      */
     public function __construct(Resolver $resolver, $table)
     {
-        $this->table = $table;
+        $this->table    = $table;
         $this->resolver = $resolver;
     }
 
@@ -48,15 +48,15 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     public function getRan()
     {
         return $this->table()
-                ->orderBy('batch', 'asc')
-                ->orderBy('migration', 'asc')
-                ->pluck('migration')->all();
+            ->orderBy('batch', 'asc')
+            ->orderBy('migration', 'asc')
+            ->pluck('migration')->all();
     }
 
     /**
      * Get list of migrations.
      *
-     * @param  int  $steps
+     * @param  int     $steps
      * @return array
      */
     public function getMigrations($steps)
@@ -81,8 +81,8 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Log that a migration was run.
      *
-     * @param  string  $file
-     * @param  int     $batch
+     * @param  string $file
+     * @param  int    $batch
      * @return void
      */
     public function log($file, $batch)
@@ -95,7 +95,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Remove a migration from the log.
      *
-     * @param  object  $migration
+     * @param  object $migration
      * @return void
      */
     public function delete($migration)
@@ -157,7 +157,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Get a query builder for the migration table.
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Mellivora\Database\Query\Builder
      */
     protected function table()
     {
@@ -167,7 +167,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Get the connection resolver instance.
      *
-     * @return \Illuminate\Database\ConnectionResolverInterface
+     * @return \Mellivora\Database\ConnectionResolverInterface
      */
     public function getConnectionResolver()
     {
@@ -177,7 +177,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Resolve the database connection instance.
      *
-     * @return \Illuminate\Database\Connection
+     * @return \Mellivora\Database\Connection
      */
     public function getConnection()
     {
@@ -187,7 +187,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
     /**
      * Set the information source to gather data.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function setSource($name)

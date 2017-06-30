@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Builder;
 
 class MorphPivot extends Pivot
 {
@@ -27,8 +27,8 @@ class MorphPivot extends Pivot
     /**
      * Set the keys for a save update query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     protected function setKeysForSaveQuery(Builder $query)
     {
@@ -67,8 +67,8 @@ class MorphPivot extends Pivot
     /**
      * Set the morph class for the pivot.
      *
-     * @param  string  $morphClass
-     * @return \Illuminate\Database\Eloquent\Relations\MorphPivot
+     * @param  string                                              $morphClass
+     * @return \Mellivora\Database\Eloquent\Relations\MorphPivot
      */
     public function setMorphClass($morphClass)
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Mellivora\Database\Connectors;
 
 interface ConnectorInterface
 {

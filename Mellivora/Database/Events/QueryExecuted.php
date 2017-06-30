@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Mellivora\Database\Events;
 
 class QueryExecuted
 {
@@ -28,7 +28,7 @@ class QueryExecuted
     /**
      * The database connection instance.
      *
-     * @var \Illuminate\Database\Connection
+     * @var \Mellivora\Database\Connection
      */
     public $connection;
 
@@ -42,17 +42,17 @@ class QueryExecuted
     /**
      * Create a new event instance.
      *
-     * @param  string  $sql
-     * @param  array  $bindings
-     * @param  float  $time
+     * @param   string $sql
+     * @param   array  $bindings
+     * @param   float  $time
      * @param
      */
     public function __construct($sql, $bindings, $time, $connection)
     {
-        $this->sql = $sql;
-        $this->time = $time;
-        $this->bindings = $bindings;
-        $this->connection = $connection;
+        $this->sql            = $sql;
+        $this->time           = $time;
+        $this->bindings       = $bindings;
+        $this->connection     = $connection;
         $this->connectionName = $connection->getName();
     }
 }

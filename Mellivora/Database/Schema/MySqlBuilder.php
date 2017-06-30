@@ -1,18 +1,18 @@
 <?php
 
-namespace Illuminate\Database\Schema;
+namespace Mellivora\Database\Schema;
 
 class MySqlBuilder extends Builder
 {
     /**
      * Determine if the given table exists.
      *
-     * @param  string  $table
+     * @param  string $table
      * @return bool
      */
     public function hasTable($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
 
         return count($this->connection->select(
             $this->grammar->compileTableExists(), [$this->connection->getDatabaseName(), $table]
@@ -27,7 +27,7 @@ class MySqlBuilder extends Builder
      */
     public function getColumnListing($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
 
         $results = $this->connection->select(
             $this->grammar->compileColumnListing(), [$this->connection->getDatabaseName(), $table]

@@ -1,13 +1,13 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Mellivora\Database\Events;
 
 class StatementPrepared
 {
     /**
      * The database connection instance.
      *
-     * @var \Illuminate\Database\Connection
+     * @var \Mellivora\Database\Connection
      */
     public $connection;
 
@@ -21,13 +21,13 @@ class StatementPrepared
     /**
      * Create a new event instance.
      *
-     * @param  \Illuminate\Database\Connection  $connection
-     * @param  \PDOStatement  $statement
+     * @param  \Mellivora\Database\Connection $connection
+     * @param  \PDOStatement                  $statement
      * @return void
      */
     public function __construct($connection, $statement)
     {
-        $this->statement = $statement;
+        $this->statement  = $statement;
         $this->connection = $connection;
     }
 }

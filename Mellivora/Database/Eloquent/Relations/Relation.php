@@ -1,34 +1,34 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
 use Closure;
-use Illuminate\Support\Arr;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Model;
+use Mellivora\Database\Query\Expression;
+use Mellivora\Support\Arr;
 
 abstract class Relation
 {
     /**
      * The Eloquent query builder instance.
      *
-     * @var \Illuminate\Database\Eloquent\Builder
+     * @var \Mellivora\Database\Eloquent\Builder
      */
     protected $query;
 
     /**
      * The parent model instance.
      *
-     * @var \Illuminate\Database\Eloquent\Model
+     * @var \Mellivora\Database\Eloquent\Model
      */
     protected $parent;
 
     /**
      * The related model instance.
      *
-     * @var \Illuminate\Database\Eloquent\Model
+     * @var \Mellivora\Database\Eloquent\Model
      */
     protected $related;
 
@@ -49,14 +49,14 @@ abstract class Relation
     /**
      * Create a new relation instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Model  $parent
+     * @param  \Mellivora\Database\Eloquent\Builder $query
+     * @param  \Mellivora\Database\Eloquent\Model   $parent
      * @return void
      */
     public function __construct(Builder $query, Model $parent)
     {
-        $this->query = $query;
-        $this->parent = $parent;
+        $this->query   = $query;
+        $this->parent  = $parent;
         $this->related = $query->getModel();
 
         $this->addConstraints();
@@ -65,7 +65,7 @@ abstract class Relation
     /**
      * Run a callback with constraints disabled on the relation.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
      * @return mixed
      */
     public static function noConstraints(Closure $callback)
@@ -111,9 +111,9 @@ abstract class Relation
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array   $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param  array                                   $models
+     * @param  \Mellivora\Database\Eloquent\Collection $results
+     * @param  string                                  $relation
      * @return array
      */
     abstract public function match(array $models, Collection $results, $relation);
@@ -128,7 +128,7 @@ abstract class Relation
     /**
      * Get the relationship for eager loading.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \Mellivora\Database\Eloquent\Collection
      */
     public function getEager()
     {
@@ -150,7 +150,7 @@ abstract class Relation
     /**
      * Run a raw update against the base query.
      *
-     * @param  array  $attributes
+     * @param  array $attributes
      * @return int
      */
     public function rawUpdate(array $attributes = [])
@@ -161,9 +161,9 @@ abstract class Relation
     /**
      * Add the constraints for a relationship count query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceCountQuery(Builder $query, Builder $parentQuery)
     {
@@ -177,10 +177,10 @@ abstract class Relation
      *
      * Essentially, these queries compare on column names like whereColumn.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
+     * @param  array|mixed                            $columns
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -206,7 +206,7 @@ abstract class Relation
     /**
      * Get the underlying query for the relation.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getQuery()
     {
@@ -216,7 +216,7 @@ abstract class Relation
     /**
      * Get the base query builder driving the Eloquent builder.
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Mellivora\Database\Query\Builder
      */
     public function getBaseQuery()
     {
@@ -226,7 +226,7 @@ abstract class Relation
     /**
      * Get the parent model of the relation.
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function getParent()
     {
@@ -246,7 +246,7 @@ abstract class Relation
     /**
      * Get the related model of the relation.
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function getRelated()
     {
@@ -286,8 +286,8 @@ abstract class Relation
     /**
      * Set or get the morph map for polymorphic relations.
      *
-     * @param  array|null  $map
-     * @param  bool  $merge
+     * @param  array|null $map
+     * @param  bool       $merge
      * @return array
      */
     public static function morphMap(array $map = null, $merge = true)
@@ -296,7 +296,7 @@ abstract class Relation
 
         if (is_array($map)) {
             static::$morphMap = $merge && static::$morphMap
-                            ? array_merge(static::$morphMap, $map) : $map;
+                ? array_merge(static::$morphMap, $map) : $map;
         }
 
         return static::$morphMap;
@@ -305,7 +305,7 @@ abstract class Relation
     /**
      * Builds a table-keyed array from model class names.
      *
-     * @param  string[]|null  $models
+     * @param  string[]|null $models
      * @return array|null
      */
     protected static function buildMorphMapFromModels(array $models = null)

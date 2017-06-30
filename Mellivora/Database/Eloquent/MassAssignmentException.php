@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Mellivora\Database\Eloquent;
 
 use RuntimeException;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Model;
 
 abstract class MorphOneOrMany extends HasOneOrMany
 {
@@ -24,11 +24,11 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Create a new morph one or many relationship instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Model  $parent
-     * @param  string  $type
-     * @param  string  $id
-     * @param  string  $localKey
+     * @param  \Mellivora\Database\Eloquent\Builder $query
+     * @param  \Mellivora\Database\Eloquent\Model   $parent
+     * @param  string                               $type
+     * @param  string                               $id
+     * @param  string                               $localKey
      * @return void
      */
     public function __construct(Builder $query, Model $parent, $type, $id, $localKey)
@@ -70,9 +70,9 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Find a related model by its primary key or return new instance of the related model.
      *
-     * @param  mixed  $id
-     * @param  array  $columns
-     * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model
+     * @param  mixed                                                              $id
+     * @param  array                                                              $columns
+     * @return \Mellivora\Support\Collection|\Mellivora\Database\Eloquent\Model
      */
     public function findOrNew($id, $columns = ['*'])
     {
@@ -91,8 +91,8 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Get the first related model record matching the attributes or instantiate it.
      *
-     * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  array                                $attributes
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function firstOrNew(array $attributes)
     {
@@ -111,8 +111,8 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Get the first related record matching the attributes or create it.
      *
-     * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  array                                $attributes
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function firstOrCreate(array $attributes)
     {
@@ -126,9 +126,9 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Create or update a related record matching the attributes, and fill it with values.
      *
-     * @param  array  $attributes
-     * @param  array  $values
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  array                                $attributes
+     * @param  array                                $values
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function updateOrCreate(array $attributes, array $values = [])
     {
@@ -142,8 +142,8 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Attach a model instance to the parent model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  \Mellivora\Database\Eloquent\Model   $model
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function save(Model $model)
     {
@@ -155,8 +155,8 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Create a new instance of the related model.
      *
-     * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  array                                $attributes
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function create(array $attributes)
     {
@@ -175,7 +175,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Set the foreign ID and type for creating a related model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  \Mellivora\Database\Eloquent\Model $model
      * @return void
      */
     protected function setForeignAttributesForCreate(Model $model)
@@ -188,10 +188,10 @@ abstract class MorphOneOrMany extends HasOneOrMany
     /**
      * Get the relationship query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed  $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
+     * @param  array|mixed                            $columns
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {

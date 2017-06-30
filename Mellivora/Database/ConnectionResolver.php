@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
 class ConnectionResolver implements ConnectionResolverInterface
 {
@@ -34,8 +34,8 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * Get a database connection instance.
      *
-     * @param  string  $name
-     * @return \Illuminate\Database\ConnectionInterface
+     * @param  string                                    $name
+     * @return \Mellivora\Database\ConnectionInterface
      */
     public function connection($name = null)
     {
@@ -49,8 +49,8 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * Add a connection to the resolver.
      *
-     * @param  string  $name
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
+     * @param  string                                  $name
+     * @param  \Mellivora\Database\ConnectionInterface $connection
      * @return void
      */
     public function addConnection($name, ConnectionInterface $connection)
@@ -61,7 +61,7 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * Check if a connection has been registered.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return bool
      */
     public function hasConnection($name)
@@ -82,7 +82,7 @@ class ConnectionResolver implements ConnectionResolverInterface
     /**
      * Set the default connection name.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function setDefaultConnection($name)

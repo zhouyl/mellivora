@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Migrations;
+namespace Mellivora\Database\Migrations;
 
 abstract class Migration
 {

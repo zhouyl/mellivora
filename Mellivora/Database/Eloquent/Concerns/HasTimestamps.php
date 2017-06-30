@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Concerns;
+namespace Mellivora\Database\Eloquent\Concerns;
 
 use Carbon\Carbon;
 
@@ -20,7 +20,7 @@ trait HasTimestamps
      */
     public function touch()
     {
-        if (! $this->timestamps) {
+        if (!$this->timestamps) {
             return false;
         }
 
@@ -38,11 +38,11 @@ trait HasTimestamps
     {
         $time = $this->freshTimestamp();
 
-        if (! $this->isDirty(static::UPDATED_AT)) {
+        if (!$this->isDirty(static::UPDATED_AT)) {
             $this->setUpdatedAt($time);
         }
 
-        if (! $this->exists && ! $this->isDirty(static::CREATED_AT)) {
+        if (!$this->exists && !$this->isDirty(static::CREATED_AT)) {
             $this->setCreatedAt($time);
         }
     }
@@ -50,7 +50,7 @@ trait HasTimestamps
     /**
      * Set the value of the "created at" attribute.
      *
-     * @param  mixed  $value
+     * @param  mixed   $value
      * @return $this
      */
     public function setCreatedAt($value)
@@ -63,7 +63,7 @@ trait HasTimestamps
     /**
      * Set the value of the "updated at" attribute.
      *
-     * @param  mixed  $value
+     * @param  mixed   $value
      * @return $this
      */
     public function setUpdatedAt($value)

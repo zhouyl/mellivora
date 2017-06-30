@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Mellivora\Database\Console\Migrations;
 
-use Illuminate\Support\Collection;
-use Illuminate\Database\Migrations\Migrator;
+use Mellivora\Database\Migrations\Migrator;
+use Mellivora\Support\Collection;
 use Symfony\Component\Console\Input\InputOption;
 
 class StatusCommand extends BaseCommand
@@ -25,15 +25,15 @@ class StatusCommand extends BaseCommand
     /**
      * The migrator instance.
      *
-     * @var \Illuminate\Database\Migrations\Migrator
+     * @var \Mellivora\Database\Migrations\Migrator
      */
     protected $migrator;
 
     /**
      * Create a new migration rollback command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator $migrator
-     * @return \Illuminate\Database\Console\Migrations\StatusCommand
+     * @param  \Mellivora\Database\Migrations\Migrator                $migrator
+     * @return \Mellivora\Database\Console\Migrations\StatusCommand
      */
     public function __construct(Migrator $migrator)
     {
@@ -51,7 +51,7 @@ class StatusCommand extends BaseCommand
     {
         $this->migrator->setConnection($this->option('database'));
 
-        if (! $this->migrator->repositoryExists()) {
+        if (!$this->migrator->repositoryExists()) {
             return $this->error('No migrations found.');
         }
 
@@ -67,19 +67,19 @@ class StatusCommand extends BaseCommand
     /**
      * Get the status for the given ran migrations.
      *
-     * @param  array  $ran
-     * @return \Illuminate\Support\Collection
+     * @param  array                           $ran
+     * @return \Mellivora\Support\Collection
      */
     protected function getStatusFor(array $ran)
     {
         return Collection::make($this->getAllMigrationFiles())
-                    ->map(function ($migration) use ($ran) {
-                        $migrationName = $this->migrator->getMigrationName($migration);
+            ->map(function ($migration) use ($ran) {
+                $migrationName = $this->migrator->getMigrationName($migration);
 
-                        return in_array($migrationName, $ran)
-                                ? ['<info>Y</info>', $migrationName]
-                                : ['<fg=red>N</fg=red>', $migrationName];
-                    });
+                return in_array($migrationName, $ran)
+                    ? ['<info>Y</info>', $migrationName]
+                    : ['<fg=red>N</fg=red>', $migrationName];
+            });
     }
 
     /**

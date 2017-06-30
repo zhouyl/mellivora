@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Mellivora\Database\Connectors;
 
 use PDO;
 
@@ -23,7 +23,7 @@ class MySqlConnector extends Connector implements ConnectorInterface
         // connection's behavior, and some might be specified by the developers.
         $connection = $this->createConnection($dsn, $config, $options);
 
-        if (! empty($config['database'])) {
+        if (!empty($config['database'])) {
             $connection->exec("use `{$config['database']}`;");
         }
 
@@ -42,43 +42,43 @@ class MySqlConnector extends Connector implements ConnectorInterface
     /**
      * Set the connection character set and collation.
      *
-     * @param  \PDO  $connection
+     * @param  \PDO   $connection
      * @param  array  $config
      * @return void
      */
     protected function configureEncoding($connection, array $config)
     {
-        if (! isset($config['charset'])) {
+        if (!isset($config['charset'])) {
             return $connection;
         }
 
         $connection->prepare(
-            "set names '{$config['charset']}'".$this->getCollation($config)
+            "set names '{$config['charset']}'" . $this->getCollation($config)
         )->execute();
     }
 
     /**
      * Get the collation for the configuration.
      *
-     * @param  array  $config
+     * @param  array    $config
      * @return string
      */
     protected function getCollation(array $config)
     {
-        return ! is_null($config['collation']) ? " collate '{$config['collation']}'" : '';
+        return !is_null($config['collation']) ? " collate '{$config['collation']}'" : '';
     }
 
     /**
      * Set the timezone on the connection.
      *
-     * @param  \PDO  $connection
+     * @param  \PDO   $connection
      * @param  array  $config
      * @return void
      */
     protected function configureTimezone($connection, array $config)
     {
         if (isset($config['timezone'])) {
-            $connection->prepare('set time_zone="'.$config['timezone'].'"')->execute();
+            $connection->prepare('set time_zone="' . $config['timezone'] . '"')->execute();
         }
     }
 
@@ -87,14 +87,14 @@ class MySqlConnector extends Connector implements ConnectorInterface
      *
      * Chooses socket or host/port based on the 'unix_socket' config value.
      *
-     * @param  array   $config
+     * @param  array    $config
      * @return string
      */
     protected function getDsn(array $config)
     {
         return $this->hasSocket($config)
-                            ? $this->getSocketDsn($config)
-                            : $this->getHostDsn($config);
+            ? $this->getSocketDsn($config)
+            : $this->getHostDsn($config);
     }
 
     /**
@@ -105,13 +105,13 @@ class MySqlConnector extends Connector implements ConnectorInterface
      */
     protected function hasSocket(array $config)
     {
-        return isset($config['unix_socket']) && ! empty($config['unix_socket']);
+        return isset($config['unix_socket']) && !empty($config['unix_socket']);
     }
 
     /**
      * Get the DSN string for a socket configuration.
      *
-     * @param  array  $config
+     * @param  array    $config
      * @return string
      */
     protected function getSocketDsn(array $config)
@@ -122,7 +122,7 @@ class MySqlConnector extends Connector implements ConnectorInterface
     /**
      * Get the DSN string for a host / port configuration.
      *
-     * @param  array  $config
+     * @param  array    $config
      * @return string
      */
     protected function getHostDsn(array $config)
@@ -130,14 +130,14 @@ class MySqlConnector extends Connector implements ConnectorInterface
         extract($config, EXTR_SKIP);
 
         return isset($port)
-                    ? "mysql:host={$host};port={$port};dbname={$database}"
-                    : "mysql:host={$host};dbname={$database}";
+            ? "mysql:host={$host};port={$port};dbname={$database}"
+            : "mysql:host={$host};dbname={$database}";
     }
 
     /**
      * Set the modes for the connection.
      *
-     * @param  \PDO  $connection
+     * @param  \PDO   $connection
      * @param  array  $config
      * @return void
      */
@@ -157,7 +157,7 @@ class MySqlConnector extends Connector implements ConnectorInterface
     /**
      * Set the custom modes on the connection.
      *
-     * @param  \PDO  $connection
+     * @param  \PDO   $connection
      * @param  array  $config
      * @return void
      */

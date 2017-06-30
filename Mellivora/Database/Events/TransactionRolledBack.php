@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Mellivora\Database\Events;
 
 class TransactionRolledBack extends ConnectionEvent
 {

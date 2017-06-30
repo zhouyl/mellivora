@@ -1,26 +1,26 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
-use PDO;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Database\Connectors\ConnectionFactory;
+use Mellivora\Database\Connectors\ConnectionFactory;
+use Mellivora\Support\Arr;
+use Mellivora\Support\Str;
+use PDO;
 
 class DatabaseManager implements ConnectionResolverInterface
 {
     /**
      * The application instance.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Mellivora\Foundation\Application
      */
     protected $app;
 
     /**
      * The database connection factory instance.
      *
-     * @var \Illuminate\Database\Connectors\ConnectionFactory
+     * @var \Mellivora\Database\Connectors\ConnectionFactory
      */
     protected $factory;
 
@@ -41,21 +41,21 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Create a new database manager instance.
      *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @param  \Illuminate\Database\Connectors\ConnectionFactory  $factory
+     * @param  \Mellivora\Foundation\Application                $app
+     * @param  \Mellivora\Database\Connectors\ConnectionFactory $factory
      * @return void
      */
     public function __construct($app, ConnectionFactory $factory)
     {
-        $this->app = $app;
+        $this->app     = $app;
         $this->factory = $factory;
     }
 
     /**
      * Get a database connection instance.
      *
-     * @param  string  $name
-     * @return \Illuminate\Database\Connection
+     * @param  string                           $name
+     * @return \Mellivora\Database\Connection
      */
     public function connection($name = null)
     {
@@ -66,7 +66,7 @@ class DatabaseManager implements ConnectionResolverInterface
         // If we haven't created this connection, we'll create it based on the config
         // provided in the application. Once we've created the connections we will
         // set the "fetch mode" for PDO which determines the query return types.
-        if (! isset($this->connections[$name])) {
+        if (!isset($this->connections[$name])) {
             $this->connections[$name] = $this->configure(
                 $connection = $this->makeConnection($database), $type
             );
@@ -86,14 +86,14 @@ class DatabaseManager implements ConnectionResolverInterface
         $name = $name ?: $this->getDefaultConnection();
 
         return Str::endsWith($name, ['::read', '::write'])
-                            ? explode('::', $name, 2) : [$name, null];
+            ? explode('::', $name, 2) : [$name, null];
     }
 
     /**
      * Make the database connection instance.
      *
-     * @param  string  $name
-     * @return \Illuminate\Database\Connection
+     * @param  string                           $name
+     * @return \Mellivora\Database\Connection
      */
     protected function makeConnection($name)
     {
@@ -119,10 +119,9 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Get the configuration for a connection.
      *
-     * @param  string  $name
-     * @return array
-     *
+     * @param  string                      $name
      * @throws \InvalidArgumentException
+     * @return array
      */
     protected function configuration($name)
     {
@@ -143,9 +142,9 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the database connection instance.
      *
-     * @param  \Illuminate\Database\Connection  $connection
-     * @param  string  $type
-     * @return \Illuminate\Database\Connection
+     * @param  \Mellivora\Database\Connection   $connection
+     * @param  string                           $type
+     * @return \Mellivora\Database\Connection
      */
     protected function configure(Connection $connection, $type)
     {
@@ -171,9 +170,9 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the read / write mode for database connection instance.
      *
-     * @param  \Illuminate\Database\Connection  $connection
-     * @param  string  $type
-     * @return \Illuminate\Database\Connection
+     * @param  \Mellivora\Database\Connection   $connection
+     * @param  string                           $type
+     * @return \Mellivora\Database\Connection
      */
     protected function setPdoForType(Connection $connection, $type = null)
     {
@@ -189,7 +188,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Disconnect from the given database and remove from local cache.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function purge($name = null)
@@ -202,7 +201,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Disconnect from the given database.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function disconnect($name = null)
@@ -215,14 +214,14 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Reconnect to the given database.
      *
-     * @param  string  $name
-     * @return \Illuminate\Database\Connection
+     * @param  string                           $name
+     * @return \Mellivora\Database\Connection
      */
     public function reconnect($name = null)
     {
         $this->disconnect($name = $name ?: $this->getDefaultConnection());
 
-        if (! isset($this->connections[$name])) {
+        if (!isset($this->connections[$name])) {
             return $this->connection($name);
         }
 
@@ -232,16 +231,16 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Refresh the PDO connections on a given connection.
      *
-     * @param  string  $name
-     * @return \Illuminate\Database\Connection
+     * @param  string                           $name
+     * @return \Mellivora\Database\Connection
      */
     protected function refreshPdoConnections($name)
     {
         $fresh = $this->makeConnection($name);
 
         return $this->connections[$name]
-                                ->setPdo($fresh->getPdo())
-                                ->setReadPdo($fresh->getReadPdo());
+            ->setPdo($fresh->getPdo())
+            ->setReadPdo($fresh->getReadPdo());
     }
 
     /**
@@ -257,7 +256,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Set the default connection name.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function setDefaultConnection($name)
@@ -291,8 +290,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Register an extension connection resolver.
      *
-     * @param  string    $name
-     * @param  callable  $resolver
+     * @param  string   $name
+     * @param  callable $resolver
      * @return void
      */
     public function extend($name, callable $resolver)

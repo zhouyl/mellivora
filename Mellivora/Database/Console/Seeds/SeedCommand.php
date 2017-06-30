@@ -1,12 +1,12 @@
 <?php
 
-namespace Illuminate\Database\Console\Seeds;
+namespace Mellivora\Database\Console\Seeds;
 
-use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Console\ConfirmableTrait;
+use Mellivora\Console\Command;
+use Mellivora\Console\ConfirmableTrait;
+use Mellivora\Database\ConnectionResolverInterface as Resolver;
+use Mellivora\Database\Eloquent\Model;
 use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Database\ConnectionResolverInterface as Resolver;
 
 class SeedCommand extends Command
 {
@@ -29,14 +29,14 @@ class SeedCommand extends Command
     /**
      * The connection resolver instance.
      *
-     * @var \Illuminate\Database\ConnectionResolverInterface
+     * @var \Mellivora\Database\ConnectionResolverInterface
      */
     protected $resolver;
 
     /**
      * Create a new database seed command instance.
      *
-     * @param  \Illuminate\Database\ConnectionResolverInterface  $resolver
+     * @param  \Mellivora\Database\ConnectionResolverInterface $resolver
      * @return void
      */
     public function __construct(Resolver $resolver)
@@ -53,7 +53,7 @@ class SeedCommand extends Command
      */
     public function fire()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return;
         }
 
@@ -67,7 +67,7 @@ class SeedCommand extends Command
     /**
      * Get a seeder instance from the container.
      *
-     * @return \Illuminate\Database\Seeder
+     * @return \Mellivora\Database\Seeder
      */
     protected function getSeeder()
     {

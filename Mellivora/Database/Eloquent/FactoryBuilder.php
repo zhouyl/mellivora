@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Mellivora\Database\Eloquent;
 
 use Closure;
 use Faker\Generator as Faker;
@@ -60,26 +60,26 @@ class FactoryBuilder
     /**
      * Create an new builder instance.
      *
-     * @param  string  $class
-     * @param  string  $name
-     * @param  array  $definitions
-     * @param  array  $states
-     * @param  \Faker\Generator  $faker
+     * @param  string           $class
+     * @param  string           $name
+     * @param  array            $definitions
+     * @param  array            $states
+     * @param  \Faker\Generator $faker
      * @return void
      */
     public function __construct($class, $name, array $definitions, array $states, Faker $faker)
     {
-        $this->name = $name;
-        $this->class = $class;
-        $this->faker = $faker;
-        $this->states = $states;
+        $this->name        = $name;
+        $this->class       = $class;
+        $this->faker       = $faker;
+        $this->states      = $states;
         $this->definitions = $definitions;
     }
 
     /**
      * Set the amount of models you wish to create / make.
      *
-     * @param  int  $amount
+     * @param  int     $amount
      * @return $this
      */
     public function times($amount)
@@ -92,7 +92,7 @@ class FactoryBuilder
     /**
      * Set the states to be applied to the model.
      *
-     * @param  array|dynamic  $states
+     * @param  array|dynamic $states
      * @return $this
      */
     public function states($states)
@@ -105,7 +105,7 @@ class FactoryBuilder
     /**
      * Create a collection of models and persist them to the database.
      *
-     * @param  array  $attributes
+     * @param  array   $attributes
      * @return mixed
      */
     public function create(array $attributes = [])
@@ -124,7 +124,7 @@ class FactoryBuilder
     /**
      * Create a collection of models.
      *
-     * @param  array  $attributes
+     * @param  array   $attributes
      * @return mixed
      */
     public function make(array $attributes = [])
@@ -145,15 +145,14 @@ class FactoryBuilder
     /**
      * Make an instance of the model with the given attributes.
      *
-     * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Model
-     *
+     * @param  array                                $attributes
      * @throws \InvalidArgumentException
+     * @return \Mellivora\Database\Eloquent\Model
      */
     protected function makeInstance(array $attributes = [])
     {
         return Model::unguarded(function () use ($attributes) {
-            if (! isset($this->definitions[$this->class][$this->name])) {
+            if (!isset($this->definitions[$this->class][$this->name])) {
                 throw new InvalidArgumentException("Unable to locate factory with name [{$this->name}] [{$this->class}].");
             }
 
@@ -171,14 +170,14 @@ class FactoryBuilder
     /**
      * Apply the active states to the model definition array.
      *
-     * @param  array  $definition
-     * @param  array  $attributes
+     * @param  array   $definition
+     * @param  array   $attributes
      * @return array
      */
     protected function applyStates(array $definition, array $attributes = [])
     {
         foreach ($this->activeStates as $state) {
-            if (! isset($this->states[$this->class][$state])) {
+            if (!isset($this->states[$this->class][$state])) {
                 throw new InvalidArgumentException("Unable to locate [{$state}] state for [{$this->class}].");
             }
 
@@ -194,14 +193,14 @@ class FactoryBuilder
     /**
      * Evaluate any Closure attributes on the attribute array.
      *
-     * @param  array  $attributes
+     * @param  array   $attributes
      * @return array
      */
     protected function callClosureAttributes(array $attributes)
     {
         foreach ($attributes as &$attribute) {
             $attribute = $attribute instanceof Closure
-                            ? $attribute($attributes) : $attribute;
+                ? $attribute($attributes) : $attribute;
         }
 
         return $attributes;

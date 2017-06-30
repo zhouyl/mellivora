@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Collection;
 
 class HasMany extends HasOneOrMany
 {
@@ -35,9 +35,9 @@ class HasMany extends HasOneOrMany
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array   $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param  array                                   $models
+     * @param  \Mellivora\Database\Eloquent\Collection $results
+     * @param  string                                  $relation
      * @return array
      */
     public function match(array $models, Collection $results, $relation)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Mellivora\Database\Eloquent;
 
 trait SoftDeletes
 {
@@ -100,13 +100,13 @@ trait SoftDeletes
      */
     public function trashed()
     {
-        return ! is_null($this->{$this->getDeletedAtColumn()});
+        return !is_null($this->{$this->getDeletedAtColumn()});
     }
 
     /**
      * Register a restoring model event with the dispatcher.
      *
-     * @param  \Closure|string  $callback
+     * @param  \Closure|string $callback
      * @return void
      */
     public static function restoring($callback)
@@ -117,7 +117,7 @@ trait SoftDeletes
     /**
      * Register a restored model event with the dispatcher.
      *
-     * @param  \Closure|string  $callback
+     * @param  \Closure|string $callback
      * @return void
      */
     public static function restored($callback)
@@ -152,6 +152,6 @@ trait SoftDeletes
      */
     public function getQualifiedDeletedAtColumn()
     {
-        return $this->getTable().'.'.$this->getDeletedAtColumn();
+        return $this->getTable() . '.' . $this->getDeletedAtColumn();
     }
 }

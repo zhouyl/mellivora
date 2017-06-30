@@ -1,31 +1,31 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
 use InvalidArgumentException;
-use Illuminate\Console\Command;
-use Illuminate\Container\Container;
+use Mellivora\Console\Command;
+use Mellivora\Container\Container;
 
 abstract class Seeder
 {
     /**
      * The container instance.
      *
-     * @var \Illuminate\Container\Container
+     * @var \Mellivora\Container\Container
      */
     protected $container;
 
     /**
      * The console command instance.
      *
-     * @var \Illuminate\Console\Command
+     * @var \Mellivora\Console\Command
      */
     protected $command;
 
     /**
      * Seed the given connection from the given path.
      *
-     * @param  string  $class
+     * @param  string $class
      * @return void
      */
     public function call($class)
@@ -40,8 +40,8 @@ abstract class Seeder
     /**
      * Resolve an instance of the given seeder class.
      *
-     * @param  string  $class
-     * @return \Illuminate\Database\Seeder
+     * @param  string                       $class
+     * @return \Mellivora\Database\Seeder
      */
     protected function resolve($class)
     {
@@ -63,7 +63,7 @@ abstract class Seeder
     /**
      * Set the IoC container instance.
      *
-     * @param  \Illuminate\Container\Container  $container
+     * @param  \Mellivora\Container\Container $container
      * @return $this
      */
     public function setContainer(Container $container)
@@ -76,7 +76,7 @@ abstract class Seeder
     /**
      * Set the console command instance.
      *
-     * @param  \Illuminate\Console\Command  $command
+     * @param  \Mellivora\Console\Command $command
      * @return $this
      */
     public function setCommand(Command $command)
@@ -89,18 +89,17 @@ abstract class Seeder
     /**
      * Run the database seeds.
      *
-     * @return void
-     *
      * @throws \InvalidArgumentException
+     * @return void
      */
     public function __invoke()
     {
-        if (! method_exists($this, 'run')) {
-            throw new InvalidArgumentException('Method [run] missing from '.get_class($this));
+        if (!method_exists($this, 'run')) {
+            throw new InvalidArgumentException('Method [run] missing from ' . get_class($this));
         }
 
         return isset($this->container)
-                    ? $this->container->call([$this, 'run'])
-                    : $this->run();
+            ? $this->container->call([$this, 'run'])
+            : $this->run();
     }
 }

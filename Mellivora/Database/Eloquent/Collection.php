@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Mellivora\Database\Eloquent;
 
 use LogicException;
-use Illuminate\Support\Arr;
-use Illuminate\Contracts\Queue\QueueableCollection;
-use Illuminate\Support\Collection as BaseCollection;
+use Mellivora\Support\Arr;
+use Mellivora\Support\Collection as BaseCollection;
+use Mellivora\Support\Contracts\Queue\QueueableCollection;
 
 class Collection extends BaseCollection implements QueueableCollection
 {
     /**
      * Find a model in the collection by key.
      *
-     * @param  mixed  $key
-     * @param  mixed  $default
-     * @return \Illuminate\Database\Eloquent\Model|static
+     * @param  mixed                                       $key
+     * @param  mixed                                       $default
+     * @return \Mellivora\Database\Eloquent\Model|static
      */
     public function find($key, $default = null)
     {
@@ -38,7 +38,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Load a set of relationships onto the collection.
      *
-     * @param  mixed  $relations
+     * @param  mixed   $relations
      * @return $this
      */
     public function load($relations)
@@ -59,7 +59,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Add an item to the collection.
      *
-     * @param  mixed  $item
+     * @param  mixed   $item
      * @return $this
      */
     public function add($item)
@@ -105,7 +105,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Merge the collection with the given items.
      *
-     * @param  \ArrayAccess|array  $items
+     * @param  \ArrayAccess|array $items
      * @return static
      */
     public function merge($items)
@@ -122,22 +122,22 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Run a map over each of the items.
      *
-     * @param  callable  $callback
-     * @return \Illuminate\Support\Collection
+     * @param  callable                        $callback
+     * @return \Mellivora\Support\Collection
      */
     public function map(callable $callback)
     {
         $result = parent::map($callback);
 
         return $result->contains(function ($item) {
-            return ! $item instanceof Model;
+            return !$item instanceof Model;
         }) ? $result->toBase() : $result;
     }
 
     /**
      * Diff the collection with the given items.
      *
-     * @param  \ArrayAccess|array  $items
+     * @param  \ArrayAccess|array $items
      * @return static
      */
     public function diff($items)
@@ -147,7 +147,7 @@ class Collection extends BaseCollection implements QueueableCollection
         $dictionary = $this->getDictionary($items);
 
         foreach ($this->items as $item) {
-            if (! isset($dictionary[$item->getKey()])) {
+            if (!isset($dictionary[$item->getKey()])) {
                 $diff->add($item);
             }
         }
@@ -158,7 +158,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Intersect the collection with the given items.
      *
-     * @param  \ArrayAccess|array  $items
+     * @param  \ArrayAccess|array $items
      * @return static
      */
     public function intersect($items)
@@ -179,13 +179,13 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Return only unique items from the collection.
      *
-     * @param  string|callable|null  $key
-     * @param  bool  $strict
-     * @return static|\Illuminate\Support\Collection
+     * @param  string|callable|null                   $key
+     * @param  bool                                   $strict
+     * @return static|\Mellivora\Support\Collection
      */
     public function unique($key = null, $strict = false)
     {
-        if (! is_null($key)) {
+        if (!is_null($key)) {
             return parent::unique($key, $strict);
         }
 
@@ -195,7 +195,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Returns only the models from the collection with the specified keys.
      *
-     * @param  mixed  $keys
+     * @param  mixed    $keys
      * @return static
      */
     public function only($keys)
@@ -212,7 +212,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Returns all models in the collection except the models with specified keys.
      *
-     * @param  mixed  $keys
+     * @param  mixed    $keys
      * @return static
      */
     public function except($keys)
@@ -225,7 +225,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Make the given, typically visible, attributes hidden across the entire collection.
      *
-     * @param  array|string  $attributes
+     * @param  array|string $attributes
      * @return $this
      */
     public function makeHidden($attributes)
@@ -238,7 +238,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Make the given, typically hidden, attributes visible across the entire collection.
      *
-     * @param  array|string  $attributes
+     * @param  array|string $attributes
      * @return $this
      */
     public function makeVisible($attributes)
@@ -251,7 +251,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Get a dictionary keyed by primary keys.
      *
-     * @param  \ArrayAccess|array|null  $items
+     * @param  \ArrayAccess|array|null $items
      * @return array
      */
     public function getDictionary($items = null)
@@ -270,13 +270,12 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * The following methods are intercepted to always return base collections.
      */
-
     /**
      * Get an array with the values of a given key.
      *
-     * @param  string  $value
-     * @param  string|null  $key
-     * @return \Illuminate\Support\Collection
+     * @param  string                          $value
+     * @param  string|null                     $key
+     * @return \Mellivora\Support\Collection
      */
     public function pluck($value, $key = null)
     {
@@ -286,7 +285,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Get the keys of the collection items.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Mellivora\Support\Collection
      */
     public function keys()
     {
@@ -296,8 +295,8 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Zip the collection together with one or more arrays.
      *
-     * @param  mixed ...$items
-     * @return \Illuminate\Support\Collection
+     * @param  mixed                           ...$items
+     * @return \Mellivora\Support\Collection
      */
     public function zip($items)
     {
@@ -307,7 +306,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Collapse the collection of items into a single array.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Mellivora\Support\Collection
      */
     public function collapse()
     {
@@ -317,8 +316,8 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Get a flattened array of the items in the collection.
      *
-     * @param  int  $depth
-     * @return \Illuminate\Support\Collection
+     * @param  int                             $depth
+     * @return \Mellivora\Support\Collection
      */
     public function flatten($depth = INF)
     {
@@ -328,7 +327,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Flip the items in the collection.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Mellivora\Support\Collection
      */
     public function flip()
     {

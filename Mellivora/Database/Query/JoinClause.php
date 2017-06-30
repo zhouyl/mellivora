@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Mellivora\Database\Query;
 
 use Closure;
 
@@ -23,22 +23,22 @@ class JoinClause extends Builder
     /**
      * The parent query builder instance.
      *
-     * @var \Illuminate\Database\Query\Builder
+     * @var \Mellivora\Database\Query\Builder
      */
     private $parentQuery;
 
     /**
      * Create a new join clause instance.
      *
-     * @param  \Illuminate\Database\Query\Builder $parentQuery
-     * @param  string  $type
-     * @param  string  $table
+     * @param  \Mellivora\Database\Query\Builder $parentQuery
+     * @param  string                            $type
+     * @param  string                            $table
      * @return void
      */
     public function __construct(Builder $parentQuery, $type, $table)
     {
-        $this->type = $type;
-        $this->table = $table;
+        $this->type        = $type;
+        $this->table       = $table;
         $this->parentQuery = $parentQuery;
 
         parent::__construct(
@@ -58,13 +58,12 @@ class JoinClause extends Builder
      *
      * on `contacts`.`user_id` = `users`.`id`  and `contacts`.`info_id` = `info`.`id`
      *
-     * @param  \Closure|string  $first
-     * @param  string|null  $operator
-     * @param  string|null  $second
-     * @param  string  $boolean
-     * @return $this
-     *
+     * @param  \Closure|string              $first
+     * @param  string|null                  $operator
+     * @param  string|null                  $second
+     * @param  string                       $boolean
      * @throws \InvalidArgumentException
+     * @return $this
      */
     public function on($first, $operator = null, $second = null, $boolean = 'and')
     {
@@ -78,10 +77,10 @@ class JoinClause extends Builder
     /**
      * Add an "or on" clause to the join.
      *
-     * @param  \Closure|string  $first
-     * @param  string|null  $operator
-     * @param  string|null  $second
-     * @return \Illuminate\Database\Query\JoinClause
+     * @param  \Closure|string                        $first
+     * @param  string|null                            $operator
+     * @param  string|null                            $second
+     * @return \Mellivora\Database\Query\JoinClause
      */
     public function orOn($first, $operator = null, $second = null)
     {
@@ -91,7 +90,7 @@ class JoinClause extends Builder
     /**
      * Get a new instance of the join clause builder.
      *
-     * @return \Illuminate\Database\Query\JoinClause
+     * @return \Mellivora\Database\Query\JoinClause
      */
     public function newQuery()
     {

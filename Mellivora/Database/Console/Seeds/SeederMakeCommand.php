@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Console\Seeds;
+namespace Mellivora\Database\Console\Seeds;
 
-use Illuminate\Support\Composer;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Console\GeneratorCommand;
+use Mellivora\Console\GeneratorCommand;
+use Mellivora\Filesystem\Filesystem;
+use Mellivora\Support\Composer;
 
 class SeederMakeCommand extends GeneratorCommand
 {
@@ -32,15 +32,15 @@ class SeederMakeCommand extends GeneratorCommand
     /**
      * The Composer instance.
      *
-     * @var \Illuminate\Support\Composer
+     * @var \Mellivora\Support\Composer
      */
     protected $composer;
 
     /**
      * Create a new command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  \Illuminate\Support\Composer  $composer
+     * @param  \Mellivora\Filesystem\Filesystem $files
+     * @param  \Mellivora\Support\Composer      $composer
      * @return void
      */
     public function __construct(Filesystem $files, Composer $composer)
@@ -69,24 +69,24 @@ class SeederMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/seeder.stub';
+        return __DIR__ . '/stubs/seeder.stub';
     }
 
     /**
      * Get the destination class path.
      *
-     * @param  string  $name
+     * @param  string   $name
      * @return string
      */
     protected function getPath($name)
     {
-        return $this->laravel->databasePath().'/seeds/'.$name.'.php';
+        return $this->laravel->databasePath() . '/seeds/' . $name . '.php';
     }
 
     /**
      * Parse the class name and format according to the root namespace.
      *
-     * @param  string  $name
+     * @param  string   $name
      * @return string
      */
     protected function qualifyClass($name)

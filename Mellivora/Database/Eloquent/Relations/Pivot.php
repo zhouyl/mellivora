@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Model;
 
 class Pivot extends Model
 {
     /**
      * The parent model of the relationship.
      *
-     * @var \Illuminate\Database\Eloquent\Model
+     * @var \Mellivora\Database\Eloquent\Model
      */
     protected $parent;
 
@@ -38,10 +38,10 @@ class Pivot extends Model
     /**
      * Create a new pivot model instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $parent
-     * @param  array   $attributes
-     * @param  string  $table
-     * @param  bool    $exists
+     * @param  \Mellivora\Database\Eloquent\Model $parent
+     * @param  array                              $attributes
+     * @param  string                             $table
+     * @param  bool                               $exists
      * @return void
      */
     public function __construct(Model $parent, $attributes, $table, $exists = false)
@@ -52,9 +52,9 @@ class Pivot extends Model
         // for the instance. This allows it work for any intermediate tables for the
         // many to many relationship that are defined by this developer's classes.
         $this->setConnection($parent->getConnectionName())
-             ->setTable($table)
-             ->forceFill($attributes)
-             ->syncOriginal();
+            ->setTable($table)
+            ->forceFill($attributes)
+            ->syncOriginal();
 
         // We store off the parent instance so we will access the timestamp column names
         // for the model, since the pivot model timestamps aren't easily configurable
@@ -69,10 +69,10 @@ class Pivot extends Model
     /**
      * Create a new pivot model from raw values returned from a query.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $parent
-     * @param  array   $attributes
-     * @param  string  $table
-     * @param  bool    $exists
+     * @param  \Mellivora\Database\Eloquent\Model $parent
+     * @param  array                              $attributes
+     * @param  string                             $table
+     * @param  bool                               $exists
      * @return static
      */
     public static function fromRawAttributes(Model $parent, $attributes, $table, $exists = false)
@@ -87,8 +87,8 @@ class Pivot extends Model
     /**
      * Set the keys for a save update query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     protected function setKeysForSaveQuery(Builder $query)
     {
@@ -110,7 +110,7 @@ class Pivot extends Model
     /**
      * Get the query builder for a delete operation on the pivot.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     protected function getDeleteQuery()
     {

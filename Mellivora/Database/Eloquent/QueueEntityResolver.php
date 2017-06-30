@@ -1,20 +1,19 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Mellivora\Database\Eloquent;
 
-use Illuminate\Contracts\Queue\EntityNotFoundException;
-use Illuminate\Contracts\Queue\EntityResolver as EntityResolverContract;
+use Mellivora\Support\Contracts\Queue\EntityNotFoundException;
+use Mellivora\Support\Contracts\Queue\EntityResolver as EntityResolverContract;
 
 class QueueEntityResolver implements EntityResolverContract
 {
     /**
      * Resolve the entity for the given ID.
      *
-     * @param  string  $type
-     * @param  mixed  $id
+     * @param  string                                                       $type
+     * @param  mixed                                                        $id
+     * @throws \Mellivora\Support\Contracts\Queue\EntityNotFoundException
      * @return mixed
-     *
-     * @throws \Illuminate\Contracts\Queue\EntityNotFoundException
      */
     public function resolve($type, $id)
     {

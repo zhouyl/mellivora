@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Mellivora\Database\Console\Migrations;
 
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Database\Migrations\Migrator;
+use Mellivora\Console\ConfirmableTrait;
+use Mellivora\Database\Migrations\Migrator;
 
 class MigrateCommand extends BaseCommand
 {
@@ -31,14 +31,14 @@ class MigrateCommand extends BaseCommand
     /**
      * The migrator instance.
      *
-     * @var \Illuminate\Database\Migrations\Migrator
+     * @var \Mellivora\Database\Migrations\Migrator
      */
     protected $migrator;
 
     /**
      * Create a new migration command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator  $migrator
+     * @param  \Mellivora\Database\Migrations\Migrator $migrator
      * @return void
      */
     public function __construct(Migrator $migrator)
@@ -55,7 +55,7 @@ class MigrateCommand extends BaseCommand
      */
     public function fire()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return;
         }
 
@@ -66,7 +66,7 @@ class MigrateCommand extends BaseCommand
         // so that migrations may be run for any path within the applications.
         $this->migrator->run($this->getMigrationPaths(), [
             'pretend' => $this->option('pretend'),
-            'step' => $this->option('step'),
+            'step'    => $this->option('step'),
         ]);
 
         // Once the migrator has run we will grab the note output and send it out to
@@ -93,7 +93,7 @@ class MigrateCommand extends BaseCommand
     {
         $this->migrator->setConnection($this->option('database'));
 
-        if (! $this->migrator->repositoryExists()) {
+        if (!$this->migrator->repositoryExists()) {
             $this->call(
                 'migrate:install', ['--database' => $this->option('database')]
             );

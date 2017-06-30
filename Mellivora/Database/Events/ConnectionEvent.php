@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Events;
+namespace Mellivora\Database\Events;
 
 abstract class ConnectionEvent
 {
@@ -14,19 +14,19 @@ abstract class ConnectionEvent
     /**
      * The database connection instance.
      *
-     * @var \Illuminate\Database\Connection
+     * @var \Mellivora\Database\Connection
      */
     public $connection;
 
     /**
      * Create a new event instance.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param  \Mellivora\Database\Connection $connection
      * @return void
      */
     public function __construct($connection)
     {
-        $this->connection = $connection;
+        $this->connection     = $connection;
         $this->connectionName = $connection->getName();
     }
 }

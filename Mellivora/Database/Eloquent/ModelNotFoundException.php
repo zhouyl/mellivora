@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Mellivora\Database\Eloquent;
 
 use RuntimeException;
 
@@ -23,19 +23,19 @@ class ModelNotFoundException extends RuntimeException
     /**
      * Set the affected Eloquent model and instance ids.
      *
-     * @param  string  $model
-     * @param  int|array  $ids
+     * @param  string    $model
+     * @param  int|array $ids
      * @return $this
      */
     public function setModel($model, $ids = [])
     {
         $this->model = $model;
-        $this->ids = array_wrap($ids);
+        $this->ids   = array_wrap($ids);
 
         $this->message = "No query results for model [{$model}]";
 
         if (count($this->ids) > 0) {
-            $this->message .= ' '.implode(', ', $this->ids);
+            $this->message .= ' ' . implode(', ', $this->ids);
         } else {
             $this->message .= '.';
         }

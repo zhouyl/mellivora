@@ -1,25 +1,24 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
 use Closure;
-use Exception;
-use Throwable;
 use Doctrine\DBAL\Driver\PDOSqlsrv\Driver as DoctrineDriver;
-use Illuminate\Database\Query\Processors\SqlServerProcessor;
-use Illuminate\Database\Query\Grammars\SqlServerGrammar as QueryGrammar;
-use Illuminate\Database\Schema\Grammars\SqlServerGrammar as SchemaGrammar;
+use Exception;
+use Mellivora\Database\Query\Grammars\SqlServerGrammar as QueryGrammar;
+use Mellivora\Database\Query\Processors\SqlServerProcessor;
+use Mellivora\Database\Schema\Grammars\SqlServerGrammar as SchemaGrammar;
+use Throwable;
 
 class SqlServerConnection extends Connection
 {
     /**
      * Execute a Closure within a transaction.
      *
-     * @param  \Closure  $callback
-     * @param  int  $attempts
-     * @return mixed
-     *
+     * @param  \Closure                $callback
+     * @param  int                     $attempts
      * @throws \Exception|\Throwable
+     * @return mixed
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
@@ -42,7 +41,7 @@ class SqlServerConnection extends Connection
             // If we catch an exception, we will roll back so nothing gets messed
             // up in the database. Then we'll re-throw the exception so it can
             // be handled how the developer sees fit for their applications.
-            catch (Exception $e) {
+             catch (Exception $e) {
                 $this->getPdo()->exec('ROLLBACK TRAN');
 
                 throw $e;
@@ -59,7 +58,7 @@ class SqlServerConnection extends Connection
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\SqlServerGrammar
+     * @return \Mellivora\Database\Query\Grammars\SqlServerGrammar
      */
     protected function getDefaultQueryGrammar()
     {
@@ -69,7 +68,7 @@ class SqlServerConnection extends Connection
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\SqlServerGrammar
+     * @return \Mellivora\Database\Schema\Grammars\SqlServerGrammar
      */
     protected function getDefaultSchemaGrammar()
     {
@@ -79,7 +78,7 @@ class SqlServerConnection extends Connection
     /**
      * Get the default post processor instance.
      *
-     * @return \Illuminate\Database\Query\Processors\SqlServerProcessor
+     * @return \Mellivora\Database\Query\Processors\SqlServerProcessor
      */
     protected function getDefaultPostProcessor()
     {

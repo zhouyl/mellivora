@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
-use Illuminate\Database\Query\Expression;
+use Mellivora\Database\Query\Expression;
 
 abstract class Grammar
 {
@@ -16,7 +16,7 @@ abstract class Grammar
     /**
      * Wrap an array of values.
      *
-     * @param  array  $values
+     * @param  array   $values
      * @return array
      */
     public function wrapArray(array $values)
@@ -27,13 +27,13 @@ abstract class Grammar
     /**
      * Wrap a table in keyword identifiers.
      *
-     * @param  \Illuminate\Database\Query\Expression|string  $table
+     * @param  \Mellivora\Database\Query\Expression|string $table
      * @return string
      */
     public function wrapTable($table)
     {
-        if (! $this->isExpression($table)) {
-            return $this->wrap($this->tablePrefix.$table, true);
+        if (!$this->isExpression($table)) {
+            return $this->wrap($this->tablePrefix . $table, true);
         }
 
         return $this->getValue($table);
@@ -42,8 +42,8 @@ abstract class Grammar
     /**
      * Wrap a value in keyword identifiers.
      *
-     * @param  \Illuminate\Database\Query\Expression|string  $value
-     * @param  bool    $prefixAlias
+     * @param  \Mellivora\Database\Query\Expression|string $value
+     * @param  bool                                        $prefixAlias
      * @return string
      */
     public function wrap($value, $prefixAlias = false)
@@ -65,8 +65,8 @@ abstract class Grammar
     /**
      * Wrap a value that has an alias.
      *
-     * @param  string  $value
-     * @param  bool  $prefixAlias
+     * @param  string   $value
+     * @param  bool     $prefixAlias
      * @return string
      */
     protected function wrapAliasedValue($value, $prefixAlias = false)
@@ -77,39 +77,39 @@ abstract class Grammar
         // as well in order to generate proper syntax. If this is a column of course
         // no prefix is necessary. The condition will be true when from wrapTable.
         if ($prefixAlias) {
-            $segments[1] = $this->tablePrefix.$segments[1];
+            $segments[1] = $this->tablePrefix . $segments[1];
         }
 
         return $this->wrap(
-            $segments[0]).' as '.$this->wrapValue($segments[1]
+            $segments[0]) . ' as ' . $this->wrapValue($segments[1]
         );
     }
 
     /**
      * Wrap the given value segments.
      *
-     * @param  array  $segments
+     * @param  array    $segments
      * @return string
      */
     protected function wrapSegments($segments)
     {
         return collect($segments)->map(function ($segment, $key) use ($segments) {
             return $key == 0 && count($segments) > 1
-                            ? $this->wrapTable($segment)
-                            : $this->wrapValue($segment);
+                ? $this->wrapTable($segment)
+                : $this->wrapValue($segment);
         })->implode('.');
     }
 
     /**
      * Wrap a single string in keyword identifiers.
      *
-     * @param  string  $value
+     * @param  string   $value
      * @return string
      */
     protected function wrapValue($value)
     {
         if ($value !== '*') {
-            return '"'.str_replace('"', '""', $value).'"';
+            return '"' . str_replace('"', '""', $value) . '"';
         }
 
         return $value;
@@ -118,7 +118,7 @@ abstract class Grammar
     /**
      * Convert an array of column names into a delimited string.
      *
-     * @param  array   $columns
+     * @param  array    $columns
      * @return string
      */
     public function columnize(array $columns)
@@ -129,7 +129,7 @@ abstract class Grammar
     /**
      * Create query parameter place-holders for an array.
      *
-     * @param  array   $values
+     * @param  array    $values
      * @return string
      */
     public function parameterize(array $values)
@@ -140,7 +140,7 @@ abstract class Grammar
     /**
      * Get the appropriate query parameter place-holder for a value.
      *
-     * @param  mixed   $value
+     * @param  mixed    $value
      * @return string
      */
     public function parameter($value)
@@ -162,7 +162,7 @@ abstract class Grammar
     /**
      * Get the value of a raw expression.
      *
-     * @param  \Illuminate\Database\Query\Expression  $expression
+     * @param  \Mellivora\Database\Query\Expression $expression
      * @return string
      */
     public function getValue($expression)

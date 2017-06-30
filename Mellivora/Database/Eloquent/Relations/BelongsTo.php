@@ -1,10 +1,10 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Model;
 
 class BelongsTo extends Relation
 {
@@ -44,17 +44,17 @@ class BelongsTo extends Relation
     /**
      * Create a new belongs to relationship instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Model  $child
-     * @param  string  $foreignKey
-     * @param  string  $ownerKey
-     * @param  string  $relation
+     * @param  \Mellivora\Database\Eloquent\Builder $query
+     * @param  \Mellivora\Database\Eloquent\Model   $child
+     * @param  string                               $foreignKey
+     * @param  string                               $ownerKey
+     * @param  string                               $relation
      * @return void
      */
     public function __construct(Builder $query, Model $child, $foreignKey, $ownerKey, $relation)
     {
-        $this->ownerKey = $ownerKey;
-        $this->relation = $relation;
+        $this->ownerKey   = $ownerKey;
+        $this->relation   = $relation;
         $this->foreignKey = $foreignKey;
 
         // In the underlying base relationship class, this variable is referred to as
@@ -88,7 +88,7 @@ class BelongsTo extends Relation
             // of the related models matching on the foreign key that's on a parent.
             $table = $this->related->getTable();
 
-            $this->query->where($table.'.'.$this->ownerKey, '=', $this->child->{$this->foreignKey});
+            $this->query->where($table . '.' . $this->ownerKey, '=', $this->child->{$this->foreignKey});
         }
     }
 
@@ -103,7 +103,7 @@ class BelongsTo extends Relation
         // We'll grab the primary key name of the related models since it could be set to
         // a non-standard name and not "id". We will then construct the constraint for
         // our eagerly loading query so it returns the proper models from execution.
-        $key = $this->related->getTable().'.'.$this->ownerKey;
+        $key = $this->related->getTable() . '.' . $this->ownerKey;
 
         $this->query->whereIn($key, $this->getEagerModelKeys($models));
     }
@@ -111,7 +111,7 @@ class BelongsTo extends Relation
     /**
      * Gather the keys from an array of related models.
      *
-     * @param  array  $models
+     * @param  array   $models
      * @return array
      */
     protected function getEagerModelKeys(array $models)
@@ -152,9 +152,9 @@ class BelongsTo extends Relation
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array   $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param  array                                   $models
+     * @param  \Mellivora\Database\Eloquent\Collection $results
+     * @param  string                                  $relation
      * @return array
      */
     public function match(array $models, Collection $results, $relation)
@@ -187,7 +187,7 @@ class BelongsTo extends Relation
     /**
      * Update the parent model on the relationship.
      *
-     * @param  array  $attributes
+     * @param  array   $attributes
      * @return mixed
      */
     public function update(array $attributes)
@@ -198,8 +198,8 @@ class BelongsTo extends Relation
     /**
      * Associate the model instance to the given parent.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|int  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  \Mellivora\Database\Eloquent\Model|int $model
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function associate($model)
     {
@@ -217,7 +217,7 @@ class BelongsTo extends Relation
     /**
      * Dissociate previously associated model from the given parent.
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function dissociate()
     {
@@ -229,10 +229,10 @@ class BelongsTo extends Relation
     /**
      * Add the constraints for a relationship query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed  $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
+     * @param  array|mixed                            $columns
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
@@ -241,28 +241,28 @@ class BelongsTo extends Relation
         }
 
         return $query->select($columns)->whereColumn(
-            $this->getQualifiedForeignKey(), '=', $query->getModel()->getTable().'.'.$this->ownerKey
+            $this->getQualifiedForeignKey(), '=', $query->getModel()->getTable() . '.' . $this->ownerKey
         );
     }
 
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed  $columns
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
+     * @param  array|mixed                            $columns
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         $query->select($columns)->from(
-            $query->getModel()->getTable().' as '.$hash = $this->getRelationCountHash()
+            $query->getModel()->getTable() . ' as ' . $hash = $this->getRelationCountHash()
         );
 
         $query->getModel()->setTable($hash);
 
         return $query->whereColumn(
-            $hash.'.'.$query->getModel()->getKeyName(), '=', $this->getQualifiedForeignKey()
+            $hash . '.' . $query->getModel()->getKeyName(), '=', $this->getQualifiedForeignKey()
         );
     }
 
@@ -273,7 +273,7 @@ class BelongsTo extends Relation
      */
     public function getRelationCountHash()
     {
-        return 'laravel_reserved_'.static::$selfJoinCount++;
+        return 'laravel_reserved_' . static::$selfJoinCount++;
     }
 
     /**
@@ -284,7 +284,7 @@ class BelongsTo extends Relation
     protected function relationHasIncrementingId()
     {
         return $this->related->getIncrementing() &&
-                                $this->related->getKeyType() === 'int';
+        $this->related->getKeyType() === 'int';
     }
 
     /**
@@ -304,7 +304,7 @@ class BelongsTo extends Relation
      */
     public function getQualifiedForeignKey()
     {
-        return $this->child->getTable().'.'.$this->foreignKey;
+        return $this->child->getTable() . '.' . $this->foreignKey;
     }
 
     /**
@@ -324,7 +324,7 @@ class BelongsTo extends Relation
      */
     public function getQualifiedOwnerKeyName()
     {
-        return $this->related->getTable().'.'.$this->ownerKey;
+        return $this->related->getTable() . '.' . $this->ownerKey;
     }
 
     /**

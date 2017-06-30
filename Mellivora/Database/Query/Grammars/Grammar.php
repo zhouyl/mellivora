@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Query\Grammars;
+namespace Mellivora\Database\Query\Grammars;
 
-use Illuminate\Support\Arr;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Database\Grammar as BaseGrammar;
+use Mellivora\Database\Grammar as BaseGrammar;
+use Mellivora\Database\Query\Builder;
+use Mellivora\Database\Query\JoinClause;
+use Mellivora\Support\Arr;
 
 class Grammar extends BaseGrammar
 {
@@ -39,7 +39,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a select query into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return string
      */
     public function compileSelect(Builder $query)
@@ -68,7 +68,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the components necessary for a select clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return array
      */
     protected function compileComponents(Builder $query)
@@ -79,8 +79,8 @@ class Grammar extends BaseGrammar
             // To compile the query, we'll spin through each component of the query and
             // see if that component exists. If it does we'll just call the compiler
             // function for the component which is responsible for making the SQL.
-            if (! is_null($query->$component)) {
-                $method = 'compile'.ucfirst($component);
+            if (!is_null($query->$component)) {
+                $method = 'compile' . ucfirst($component);
 
                 $sql[$component] = $this->$method($query, $query->$component);
             }
@@ -92,8 +92,8 @@ class Grammar extends BaseGrammar
     /**
      * Compile an aggregated select clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $aggregate
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $aggregate
      * @return string
      */
     protected function compileAggregate(Builder $query, $aggregate)
@@ -104,17 +104,17 @@ class Grammar extends BaseGrammar
         // we need to prepend "distinct" onto the column name so that the query takes
         // it into account when it performs the aggregating operations on the data.
         if ($query->distinct && $column !== '*') {
-            $column = 'distinct '.$column;
+            $column = 'distinct ' . $column;
         }
 
-        return 'select '.$aggregate['function'].'('.$column.') as aggregate';
+        return 'select ' . $aggregate['function'] . '(' . $column . ') as aggregate';
     }
 
     /**
      * Compile the "select *" portion of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $columns
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $columns
      * @return string|null
      */
     protected function compileColumns(Builder $query, $columns)
@@ -122,32 +122,32 @@ class Grammar extends BaseGrammar
         // If the query is actually performing an aggregating select, we will let that
         // compiler handle the building of the select clauses, as it will need some
         // more syntax that is best handled by that function to keep things neat.
-        if (! is_null($query->aggregate)) {
+        if (!is_null($query->aggregate)) {
             return;
         }
 
         $select = $query->distinct ? 'select distinct ' : 'select ';
 
-        return $select.$this->columnize($columns);
+        return $select . $this->columnize($columns);
     }
 
     /**
      * Compile the "from" portion of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  string  $table
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  string                            $table
      * @return string
      */
     protected function compileFrom(Builder $query, $table)
     {
-        return 'from '.$this->wrapTable($table);
+        return 'from ' . $this->wrapTable($table);
     }
 
     /**
      * Compile the "join" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $joins
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $joins
      * @return string
      */
     protected function compileJoins(Builder $query, $joins)
@@ -162,7 +162,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "where" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return string
      */
     protected function compileWheres(Builder $query)
@@ -187,35 +187,35 @@ class Grammar extends BaseGrammar
     /**
      * Get an array of all the where clauses for the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return array
      */
     protected function compileWheresToArray($query)
     {
         return collect($query->wheres)->map(function ($where) use ($query) {
-            return $where['boolean'].' '.$this->{"where{$where['type']}"}($query, $where);
+            return $where['boolean'] . ' ' . $this->{"where{$where['type']}"}($query, $where);
         })->all();
     }
 
     /**
      * Format the where clause statements into one string.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $sql
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $sql
      * @return string
      */
     protected function concatenateWhereClauses($query, $sql)
     {
         $conjunction = $query instanceof JoinClause ? 'on' : 'where';
 
-        return $conjunction.' '.$this->removeLeadingBoolean(implode(' ', $sql));
+        return $conjunction . ' ' . $this->removeLeadingBoolean(implode(' ', $sql));
     }
 
     /**
      * Compile a raw where clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereRaw(Builder $query, $where)
@@ -226,28 +226,28 @@ class Grammar extends BaseGrammar
     /**
      * Compile a basic where clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereBasic(Builder $query, $where)
     {
         $value = $this->parameter($where['value']);
 
-        return $this->wrap($where['column']).' '.$where['operator'].' '.$value;
+        return $this->wrap($where['column']) . ' ' . $where['operator'] . ' ' . $value;
     }
 
     /**
      * Compile a "where in" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereIn(Builder $query, $where)
     {
-        if (! empty($where['values'])) {
-            return $this->wrap($where['column']).' in ('.$this->parameterize($where['values']).')';
+        if (!empty($where['values'])) {
+            return $this->wrap($where['column']) . ' in (' . $this->parameterize($where['values']) . ')';
         }
 
         return '0 = 1';
@@ -256,14 +256,14 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where not in" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereNotIn(Builder $query, $where)
     {
-        if (! empty($where['values'])) {
-            return $this->wrap($where['column']).' not in ('.$this->parameterize($where['values']).')';
+        if (!empty($where['values'])) {
+            return $this->wrap($where['column']) . ' not in (' . $this->parameterize($where['values']) . ')';
         }
 
         return '1 = 1';
@@ -272,70 +272,70 @@ class Grammar extends BaseGrammar
     /**
      * Compile a where in sub-select clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereInSub(Builder $query, $where)
     {
-        return $this->wrap($where['column']).' in ('.$this->compileSelect($where['query']).')';
+        return $this->wrap($where['column']) . ' in (' . $this->compileSelect($where['query']) . ')';
     }
 
     /**
      * Compile a where not in sub-select clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereNotInSub(Builder $query, $where)
     {
-        return $this->wrap($where['column']).' not in ('.$this->compileSelect($where['query']).')';
+        return $this->wrap($where['column']) . ' not in (' . $this->compileSelect($where['query']) . ')';
     }
 
     /**
      * Compile a "where null" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereNull(Builder $query, $where)
     {
-        return $this->wrap($where['column']).' is null';
+        return $this->wrap($where['column']) . ' is null';
     }
 
     /**
      * Compile a "where not null" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereNotNull(Builder $query, $where)
     {
-        return $this->wrap($where['column']).' is not null';
+        return $this->wrap($where['column']) . ' is not null';
     }
 
     /**
      * Compile a "between" where clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereBetween(Builder $query, $where)
     {
         $between = $where['not'] ? 'not between' : 'between';
 
-        return $this->wrap($where['column']).' '.$between.' ? and ?';
+        return $this->wrap($where['column']) . ' ' . $between . ' ? and ?';
     }
 
     /**
      * Compile a "where date" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereDate(Builder $query, $where)
@@ -346,8 +346,8 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where time" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereTime(Builder $query, $where)
@@ -358,8 +358,8 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where day" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereDay(Builder $query, $where)
@@ -370,8 +370,8 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where month" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereMonth(Builder $query, $where)
@@ -382,8 +382,8 @@ class Grammar extends BaseGrammar
     /**
      * Compile a "where year" clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereYear(Builder $query, $where)
@@ -394,35 +394,35 @@ class Grammar extends BaseGrammar
     /**
      * Compile a date based where clause.
      *
-     * @param  string  $type
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  string                            $type
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function dateBasedWhere($type, Builder $query, $where)
     {
         $value = $this->parameter($where['value']);
 
-        return $type.'('.$this->wrap($where['column']).') '.$where['operator'].' '.$value;
+        return $type . '(' . $this->wrap($where['column']) . ') ' . $where['operator'] . ' ' . $value;
     }
 
     /**
      * Compile a where clause comparing two columns..
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereColumn(Builder $query, $where)
     {
-        return $this->wrap($where['first']).' '.$where['operator'].' '.$this->wrap($where['second']);
+        return $this->wrap($where['first']) . ' ' . $where['operator'] . ' ' . $this->wrap($where['second']);
     }
 
     /**
      * Compile a nested where clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereNested(Builder $query, $where)
@@ -432,77 +432,77 @@ class Grammar extends BaseGrammar
         // if it is a normal query we need to take the leading "where" of queries.
         $offset = $query instanceof JoinClause ? 3 : 6;
 
-        return '('.substr($this->compileWheres($where['query']), $offset).')';
+        return '(' . substr($this->compileWheres($where['query']), $offset) . ')';
     }
 
     /**
      * Compile a where condition with a sub-select.
      *
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @param  array   $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereSub(Builder $query, $where)
     {
         $select = $this->compileSelect($where['query']);
 
-        return $this->wrap($where['column']).' '.$where['operator']." ($select)";
+        return $this->wrap($where['column']) . ' ' . $where['operator'] . " ($select)";
     }
 
     /**
      * Compile a where exists clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereExists(Builder $query, $where)
     {
-        return 'exists ('.$this->compileSelect($where['query']).')';
+        return 'exists (' . $this->compileSelect($where['query']) . ')';
     }
 
     /**
      * Compile a where exists clause.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $where
      * @return string
      */
     protected function whereNotExists(Builder $query, $where)
     {
-        return 'not exists ('.$this->compileSelect($where['query']).')';
+        return 'not exists (' . $this->compileSelect($where['query']) . ')';
     }
 
     /**
      * Compile the "group by" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $groups
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $groups
      * @return string
      */
     protected function compileGroups(Builder $query, $groups)
     {
-        return 'group by '.$this->columnize($groups);
+        return 'group by ' . $this->columnize($groups);
     }
 
     /**
      * Compile the "having" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $havings
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $havings
      * @return string
      */
     protected function compileHavings(Builder $query, $havings)
     {
         $sql = implode(' ', array_map([$this, 'compileHaving'], $havings));
 
-        return 'having '.$this->removeLeadingBoolean($sql);
+        return 'having ' . $this->removeLeadingBoolean($sql);
     }
 
     /**
      * Compile a single having clause.
      *
-     * @param  array   $having
+     * @param  array    $having
      * @return string
      */
     protected function compileHaving(array $having)
@@ -511,7 +511,7 @@ class Grammar extends BaseGrammar
         // without doing any more processing on it. Otherwise, we will compile the
         // clause into SQL based on the components that make it up from builder.
         if ($having['type'] === 'Raw') {
-            return $having['boolean'].' '.$having['sql'];
+            return $having['boolean'] . ' ' . $having['sql'];
         }
 
         return $this->compileBasicHaving($having);
@@ -520,7 +520,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a basic having clause.
      *
-     * @param  array   $having
+     * @param  array    $having
      * @return string
      */
     protected function compileBasicHaving($having)
@@ -529,20 +529,20 @@ class Grammar extends BaseGrammar
 
         $parameter = $this->parameter($having['value']);
 
-        return $having['boolean'].' '.$column.' '.$having['operator'].' '.$parameter;
+        return $having['boolean'] . ' ' . $column . ' ' . $having['operator'] . ' ' . $parameter;
     }
 
     /**
      * Compile the "order by" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $orders
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $orders
      * @return string
      */
     protected function compileOrders(Builder $query, $orders)
     {
-        if (! empty($orders)) {
-            return 'order by '.implode(', ', $this->compileOrdersToArray($query, $orders));
+        if (!empty($orders)) {
+            return 'order by ' . implode(', ', $this->compileOrdersToArray($query, $orders));
         }
 
         return '';
@@ -551,23 +551,23 @@ class Grammar extends BaseGrammar
     /**
      * Compile the query orders to an array.
      *
-     * @param  \Illuminate\Database\Query\Builder
-     * @param  array  $orders
+     * @param  \Mellivora\Database\Query\Builder
+     * @param  array                               $orders
      * @return array
      */
     protected function compileOrdersToArray(Builder $query, $orders)
     {
         return array_map(function ($order) {
-            return ! isset($order['sql'])
-                        ? $this->wrap($order['column']).' '.$order['direction']
-                        : $order['sql'];
+            return !isset($order['sql'])
+                ? $this->wrap($order['column']) . ' ' . $order['direction']
+                : $order['sql'];
         }, $orders);
     }
 
     /**
      * Compile the random statement into SQL.
      *
-     * @param  string  $seed
+     * @param  string   $seed
      * @return string
      */
     public function compileRandom($seed)
@@ -578,31 +578,31 @@ class Grammar extends BaseGrammar
     /**
      * Compile the "limit" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  int  $limit
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  int                               $limit
      * @return string
      */
     protected function compileLimit(Builder $query, $limit)
     {
-        return 'limit '.(int) $limit;
+        return 'limit ' . (int) $limit;
     }
 
     /**
      * Compile the "offset" portions of the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  int  $offset
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  int                               $offset
      * @return string
      */
     protected function compileOffset(Builder $query, $offset)
     {
-        return 'offset '.(int) $offset;
+        return 'offset ' . (int) $offset;
     }
 
     /**
      * Compile the "union" queries attached to the main query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return string
      */
     protected function compileUnions(Builder $query)
@@ -613,16 +613,16 @@ class Grammar extends BaseGrammar
             $sql .= $this->compileUnion($union);
         }
 
-        if (! empty($query->unionOrders)) {
-            $sql .= ' '.$this->compileOrders($query, $query->unionOrders);
+        if (!empty($query->unionOrders)) {
+            $sql .= ' ' . $this->compileOrders($query, $query->unionOrders);
         }
 
         if (isset($query->unionLimit)) {
-            $sql .= ' '.$this->compileLimit($query, $query->unionLimit);
+            $sql .= ' ' . $this->compileLimit($query, $query->unionLimit);
         }
 
         if (isset($query->unionOffset)) {
-            $sql .= ' '.$this->compileOffset($query, $query->unionOffset);
+            $sql .= ' ' . $this->compileOffset($query, $query->unionOffset);
         }
 
         return ltrim($sql);
@@ -631,20 +631,20 @@ class Grammar extends BaseGrammar
     /**
      * Compile a single union statement.
      *
-     * @param  array  $union
+     * @param  array    $union
      * @return string
      */
     protected function compileUnion(array $union)
     {
         $conjuction = $union['all'] ? ' union all ' : ' union ';
 
-        return $conjuction.$union['query']->toSql();
+        return $conjuction . $union['query']->toSql();
     }
 
     /**
      * Compile an exists statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return string
      */
     public function compileExists(Builder $query)
@@ -657,8 +657,8 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $values
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $values
      * @return string
      */
     public function compileInsert(Builder $query, array $values)
@@ -668,7 +668,7 @@ class Grammar extends BaseGrammar
         // basic routine regardless of an amount of records given to us to insert.
         $table = $this->wrapTable($query->from);
 
-        if (! is_array(reset($values))) {
+        if (!is_array(reset($values))) {
             $values = [$values];
         }
 
@@ -678,7 +678,7 @@ class Grammar extends BaseGrammar
         // to the query. Each insert should have the exact same amount of parameter
         // bindings so we will loop through the record and parameterize them all.
         $parameters = collect($values)->map(function ($record) {
-            return '('.$this->parameterize($record).')';
+            return '(' . $this->parameterize($record) . ')';
         })->implode(', ');
 
         return "insert into $table ($columns) values $parameters";
@@ -687,9 +687,9 @@ class Grammar extends BaseGrammar
     /**
      * Compile an insert and get ID statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array   $values
-     * @param  string  $sequence
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $values
+     * @param  string                            $sequence
      * @return string
      */
     public function compileInsertGetId(Builder $query, $values, $sequence)
@@ -700,8 +700,8 @@ class Grammar extends BaseGrammar
     /**
      * Compile an update statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $values
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  array                             $values
      * @return string
      */
     public function compileUpdate(Builder $query, $values)
@@ -712,7 +712,7 @@ class Grammar extends BaseGrammar
         // keyword identifiers, also a place-holder needs to be created for each of
         // the values in the list of bindings so we can make the sets statements.
         $columns = collect($values)->map(function ($value, $key) {
-            return $this->wrap($key).' = '.$this->parameter($value);
+            return $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
 
         // If the query has any "join" clauses, we will setup the joins on the builder
@@ -721,7 +721,7 @@ class Grammar extends BaseGrammar
         $joins = '';
 
         if (isset($query->joins)) {
-            $joins = ' '.$this->compileJoins($query, $query->joins);
+            $joins = ' ' . $this->compileJoins($query, $query->joins);
         }
 
         // Of course, update queries may also be constrained by where clauses so we'll
@@ -735,8 +735,8 @@ class Grammar extends BaseGrammar
     /**
      * Prepare the bindings for an update statement.
      *
-     * @param  array  $bindings
-     * @param  array  $values
+     * @param  array   $bindings
+     * @param  array   $values
      * @return array
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
@@ -751,7 +751,7 @@ class Grammar extends BaseGrammar
     /**
      * Compile a delete statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return string
      */
     public function compileDelete(Builder $query)
@@ -764,19 +764,19 @@ class Grammar extends BaseGrammar
     /**
      * Compile a truncate table statement into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Mellivora\Database\Query\Builder $query
      * @return array
      */
     public function compileTruncate(Builder $query)
     {
-        return ['truncate '.$this->wrapTable($query->from) => []];
+        return ['truncate ' . $this->wrapTable($query->from) => []];
     }
 
     /**
      * Compile the lock into SQL.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  bool|string  $value
+     * @param  \Mellivora\Database\Query\Builder $query
+     * @param  bool|string                       $value
      * @return string
      */
     protected function compileLock(Builder $query, $value)
@@ -797,29 +797,29 @@ class Grammar extends BaseGrammar
     /**
      * Compile the SQL statement to define a savepoint.
      *
-     * @param  string  $name
+     * @param  string   $name
      * @return string
      */
     public function compileSavepoint($name)
     {
-        return 'SAVEPOINT '.$name;
+        return 'SAVEPOINT ' . $name;
     }
 
     /**
      * Compile the SQL statement to execute a savepoint rollback.
      *
-     * @param  string  $name
+     * @param  string   $name
      * @return string
      */
     public function compileSavepointRollBack($name)
     {
-        return 'ROLLBACK TO SAVEPOINT '.$name;
+        return 'ROLLBACK TO SAVEPOINT ' . $name;
     }
 
     /**
      * Concatenate an array of segments, removing empties.
      *
-     * @param  array   $segments
+     * @param  array    $segments
      * @return string
      */
     protected function concatenate($segments)
@@ -832,7 +832,7 @@ class Grammar extends BaseGrammar
     /**
      * Remove the leading boolean from a statement.
      *
-     * @param  string  $value
+     * @param  string   $value
      * @return string
      */
     protected function removeLeadingBoolean($value)

@@ -1,20 +1,20 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
-use PDO;
-use Illuminate\Database\Schema\MySqlBuilder;
-use Illuminate\Database\Query\Processors\MySqlProcessor;
 use Doctrine\DBAL\Driver\PDOMySql\Driver as DoctrineDriver;
-use Illuminate\Database\Query\Grammars\MySqlGrammar as QueryGrammar;
-use Illuminate\Database\Schema\Grammars\MySqlGrammar as SchemaGrammar;
+use Mellivora\Database\Query\Grammars\MySqlGrammar as QueryGrammar;
+use Mellivora\Database\Query\Processors\MySqlProcessor;
+use Mellivora\Database\Schema\Grammars\MySqlGrammar as SchemaGrammar;
+use Mellivora\Database\Schema\MySqlBuilder;
+use PDO;
 
 class MySqlConnection extends Connection
 {
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\MySqlGrammar
+     * @return \Mellivora\Database\Query\Grammars\MySqlGrammar
      */
     protected function getDefaultQueryGrammar()
     {
@@ -24,7 +24,7 @@ class MySqlConnection extends Connection
     /**
      * Get a schema builder instance for the connection.
      *
-     * @return \Illuminate\Database\Schema\MySqlBuilder
+     * @return \Mellivora\Database\Schema\MySqlBuilder
      */
     public function getSchemaBuilder()
     {
@@ -38,7 +38,7 @@ class MySqlConnection extends Connection
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\MySqlGrammar
+     * @return \Mellivora\Database\Schema\Grammars\MySqlGrammar
      */
     protected function getDefaultSchemaGrammar()
     {
@@ -48,7 +48,7 @@ class MySqlConnection extends Connection
     /**
      * Get the default post processor instance.
      *
-     * @return \Illuminate\Database\Query\Processors\MySqlProcessor
+     * @return \Mellivora\Database\Query\Processors\MySqlProcessor
      */
     protected function getDefaultPostProcessor()
     {
@@ -69,7 +69,7 @@ class MySqlConnection extends Connection
      * Bind values to their parameters in the given statement.
      *
      * @param  \PDOStatement $statement
-     * @param  array  $bindings
+     * @param  array         $bindings
      * @return void
      */
     public function bindValues($statement, $bindings)

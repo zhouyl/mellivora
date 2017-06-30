@@ -1,8 +1,8 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Mellivora\Database\Console\Migrations;
 
-use Illuminate\Console\Command;
+use Mellivora\Console\Command;
 
 class BaseCommand extends Command
 {
@@ -17,7 +17,7 @@ class BaseCommand extends Command
         // use the path relative to the root of the installation folder so our database
         // migrations may be run for any customized path from within the application.
         if ($this->input->hasOption('path') && $this->option('path')) {
-            return [$this->laravel->basePath().'/'.$this->option('path')];
+            return [$this->laravel->basePath() . '/' . $this->option('path')];
         }
 
         return array_merge(
@@ -32,6 +32,6 @@ class BaseCommand extends Command
      */
     protected function getMigrationPath()
     {
-        return $this->laravel->databasePath().DIRECTORY_SEPARATOR.'migrations';
+        return $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'migrations';
     }
 }

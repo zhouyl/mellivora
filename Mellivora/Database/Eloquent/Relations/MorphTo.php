@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
 use BadMethodCallException;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Builder;
+use Mellivora\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Model;
 
 class MorphTo extends BelongsTo
 {
@@ -19,7 +19,7 @@ class MorphTo extends BelongsTo
     /**
      * The models whose relations are being eager loaded.
      *
-     * @var \Illuminate\Database\Eloquent\Collection
+     * @var \Mellivora\Database\Eloquent\Collection
      */
     protected $models;
 
@@ -40,12 +40,12 @@ class MorphTo extends BelongsTo
     /**
      * Create a new morph to relationship instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Model  $parent
-     * @param  string  $foreignKey
-     * @param  string  $ownerKey
-     * @param  string  $type
-     * @param  string  $relation
+     * @param  \Mellivora\Database\Eloquent\Builder $query
+     * @param  \Mellivora\Database\Eloquent\Model   $parent
+     * @param  string                               $foreignKey
+     * @param  string                               $ownerKey
+     * @param  string                               $type
+     * @param  string                               $relation
      * @return void
      */
     public function __construct(Builder $query, Model $parent, $foreignKey, $ownerKey, $type, $relation)
@@ -69,7 +69,7 @@ class MorphTo extends BelongsTo
     /**
      * Build a dictionary with the models.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $models
+     * @param  \Mellivora\Database\Eloquent\Collection $models
      * @return void
      */
     protected function buildDictionary(Collection $models)
@@ -110,19 +110,19 @@ class MorphTo extends BelongsTo
     /**
      * Get all of the relation results for a type.
      *
-     * @param  string  $type
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param  string                                    $type
+     * @return \Mellivora\Database\Eloquent\Collection
      */
     protected function getResultsByType($type)
     {
         $instance = $this->createModelByType($type);
 
         $query = $this->replayMacros($instance->newQuery())
-                            ->mergeConstraintsFrom($this->getQuery())
-                            ->with($this->getQuery()->getEagerLoads());
+            ->mergeConstraintsFrom($this->getQuery())
+            ->with($this->getQuery()->getEagerLoads());
 
         return $query->whereIn(
-            $instance->getTable().'.'.$instance->getKeyName(), $this->gatherKeysByType($type)
+            $instance->getTable() . '.' . $instance->getKeyName(), $this->gatherKeysByType($type)
         )->get();
     }
 
@@ -142,8 +142,8 @@ class MorphTo extends BelongsTo
     /**
      * Create a new model instance by type.
      *
-     * @param  string  $type
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  string                               $type
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function createModelByType($type)
     {
@@ -155,9 +155,9 @@ class MorphTo extends BelongsTo
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array   $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param  array                                   $models
+     * @param  \Mellivora\Database\Eloquent\Collection $results
+     * @param  string                                  $relation
      * @return array
      */
     public function match(array $models, Collection $results, $relation)
@@ -168,8 +168,8 @@ class MorphTo extends BelongsTo
     /**
      * Match the results for a given type to their parents.
      *
-     * @param  string  $type
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
+     * @param  string                                  $type
+     * @param  \Mellivora\Database\Eloquent\Collection $results
      * @return void
      */
     protected function matchToMorphParents($type, Collection $results)
@@ -186,8 +186,8 @@ class MorphTo extends BelongsTo
     /**
      * Associate the model instance to the given parent.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  \Mellivora\Database\Eloquent\Model   $model
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function associate($model)
     {
@@ -201,7 +201,7 @@ class MorphTo extends BelongsTo
     /**
      * Dissociate previously associated model from the given parent.
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Mellivora\Database\Eloquent\Model
      */
     public function dissociate()
     {
@@ -235,8 +235,8 @@ class MorphTo extends BelongsTo
     /**
      * Replay stored macro calls on the actual related instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @return \Mellivora\Database\Eloquent\Builder
      */
     protected function replayMacros(Builder $query)
     {
@@ -263,7 +263,7 @@ class MorphTo extends BelongsTo
         // If we tried to call a method that does not exist on the parent Builder instance,
         // we'll assume that we want to call a query macro (e.g. withTrashed) that only
         // exists on related models. We will just store the call and replay it later.
-        catch (BadMethodCallException $e) {
+         catch (BadMethodCallException $e) {
             $this->macroBuffer[] = compact('method', 'parameters');
 
             return $this;

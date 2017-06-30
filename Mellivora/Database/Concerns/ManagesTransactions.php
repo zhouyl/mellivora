@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Concerns;
+namespace Mellivora\Database\Concerns;
 
 use Closure;
 use Exception;
@@ -11,11 +11,10 @@ trait ManagesTransactions
     /**
      * Execute a Closure within a transaction.
      *
-     * @param  \Closure  $callback
-     * @param  int  $attempts
-     * @return mixed
-     *
+     * @param  \Closure                $callback
+     * @param  int                     $attempts
      * @throws \Exception|\Throwable
+     * @return mixed
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
@@ -34,7 +33,7 @@ trait ManagesTransactions
             // If we catch an exception we'll rollback this transaction and try again if we
             // are not out of attempts. If we are out of attempts we will just throw the
             // exception back out and let the developer handle an uncaught exceptions.
-            catch (Exception $e) {
+             catch (Exception $e) {
                 $this->handleTransactionException(
                     $e, $currentAttempt, $attempts
                 );
@@ -49,12 +48,11 @@ trait ManagesTransactions
     /**
      * Handle an exception encountered when running a transacted statement.
      *
-     * @param  \Exception  $e
-     * @param  int  $currentAttempt
-     * @param  int  $maxAttempts
-     * @return void
-     *
+     * @param  \Exception   $e
+     * @param  int          $currentAttempt
+     * @param  int          $maxAttempts
      * @throws \Exception
+     * @return void
      */
     protected function handleTransactionException($e, $currentAttempt, $maxAttempts)
     {
@@ -84,8 +82,8 @@ trait ManagesTransactions
     /**
      * Start a new database transaction.
      *
-     * @return void
      * @throws \Exception
+     * @return void
      */
     public function beginTransaction()
     {
@@ -122,17 +120,16 @@ trait ManagesTransactions
     protected function createSavepoint()
     {
         $this->getPdo()->exec(
-            $this->queryGrammar->compileSavepoint('trans'.($this->transactions + 1))
+            $this->queryGrammar->compileSavepoint('trans' . ($this->transactions + 1))
         );
     }
 
     /**
      * Handle an exception from a transaction beginning.
      *
-     * @param  \Exception  $e
-     * @return void
-     *
+     * @param  \Exception   $e
      * @throws \Exception
+     * @return void
      */
     protected function handleBeginTransactionException($e)
     {
@@ -164,7 +161,7 @@ trait ManagesTransactions
     /**
      * Rollback the active database transaction.
      *
-     * @param  int|null  $toLevel
+     * @param  int|null $toLevel
      * @return void
      */
     public function rollBack($toLevel = null)
@@ -173,8 +170,8 @@ trait ManagesTransactions
         // that this given transaction level is valid before attempting to rollback to
         // that level. If it's not we will just return out and not attempt anything.
         $toLevel = is_null($toLevel)
-                    ? $this->transactions - 1
-                    : $toLevel;
+            ? $this->transactions - 1
+            : $toLevel;
 
         if ($toLevel < 0 || $toLevel >= $this->transactions) {
             return;
@@ -193,7 +190,7 @@ trait ManagesTransactions
     /**
      * Perform a rollback within the database.
      *
-     * @param  int  $toLevel
+     * @param  int    $toLevel
      * @return void
      */
     protected function performRollBack($toLevel)
@@ -202,7 +199,7 @@ trait ManagesTransactions
             $this->getPdo()->rollBack();
         } elseif ($this->queryGrammar->supportsSavepoints()) {
             $this->getPdo()->exec(
-                $this->queryGrammar->compileSavepointRollBack('trans'.($toLevel + 1))
+                $this->queryGrammar->compileSavepointRollBack('trans' . ($toLevel + 1))
             );
         }
     }

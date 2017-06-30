@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Connectors;
+namespace Mellivora\Database\Connectors;
 
 use InvalidArgumentException;
 
@@ -9,10 +9,9 @@ class SQLiteConnector extends Connector implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
-     * @return \PDO
-     *
+     * @param  array                       $config
      * @throws \InvalidArgumentException
+     * @return \PDO
      */
     public function connect(array $config)
     {

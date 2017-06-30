@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
 use Exception;
-use Illuminate\Support\Str;
+use Mellivora\Support\Str;
 
 trait DetectsLostConnections
 {
     /**
      * Determine if the given exception was caused by a lost connection.
      *
-     * @param  \Exception  $e
+     * @param  \Exception $e
      * @return bool
      */
     protected function causedByLostConnection(Exception $e)

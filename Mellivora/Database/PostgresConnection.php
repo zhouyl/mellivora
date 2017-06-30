@@ -1,19 +1,19 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
-use Illuminate\Database\Schema\PostgresBuilder;
 use Doctrine\DBAL\Driver\PDOPgSql\Driver as DoctrineDriver;
-use Illuminate\Database\Query\Processors\PostgresProcessor;
-use Illuminate\Database\Query\Grammars\PostgresGrammar as QueryGrammar;
-use Illuminate\Database\Schema\Grammars\PostgresGrammar as SchemaGrammar;
+use Mellivora\Database\Query\Grammars\PostgresGrammar as QueryGrammar;
+use Mellivora\Database\Query\Processors\PostgresProcessor;
+use Mellivora\Database\Schema\Grammars\PostgresGrammar as SchemaGrammar;
+use Mellivora\Database\Schema\PostgresBuilder;
 
 class PostgresConnection extends Connection
 {
     /**
      * Get the default query grammar instance.
      *
-     * @return \Illuminate\Database\Query\Grammars\PostgresGrammar
+     * @return \Mellivora\Database\Query\Grammars\PostgresGrammar
      */
     protected function getDefaultQueryGrammar()
     {
@@ -23,7 +23,7 @@ class PostgresConnection extends Connection
     /**
      * Get a schema builder instance for the connection.
      *
-     * @return \Illuminate\Database\Schema\PostgresBuilder
+     * @return \Mellivora\Database\Schema\PostgresBuilder
      */
     public function getSchemaBuilder()
     {
@@ -37,7 +37,7 @@ class PostgresConnection extends Connection
     /**
      * Get the default schema grammar instance.
      *
-     * @return \Illuminate\Database\Schema\Grammars\PostgresGrammar
+     * @return \Mellivora\Database\Schema\Grammars\PostgresGrammar
      */
     protected function getDefaultSchemaGrammar()
     {
@@ -47,7 +47,7 @@ class PostgresConnection extends Connection
     /**
      * Get the default post processor instance.
      *
-     * @return \Illuminate\Database\Query\Processors\PostgresProcessor
+     * @return \Mellivora\Database\Query\Processors\PostgresProcessor
      */
     protected function getDefaultPostProcessor()
     {

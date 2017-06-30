@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Eloquent;
+namespace Mellivora\Database\Eloquent;
 
 class SoftDeletingScope implements Scope
 {
@@ -14,8 +14,8 @@ class SoftDeletingScope implements Scope
     /**
      * Apply the scope to a given Eloquent query builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
+     * @param  \Mellivora\Database\Eloquent\Model   $model
      * @return void
      */
     public function apply(Builder $builder, Model $model)
@@ -26,7 +26,7 @@ class SoftDeletingScope implements Scope
     /**
      * Extend the query builder with the needed functions.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
      * @return void
      */
     public function extend(Builder $builder)
@@ -47,7 +47,7 @@ class SoftDeletingScope implements Scope
     /**
      * Get the "deleted at" column for the builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
      * @return string
      */
     protected function getDeletedAtColumn(Builder $builder)
@@ -62,7 +62,7 @@ class SoftDeletingScope implements Scope
     /**
      * Add the force delete extension to the builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
      * @return void
      */
     protected function addForceDelete(Builder $builder)
@@ -75,7 +75,7 @@ class SoftDeletingScope implements Scope
     /**
      * Add the restore extension to the builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
      * @return void
      */
     protected function addRestore(Builder $builder)
@@ -90,7 +90,7 @@ class SoftDeletingScope implements Scope
     /**
      * Add the with-trashed extension to the builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
      * @return void
      */
     protected function addWithTrashed(Builder $builder)
@@ -103,7 +103,7 @@ class SoftDeletingScope implements Scope
     /**
      * Add the without-trashed extension to the builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
      * @return void
      */
     protected function addWithoutTrashed(Builder $builder)
@@ -122,7 +122,7 @@ class SoftDeletingScope implements Scope
     /**
      * Add the only-trashed extension to the builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Mellivora\Database\Eloquent\Builder $builder
      * @return void
      */
     protected function addOnlyTrashed(Builder $builder)

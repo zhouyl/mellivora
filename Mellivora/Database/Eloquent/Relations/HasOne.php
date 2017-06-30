@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Eloquent\Relations;
+namespace Mellivora\Database\Eloquent\Relations;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Collection;
+use Mellivora\Database\Eloquent\Model;
 
 class HasOne extends HasOneOrMany
 {
@@ -45,12 +45,12 @@ class HasOne extends HasOneOrMany
     /**
      * Get the default value for this relation.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @param  \Mellivora\Database\Eloquent\Model        $model
+     * @return \Mellivora\Database\Eloquent\Model|null
      */
     protected function getDefaultFor(Model $model)
     {
-        if (! $this->withDefault) {
+        if (!$this->withDefault) {
             return;
         }
 
@@ -72,9 +72,9 @@ class HasOne extends HasOneOrMany
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array  $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param  array                                   $models
+     * @param  \Mellivora\Database\Eloquent\Collection $results
+     * @param  string                                  $relation
      * @return array
      */
     public function match(array $models, Collection $results, $relation)
@@ -85,7 +85,7 @@ class HasOne extends HasOneOrMany
     /**
      * Return a new model instance in case the relationship does not exist.
      *
-     * @param  \Closure|bool  $callback
+     * @param  \Closure|bool $callback
      * @return $this
      */
     public function withDefault($callback = true)

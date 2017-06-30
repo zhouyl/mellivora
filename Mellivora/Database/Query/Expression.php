@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Query;
+namespace Mellivora\Database\Query;
 
 class Expression
 {

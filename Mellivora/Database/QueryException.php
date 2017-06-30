@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
+use Mellivora\Support\Str;
 use PDOException;
-use Illuminate\Support\Str;
 
 class QueryException extends PDOException
 {
@@ -24,8 +24,8 @@ class QueryException extends PDOException
     /**
      * Create a new query exception instance.
      *
-     * @param  string  $sql
-     * @param  array  $bindings
+     * @param  string     $sql
+     * @param  array      $bindings
      * @param  \Exception $previous
      * @return void
      */
@@ -33,10 +33,10 @@ class QueryException extends PDOException
     {
         parent::__construct('', 0, $previous);
 
-        $this->sql = $sql;
+        $this->sql      = $sql;
         $this->bindings = $bindings;
-        $this->code = $previous->getCode();
-        $this->message = $this->formatMessage($sql, $bindings, $previous);
+        $this->code     = $previous->getCode();
+        $this->message  = $this->formatMessage($sql, $bindings, $previous);
 
         if ($previous instanceof PDOException) {
             $this->errorInfo = $previous->errorInfo;
@@ -46,14 +46,14 @@ class QueryException extends PDOException
     /**
      * Format the SQL error message.
      *
-     * @param  string  $sql
-     * @param  array  $bindings
+     * @param  string     $sql
+     * @param  array      $bindings
      * @param  \Exception $previous
      * @return string
      */
     protected function formatMessage($sql, $bindings, $previous)
     {
-        return $previous->getMessage().' (SQL: '.Str::replaceArray('?', $bindings, $sql).')';
+        return $previous->getMessage() . ' (SQL: ' . Str::replaceArray('?', $bindings, $sql) . ')';
     }
 
     /**

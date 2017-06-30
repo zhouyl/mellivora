@@ -1,9 +1,9 @@
 <?php
 
-namespace Illuminate\Database\Console\Migrations;
+namespace Mellivora\Database\Console\Migrations;
 
-use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Database\Migrations\Migrator;
+use Mellivora\Console\ConfirmableTrait;
+use Mellivora\Database\Migrations\Migrator;
 use Symfony\Component\Console\Input\InputOption;
 
 class RollbackCommand extends BaseCommand
@@ -27,14 +27,14 @@ class RollbackCommand extends BaseCommand
     /**
      * The migrator instance.
      *
-     * @var \Illuminate\Database\Migrations\Migrator
+     * @var \Mellivora\Database\Migrations\Migrator
      */
     protected $migrator;
 
     /**
      * Create a new migration rollback command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator  $migrator
+     * @param  \Mellivora\Database\Migrations\Migrator $migrator
      * @return void
      */
     public function __construct(Migrator $migrator)
@@ -51,7 +51,7 @@ class RollbackCommand extends BaseCommand
      */
     public function fire()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return;
         }
 
@@ -60,7 +60,7 @@ class RollbackCommand extends BaseCommand
         $this->migrator->rollback(
             $this->getMigrationPaths(), [
                 'pretend' => $this->option('pretend'),
-                'step' => (int) $this->option('step'),
+                'step'    => (int) $this->option('step'),
             ]
         );
 

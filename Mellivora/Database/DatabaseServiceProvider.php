@@ -1,15 +1,15 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
 use Faker\Factory as FakerFactory;
 use Faker\Generator as FakerGenerator;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Queue\EntityResolver;
-use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Database\Eloquent\QueueEntityResolver;
-use Illuminate\Database\Eloquent\Factory as EloquentFactory;
+use Mellivora\Database\Connectors\ConnectionFactory;
+use Mellivora\Database\Eloquent\Factory as EloquentFactory;
+use Mellivora\Database\Eloquent\Model;
+use Mellivora\Database\Eloquent\QueueEntityResolver;
+use Mellivora\Support\Contracts\Queue\EntityResolver;
+use Mellivora\Support\ServiceProvider;
 
 class DatabaseServiceProvider extends ServiceProvider
 {

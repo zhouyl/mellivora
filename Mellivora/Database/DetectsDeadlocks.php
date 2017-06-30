@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
 use Exception;
-use Illuminate\Support\Str;
+use Mellivora\Support\Str;
 
 trait DetectsDeadlocks
 {
     /**
      * Determine if the given exception was caused by a deadlock.
      *
-     * @param  \Exception  $e
+     * @param  \Exception $e
      * @return bool
      */
     protected function causedByDeadlock(Exception $e)

@@ -1,11 +1,11 @@
 <?php
 
-namespace Illuminate\Database;
+namespace Mellivora\Database;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Migrations\Migrator;
-use Illuminate\Database\Migrations\MigrationCreator;
-use Illuminate\Database\Migrations\DatabaseMigrationRepository;
+use Mellivora\Database\Migrations\DatabaseMigrationRepository;
+use Mellivora\Database\Migrations\MigrationCreator;
+use Mellivora\Database\Migrations\Migrator;
+use Mellivora\Support\ServiceProvider;
 
 class MigrationServiceProvider extends ServiceProvider
 {

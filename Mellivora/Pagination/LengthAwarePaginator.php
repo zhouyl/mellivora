@@ -1,16 +1,16 @@
 <?php
 
-namespace Illuminate\Pagination;
+namespace Mellivora\Pagination;
 
 use ArrayAccess;
 use Countable;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Contracts\Arrayable;
-use Illuminate\Support\Contracts\Jsonable;
-use Illuminate\Support\HtmlString;
 use IteratorAggregate;
 use JsonSerializable;
+use Mellivora\Support\Collection;
+use Mellivora\Support\Contracts\Arrayable;
+use Mellivora\Support\Contracts\Jsonable;
+use Mellivora\Support\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorContract;
+use Mellivora\Support\HtmlString;
 
 class LengthAwarePaginator extends AbstractPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Jsonable, LengthAwarePaginatorContract
 {

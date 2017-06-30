@@ -304,15 +304,19 @@ if (!function_exists('csrf_field')) {
      */
     function csrf_field()
     {
-        $nameKey  = app('csrf')->getTokenNameKey();
-        $valueKey = app('csrf')->getTokenValueKey();
-        $name     = app('request')->getAttribute($nameKey);
-        $value    = app('request')->getAttribute($valueKey);
+        return new HtmlString('<input type="hidden" name="csrf_token" value="' . csrf_token() . '">');
+    }
+}
 
-        return new HtmlString(join("\n", [
-            sprintf('<input type="hidden" name="%s" value="%s" />', $nameKey, $name),
-            sprintf('<input type="hidden" name="%s" value="%s" />', $valueKey, $value),
-        ]));
+if (!function_exists('csrf_token')) {
+    /**
+     * Get the CSRF token value.
+     *
+     * @return string
+     */
+    function csrf_token()
+    {
+        return app('session')->token();
     }
 }
 
@@ -324,7 +328,7 @@ if (!function_exists('csrf_check')) {
      */
     function csrf_check()
     {
-        return app('request')->getAttribute('csrf_status') !== false;
+        return app('session')->checkToken(app('request')->input('csrf_token'));
     }
 }
 

@@ -21,7 +21,6 @@
     "require": {
         "php": ">=7.0.0",
         "slim/csrf": "^0.8.1",
-        "slim/slim": "^3.8",
         "symfony/cache": "4.0.x-dev"
     },
     "autoload": {

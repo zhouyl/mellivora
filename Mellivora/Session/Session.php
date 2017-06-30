@@ -4,6 +4,7 @@ namespace Mellivora\Session;
 
 use ArrayAccess;
 use Mellivora\Support\Arr;
+use Mellivora\Support\Str;
 use Mellivora\Support\Traits\MagicAccess;
 use SessionHandlerInterface;
 
@@ -249,6 +250,40 @@ class Session implements ArrayAccess
     public function status()
     {
         return session_status();
+    }
+
+    /**
+     * 获取一个 token，如果不存在则自动生成
+     *
+     * @param  boolean  $regenerate
+     * @return string
+     */
+    public function token($regenerate = false)
+    {
+        $key = '__token';
+        if (!$this->has($key) || $regenerate) {
+            $this->set($key, Str::random(40));
+        }
+
+        return $this->get($key);
+    }
+
+    /**
+     * 校验 token
+     *
+     * @param  string    $token
+     * @param  boolean   $once
+     * @return boolean
+     */
+    public function checkToken($token, $once = true)
+    {
+        $check = $this->token() === $token;
+
+        if ($once) {
+            $this->delete('__token');
+        }
+
+        return $check;
     }
 
     /**

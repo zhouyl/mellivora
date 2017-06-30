@@ -137,15 +137,7 @@ class View implements ArrayAccess
      */
     protected function gatherData()
     {
-        $data = array_merge($this->factory->getShared(), $this->data);
-
-        foreach ($data as $key => $value) {
-            if (method_exists($value, 'render')) {
-                $data[$key] = $value->render();
-            }
-        }
-
-        return $data;
+        return array_merge($this->factory->getShared(), $this->data);
     }
 
     /**

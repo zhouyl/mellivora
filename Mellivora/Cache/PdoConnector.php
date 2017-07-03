@@ -69,7 +69,8 @@ class PdoConnector extends Connector
      */
     protected function autoCreateTable($cache)
     {
-        $lockfile = '/tmp/mellivora_cache_pdo_connector.lock';
+        $lockfile = sys_get_temp_dir() . '/mellivora-cache-pdo.lock';
+
         if (!is_file($lockfile)) {
             try {
                 $cache->createTable();

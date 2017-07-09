@@ -2,7 +2,6 @@
 
 namespace Mellivora\Support\Facades;
 
-use Mellivora\Application\App;
 use RuntimeException;
 
 /**
@@ -13,7 +12,7 @@ use RuntimeException;
 class Facade
 {
     /**
-     * @var Mellivora\Application\App
+     * @var object
      */
     protected static $app;
 
@@ -85,7 +84,7 @@ class Facade
     /**
      * Get the application instance behind the facade.
      *
-     * @return Mellivora\Application\App
+     * @return object
      */
     public static function getFacadeApplication()
     {
@@ -95,9 +94,9 @@ class Facade
     /**
      * Set the application instance.
      *
-     * @param Mellivora\Application\App $app
+     * @param object $app
      */
-    public static function setFacadeApplication(App $app)
+    public static function setFacadeApplication($app)
     {
         static::$app = $app;
     }

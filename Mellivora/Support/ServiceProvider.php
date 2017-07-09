@@ -2,8 +2,6 @@
 
 namespace Mellivora\Support;
 
-use Mellivora\Application\App;
-
 /**
  * 服务提供者基类
  */
@@ -11,7 +9,7 @@ abstract class ServiceProvider
 {
 
     /**
-     * @param Mellivora\Application\App $app
+     * @param object $app
      */
     protected $app;
 
@@ -21,9 +19,9 @@ abstract class ServiceProvider
     protected $container;
 
     /**
-     * @param Mellivora\Application\App $app
+     * @param object $app
      */
-    public function __construct(App $app)
+    public function __construct($app)
     {
         $this->app       = $app;
         $this->container = $app->getContainer();

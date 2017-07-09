@@ -1,11 +1,14 @@
 <?php
 
-namespace Mellivora\Application;
+namespace Mellivora\Console;
 
+use InvalidArgumentException;
+use Mellivora\Application\Container;
 use Mellivora\Support\Facades\Facade;
 use Mellivora\Support\ServiceProvider;
 use Mellivora\Support\Traits\Singleton;
-use Slim\App as SlimApp;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Application;
 use UnexpectedValueException;
 
 /**
@@ -15,22 +18,30 @@ if (!defined('JSON_ENCODE_OPTION')) {
     define('JSON_ENCODE_OPTION', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
-/**
- * 重写 Slim\App 类
- *
- * 对 facades/provider 进行扩展
- */
-class App extends SlimApp
+class App extends Application
 {
+
     /**
      * 使用 Singleton，让 App 支持单例调用
      */
     use Singleton;
 
     /**
+     * Current version
+     *
+     * @var string
+     */
+    const VERSION = '1.0.0';
+
+    /**
+     * @var Mellivora\Application\Container
+     */
+    protected $container;
+
+    /**
      * {@inheritdoc}
      */
-    public function __construct($container = [])
+    public function __construct($container = [], $name = 'Mellivora Framework', $version = self::VERSION)
     {
         // 将 app 注册为允许单例调用
         $this->registerSingleton();
@@ -43,10 +54,26 @@ class App extends SlimApp
             $container = new Container($container);
         }
 
-        parent::__construct($container);
+        if (!$container instanceof ContainerInterface) {
+            throw new InvalidArgumentException('Expected a ContainerInterface');
+        }
+
+        $this->container = $container;
 
         $this->registerFacades();
         $this->registerProviders();
+
+        parent::__construct($name, $version);
+    }
+
+    /**
+     * 获取 container 实例
+     *
+     * @return \Mellivora\Application\Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**
@@ -80,13 +107,5 @@ class App extends SlimApp
                 (new $class($this))->register();
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function run($silent = false)
-    {
-        return parent::run($silent);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-use Mellivora\Application\App;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Collection;
 use Mellivora\Support\Contracts\Htmlable;
+use Mellivora\Support\Facades\App;
 use Mellivora\Support\HigherOrderTapProxy;
 use Mellivora\Support\HtmlString;
 use Mellivora\Support\Str;

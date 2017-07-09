@@ -101,22 +101,31 @@ if (!function_exists('cookie')) {
     /**
      * 获取或设定 cookie 值
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  int     $minutes
+     *
+     * @param  dynamic      key|key,default|data,expiration|null
+     * @throws \Exception
      * @return mixed
      */
-    function cookie($name = null, $value = null, $minutes = null)
+    function cookie()
     {
-        if (func_num_args() === 0) {
+        $arguments = func_get_args();
+
+        if (empty($arguments)) {
             return app('cookies');
         }
 
-        if (func_num_args() === 1) {
-            return app('cookies')->get($name);
+        if (is_string($arguments[0])) {
+            return app('cookies')->get($arguments[0], $arguments[1] ?? null);
         }
 
-        return app('cookies')->set($name, $value, $minutes);
+        if (!is_array($arguments[0])) {
+            throw new Exception(
+                'When setting a value in the cookies, you must pass an array of key / value pairs.'
+            );
+        }
+
+        return app('cookies')->set(
+            key($arguments[0]), reset($arguments[0]), $arguments[1] ?? null);
     }
 }
 

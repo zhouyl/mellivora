@@ -4,6 +4,7 @@ namespace Mellivora\Http;
 
 use ArrayAccess;
 use Mellivora\Encryption\EncryptionInterface;
+use Mellivora\Support\Arr;
 use Mellivora\Support\Traits\MagicAccess;
 
 /**
@@ -93,13 +94,13 @@ class Cookies implements ArrayAccess
     protected function setCookie($key, $value = null, $expire = 0)
     {
         if ($value === null) {
-            unset($_COOKIE[$key]);
+            Arr::forget($_COOKIE, $key);
         } else {
             if ($this->defaults['encrypt']) {
                 $value = $this->getEncryption()->encryptBase64($value);
             }
 
-            $_COOKIE[$key] = $value;
+            Arr::set($_COOKIE, $key, $value);
         }
 
         setcookie($key, $value, $expire,
@@ -142,13 +143,15 @@ class Cookies implements ArrayAccess
      */
     public function get($key, $default = null)
     {
-        $value = $_COOKIE[$key] ?? $default;
+        $value = Arr::get($_COOKIE, $key);
 
-        if ($this->defaults['encrypt']) {
-            $value = $this->getEncryption()->decryptBase64($value);
+        if ($value === null) {
+            return $default;
         }
 
-        return $value;
+        return $this->defaults['encrypt']
+            ? $this->getEncryption()->decryptBase64($value)
+            : $value;
     }
 
     /**
@@ -159,7 +162,7 @@ class Cookies implements ArrayAccess
      */
     public function has($key)
     {
-        return isset($_COOKIE[$key]);
+        return Arr::exists($_COOKIE, $key);
     }
 
     /**
@@ -170,8 +173,6 @@ class Cookies implements ArrayAccess
      */
     public function delete($key)
     {
-        unset($_COOKIE[$key]);
-
         $this->setCookie($key, null, -86400);
 
         return $this;

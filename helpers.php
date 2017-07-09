@@ -40,7 +40,7 @@ if (!function_exists('env')) {
      */
     function env($environment = null)
     {
-        if ($environment === null) {
+        if (is_null($environment)) {
             return app('settings')['environment'];
         }
 
@@ -56,26 +56,17 @@ if (!function_exists('cache')) {
      * @throws \Exception
      * @return mixed
      */
-    function cache()
+    function cache($key = null, $default = null)
     {
-        $arguments = func_get_args();
-
-        if (empty($arguments)) {
+        if (is_null($key)) {
             return app('cache.simple');
         }
 
-        if (is_string($arguments[0])) {
-            return app('cache.simple')->get($arguments[0], isset($arguments[1]) ? $arguments[1] : null);
+        if (is_string($key)) {
+            return app('cache.simple')->get($key, $default);
         }
 
-        if (!is_array($arguments[0])) {
-            throw new Exception(
-                'When setting a value in the cache, you must pass an array of key / value pairs.'
-            );
-        }
-
-        return app('cache.simple')->set(
-            key($arguments[0]), reset($arguments[0]), $arguments[1] ?? null);
+        return app('cache.simple')->setMultiple($key, $default);
     }
 }
 
@@ -89,7 +80,7 @@ if (!function_exists('config')) {
      */
     function config($key = null, $default = null)
     {
-        if ($key === null) {
+        if (is_null($key)) {
             return app('config');
         }
 
@@ -102,30 +93,27 @@ if (!function_exists('cookie')) {
      * 获取或设定 cookie 值
      *
      *
-     * @param  dynamic      key|key,default|data,expiration|null
+     * @param  dynamic      key|key,default|data,minutes|null
      * @throws \Exception
      * @return mixed
      */
-    function cookie()
+    function cookie($key = null, $default = null)
     {
-        $arguments = func_get_args();
-
-        if (empty($arguments)) {
+        if (is_null($key)) {
             return app('cookies');
         }
 
-        if (is_string($arguments[0])) {
-            return app('cookies')->get($arguments[0], $arguments[1] ?? null);
+        if (is_string($key)) {
+            return app('cookies')->get($key, $default);
         }
 
-        if (!is_array($arguments[0])) {
+        if (!is_array($key)) {
             throw new Exception(
                 'When setting a value in the cookies, you must pass an array of key / value pairs.'
             );
         }
 
-        return app('cookies')->set(
-            key($arguments[0]), reset($arguments[0]), $arguments[1] ?? null);
+        return app('cookies')->set($key, null, $default);
     }
 }
 
@@ -181,7 +169,7 @@ if (!function_exists('view')) {
      */
     function view($view = null, $data = [], callable $callback = null)
     {
-        if (func_num_args() === 0) {
+        if (is_null($view)) {
             return app('view');
         }
 
@@ -271,7 +259,7 @@ if (!function_exists('url')) {
      */
     function url($path = null, array $queryParams = [])
     {
-        if ($path === null) {
+        if (is_null($path)) {
             return app('request')->fullUrlWithQuery($queryParams);
         }
 

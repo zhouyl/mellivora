@@ -101,7 +101,7 @@ class Fluent implements ArrayAccess, JsonSerializable, Jsonable, Arrayable
      */
     public function offsetGet($offset)
     {
-        return $this->attributes[$offset] ?? null;
+        return isset($this->attributes[$offset]) ? $this->attributes[$offset] : null;
     }
 
     /**

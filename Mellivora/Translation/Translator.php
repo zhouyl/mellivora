@@ -104,7 +104,7 @@ class Translator
         $aliases = array_map('strtolower', $aliases);
 
         $this->aliases[$lang] = array_unique(
-            array_merge($this->aliases[$lang] ?? [], $aliases));
+            array_merge(Arr::get($this->aliases, $lang, []), $aliases));
 
         return $this;
     }

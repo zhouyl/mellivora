@@ -210,7 +210,7 @@ class Request extends SlimHttpRequest
             }
         }
 
-        return $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['REMOTE_ADDR'];
+        return Arr::get($_SERVER, 'HTTP_CLIENT_IP', $_SERVER['REMOTE_ADDR']);
     }
 
     /**
@@ -236,9 +236,7 @@ class Request extends SlimHttpRequest
      */
     public function getPostParam($key, $default = null)
     {
-        $posts = $this->getPostParams();
-
-        return $posts[$key] ?? $default;
+        return Arr::get($this->getPostParams(), $key, $default);
     }
 
     /**

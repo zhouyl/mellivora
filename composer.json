@@ -22,7 +22,7 @@
         "php": ">=7.0.0",
         "slim/slim": "^3.8",
         "league/event": "^2.1",
-        "symfony/cache": "4.0.x-dev"
+        "symfony/cache": "^3.3"
     },
     "autoload": {
         "psr-4": {

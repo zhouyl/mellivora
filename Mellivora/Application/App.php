@@ -32,12 +32,6 @@ class App extends SlimApp
      */
     public function __construct($container = [])
     {
-        // 将 app 注册为允许单例调用
-        $this->registerSingleton();
-
-        // Facade 初始化设置
-        Facade::setFacadeApplication($this);
-
         // 构造 container
         if (is_array($container)) {
             $container = new Container($container);
@@ -45,6 +39,8 @@ class App extends SlimApp
 
         parent::__construct($container);
 
+        Facade::setFacadeApplication($this);
+        $this->registerSingleton();
         $this->registerFacades();
         $this->registerProviders();
     }

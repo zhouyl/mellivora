@@ -262,7 +262,7 @@ class Session implements ArrayAccess
     {
         $key = '__token';
         if (!$this->has($key) || $regenerate) {
-            $this->set($key, Str::random(40));
+            $this->set($key, Str::quickRandom(40));
         }
 
         return $this->get($key);

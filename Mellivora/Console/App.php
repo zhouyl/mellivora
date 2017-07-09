@@ -43,27 +43,16 @@ class App extends Application
      */
     public function __construct($container = [], $name = 'Mellivora Framework', $version = self::VERSION)
     {
-        // 将 app 注册为允许单例调用
-        $this->registerSingleton();
+        parent::__construct($name, $version);
 
-        // Facade 初始化设置
+        // Facade 初始化设
         Facade::setFacadeApplication($this);
 
-        // 构造 container
-        if (is_array($container)) {
-            $container = new Container($container);
-        }
-
-        if (!$container instanceof ContainerInterface) {
-            throw new InvalidArgumentException('Expected a ContainerInterface');
-        }
-
-        $this->container = $container;
-
+        $this->registerSingleton();
+        $this->registerContainer($container);
         $this->registerFacades();
         $this->registerProviders();
-
-        parent::__construct($name, $version);
+        $this->registerCommands();
     }
 
     /**
@@ -74,6 +63,26 @@ class App extends Application
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * 注册 container 容器
+     *
+     * @param  array                       $container
+     * @throws \InvalidArgumentException
+     */
+    protected function registerContainer($container = [])
+    {
+        // 构造 container
+        if (is_array($container)) {
+            $container = new Container($container);
+        }
+
+        if (!$container instanceof ContainerInterface) {
+            throw new InvalidArgumentException('Expected a ContainerInterface');
+        }
+
+        $this->container = $container;
     }
 
     /**
@@ -105,6 +114,20 @@ class App extends Application
                 }
 
                 (new $class($this))->register();
+            }
+        }
+    }
+
+    /**
+     * 注册 Commands
+     */
+    protected function registerCommands()
+    {
+        $container = $this->getContainer();
+
+        if ($container->has('commands')) {
+            foreach ($container->get('commands') as $class) {
+                $this->add(new $class);
             }
         }
     }

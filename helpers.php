@@ -1167,7 +1167,7 @@ if (!function_exists('str_random')) {
      */
     function str_random($length = 16)
     {
-        return Str::random($length);
+        return Str::quickRandom($length);
     }
 }
 

@@ -3,7 +3,7 @@
 namespace Mellivora\View\Engines;
 
 use Exception;
-use Mellivora\Support\Exceptions\FatalThrowableError;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 
 class PhpEngine implements EngineInterface

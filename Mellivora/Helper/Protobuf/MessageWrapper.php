@@ -216,7 +216,17 @@ class MessageWrapper implements ArrayAccess
     public function __call($method, $args)
     {
         if (method_exists($this->message, $method)) {
-            return $this->message->$method(...$args);
+            $return = $this->message->$method(...$args);
+
+            // 当使用 set 时，返回当前类，以便连贯式的写法
+            // $order = app('helper.protobuf')->wrapper(Order::class)
+            //      ->setOrderId(123)
+            //      ->setBusinessId(456);
+            if (substr($method, 0, 3) === 'set') {
+                return $this;
+            }
+
+            return $return;
         }
 
         throw new BadMethodCallException(

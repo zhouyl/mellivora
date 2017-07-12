@@ -130,6 +130,10 @@ class MessageWrapper implements ArrayAccess
         } elseif ($this->has($key)) {
             $method = 'set' . Str::studly($key);
             if (method_exists($this->message, $method)) {
+                if ($value instanceof self) {
+                    $value = $value->raw();
+                }
+
                 $this->message->$method($value);
             }
         }

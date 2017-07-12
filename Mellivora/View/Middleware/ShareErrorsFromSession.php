@@ -2,7 +2,6 @@
 
 namespace Mellivora\View\Middleware;
 
-use Closure;
 use Mellivora\Application\Container;
 use Mellivora\Support\ViewErrorBag;
 use Psr\Http\Message\ResponseInterface;

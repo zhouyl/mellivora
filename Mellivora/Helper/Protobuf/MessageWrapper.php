@@ -3,7 +3,9 @@
 namespace Mellivora\Helper\Protobuf;
 
 use ArrayAccess;
+use BadMethodCallException;
 use Google\Protobuf\Internal\Message as ProtobufMessage;
+use InvalidArgumentException;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
 use Mellivora\Support\Traits\MagicAccess;
@@ -197,5 +199,23 @@ class MessageWrapper implements ArrayAccess
         }
 
         return $data;
+    }
+
+    /**
+     * 允许直接调用 Message 类的方法
+     *
+     * @param  string                   $method
+     * @param  array                    $args
+     * @throws BadMethodCallException
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        if (method_exists($this->message, $method)) {
+            return $this->message->$method(...$args);
+        }
+
+        throw new BadMethodCallException(
+            sprintf('Call to undefined method %s::%s()', get_class($this->message), $method));
     }
 }

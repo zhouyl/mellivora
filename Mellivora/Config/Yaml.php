@@ -7,7 +7,7 @@ use RuntimeException;
 /**
  * yaml 格式配置文件解释器
  */
-class Yaml extends Parser
+class Yaml extends NativeArray
 {
     /**
      * 构造方法

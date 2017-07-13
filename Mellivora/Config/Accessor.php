@@ -3,6 +3,7 @@
 namespace Mellivora\Config;
 
 use ArrayAccess;
+use Mellivora\Support\Traits\MagicAccess;
 use RuntimeException;
 
 /**
@@ -35,6 +36,9 @@ use RuntimeException;
  */
 class Accessor implements ArrayAccess
 {
+
+    use MagicAccess;
+
     /**
      * 默认的配置文件的查找路径，查找顺序从最后注册的路径开始（数组的底部）
      *
@@ -118,8 +122,8 @@ class Accessor implements ArrayAccess
     /**
      * 设定配置文件解释器
      *
-     * @param array                   $parsers
-     * @param Mellivora\Config\Parser $parser
+     * @param array                        $parsers
+     * @param Mellivora\Config\NativeArray $parser
      */
     public function setParsers(array $parsers)
     {
@@ -131,10 +135,10 @@ class Accessor implements ArrayAccess
     /**
      * 新增配置解释器
      *
-     * @param string                  $ext
-     * @param Mellivora\Config\Parser $parser
+     * @param string                       $ext
+     * @param Mellivora\Config\NativeArray $parser
      */
-    public function addParser($ext, Parser $parser)
+    public function addParser($ext, NativeArray $parser)
     {
         $this->parsers[$ext] = $parser;
 
@@ -165,6 +169,10 @@ class Accessor implements ArrayAccess
             }
         }
 
+        if (!isset(self::$cached[$name])) {
+            self::$cached[$name] = new NativeArray;
+        }
+
         return self::$cached[$name];
     }
 
@@ -181,41 +189,72 @@ class Accessor implements ArrayAccess
      */
     public function get($path, $default = null)
     {
-        $parts  = explode('.', $path);
-        $config = $this->load(array_shift($parts));
+        list($name, $path) = $this->splitPath($path);
 
-        if ($config === false) {
-            return $default;
+        $config = $this->load($name);
+
+        return empty($path) ? $config : $config->get($path, $default);
+    }
+
+    /**
+     * 根据配置名称及路径，对配置数据进行设置
+     *
+     * @param  string                         $key
+     * @param  mixed                          $value
+     * @throws RuntimeException
+     * @return Mellivora\Config\NativeArray
+     */
+    public function set($path, $value)
+    {
+        list($name, $path) = $this->splitPath($path);
+
+        if (empty($path)) {
+            throw new RuntimeException('The root node of config is not writable');
         }
 
-        if (empty($parts)) {
-            return $config;
+        return $this->load($name)->set($path, $value);
+    }
+
+    /**
+     * 根据配置名称及路径，删除配置数据
+     *
+     * @param  string                         $path
+     * @return Mellivora\Config\NativeArray
+     */
+    public function remove($path)
+    {
+        list($name, $path) = $this->splitPath($path);
+
+        if (empty($path)) {
+            throw new RuntimeException('The root node of config is not writable');
         }
 
-        return $config->get(implode('.', $parts), $default);
+        return $this->load($name)->remove($path);
     }
 
-    /********************************************************************
-     * 通过对 ArrayAccess 的支持，使配置加载更自由
-     ********************************************************************/
-
-    public function offsetGet($key)
+    /**
+     * 根据配置名称及路径，判断是否存在
+     *
+     * @param  string    $path
+     * @return boolean
+     */
+    public function exists($path)
     {
-        return $this->get($key);
+        list($name, $path) = $this->splitPath($path);
+
+        return $this->load($name)->exists($path);
     }
 
-    public function offsetSet($key, $value)
+    /**
+     * 将 path 进行分割为 [name, path] 两部分
+     *
+     * @param  string  $path
+     * @return array
+     */
+    protected function splitPath($path)
     {
-        throw new RuntimeException('Can not set the config data');
-    }
+        $parts = explode('.', $path);
 
-    public function offsetUnset($key)
-    {
-        throw new RuntimeException('Can not unset the config data');
-    }
-
-    public function offsetExists($key)
-    {
-        return $this->get($key) !== null;
+        return [array_shift($parts), implode('.', $parts)];
     }
 }

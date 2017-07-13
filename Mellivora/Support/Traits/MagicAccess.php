@@ -21,11 +21,19 @@ trait MagicAccess
 
     public function offsetExists($key)
     {
+        if (method_exists($this, 'exists')) {
+            return $this->exists($key);
+        }
+
         return $this->has($key);
     }
 
     public function offsetUnset($key)
     {
+        if (method_exists($this, 'remove')) {
+            return $this->remove($key);
+        }
+
         return $this->delete($key);
     }
 

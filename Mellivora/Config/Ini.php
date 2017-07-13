@@ -5,7 +5,7 @@ namespace Mellivora\Config;
 /**
  * ini 格式配置文件解释器
  */
-class Ini extends Parser
+class Ini extends NativeArray
 {
     /**
      * 构造方法

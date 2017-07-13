@@ -5,7 +5,7 @@ namespace Mellivora\Config;
 /**
  * json 格式配置文件解释器
  */
-class Json extends Parser
+class Json extends NativeArray
 {
     /**
      * 构造方法

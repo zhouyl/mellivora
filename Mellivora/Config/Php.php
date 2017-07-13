@@ -7,7 +7,7 @@ use RuntimeException;
 /**
  * php 格式配置文件解释器
  */
-class Php extends Parser
+class Php extends NativeArray
 {
     /**
      * 构造方法

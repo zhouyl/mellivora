@@ -2,30 +2,33 @@
 
 namespace Mellivora\Config;
 
+use Mellivora\Support\Arr;
 use Mellivora\Support\Fluent;
 
 /**
  * 使用原生数组构建的配置基础类
  */
-class Parser extends Fluent
+class NativeArray extends Fluent
 {
 
     /**
-     * Set the value at the given offset.
-     *
-     * @param  string $offset
-     * @param  mixed  $value
-     * @return void
+     * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function set($key, $value = null)
     {
-        parent::offsetSet($offset, is_array($value) ? new self($value) : $value);
+        $attributes = is_array($key) ? $key : [$key => $value];
+
+        foreach ($attributes as $key => $value) {
+            $value = is_array($value) ? new self($value) : $value;
+
+            Arr::set($this->attributes, $key, $value);
+        }
+
+        return $this;
     }
 
     /**
-     * Convert the Fluent instance to an array.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray()
     {

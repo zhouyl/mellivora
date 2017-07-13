@@ -2,17 +2,19 @@
 
 namespace Mellivora\Database\Capsule;
 
-use Mellivora\Container\Container;
+use Mellivora\Application\Container;
 use Mellivora\Database\Connectors\ConnectionFactory;
 use Mellivora\Database\DatabaseManager;
 use Mellivora\Database\Eloquent\Model as Eloquent;
 use Mellivora\Support\Contracts\Events\Dispatcher;
 use Mellivora\Support\Traits\CapsuleManagerTrait;
+use Mellivora\Support\Traits\Singleton;
 use PDO;
 
 class Manager
 {
     use CapsuleManagerTrait;
+    use Singleton;
 
     /**
      * The database manager instance.
@@ -24,7 +26,7 @@ class Manager
     /**
      * Create a new database capsule manager.
      *
-     * @param  \Mellivora\Container\Container|null $container
+     * @param  \Mellivora\Application\Container|null $container
      * @return void
      */
     public function __construct(Container $container = null)
@@ -171,7 +173,7 @@ class Manager
      */
     public function getEventDispatcher()
     {
-        if ($this->container->bound('events')) {
+        if ($this->container->has('events')) {
             return $this->container['events'];
         }
     }
@@ -184,7 +186,7 @@ class Manager
      */
     public function setEventDispatcher(Dispatcher $dispatcher)
     {
-        $this->container->instance('events', $dispatcher);
+        $this->container['events'] = $dispatcher;
     }
 
     /**

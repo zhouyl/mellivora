@@ -3,13 +3,13 @@
 namespace Mellivora\Database\Connectors;
 
 use InvalidArgumentException;
+use Mellivora\Application\Container;
 use Mellivora\Database\Connection;
 use Mellivora\Database\MySqlConnection;
 use Mellivora\Database\PostgresConnection;
 use Mellivora\Database\SQLiteConnection;
 use Mellivora\Database\SqlServerConnection;
 use Mellivora\Support\Arr;
-use Mellivora\Support\Contracts\Container\Container;
 use Mellivora\Support\Contracts\Debug\ExceptionHandler;
 use PDOException;
 
@@ -18,14 +18,14 @@ class ConnectionFactory
     /**
      * The IoC container instance.
      *
-     * @var \Mellivora\Support\Contracts\Container\Container
+     * @var \Mellivora\Application\Container
      */
     protected $container;
 
     /**
      * Create a new connection factory instance.
      *
-     * @param  \Mellivora\Support\Contracts\Container\Container $container
+     * @param  \Mellivora\Application\Container$container
      * @return void
      */
     public function __construct(Container $container)

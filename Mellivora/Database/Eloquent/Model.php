@@ -12,18 +12,17 @@ use Mellivora\Support\Arr;
 use Mellivora\Support\Contracts\Arrayable;
 use Mellivora\Support\Contracts\Jsonable;
 use Mellivora\Support\Contracts\Queue\QueueableEntity;
-use Mellivora\Support\Contracts\Routing\UrlRoutable;
 use Mellivora\Support\Str;
 
-abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, QueueableEntity, UrlRoutable
+abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable, QueueableEntity
 {
-    use Concerns\HasAttributes,
-    Concerns\HasEvents,
-    Concerns\HasGlobalScopes,
-    Concerns\HasRelationships,
-    Concerns\HasTimestamps,
-    Concerns\HidesAttributes,
-    Concerns\GuardsAttributes;
+    use Concerns\HasAttributes;
+    use Concerns\HasEvents;
+    use Concerns\HasGlobalScopes;
+    use Concerns\HasRelationships;
+    use Concerns\HasTimestamps;
+    use Concerns\HidesAttributes;
+    use Concerns\GuardsAttributes;
 
     /**
      * The connection name for the model.
@@ -1151,26 +1150,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     public function getQueueableId()
     {
         return $this->getKey();
-    }
-
-    /**
-     * Get the value of the model's route key.
-     *
-     * @return mixed
-     */
-    public function getRouteKey()
-    {
-        return $this->getAttribute($this->getRouteKeyName());
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return $this->getKeyName();
     }
 
     /**

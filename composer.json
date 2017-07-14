@@ -16,12 +16,17 @@
         {
             "type": "composer",
             "url": "https://packagist.phpcomposer.com"
+        },
+        {
+            "url": "git@git.eformax.com:vendor/Carbon.git",
+            "type": "git"
         }
     ],
     "require": {
         "php": ">=5.6.0",
         "slim/slim": "^3.8",
         "league/event": "^2.1",
+        "nesbot/carbon": "dev-master",
         "symfony/cache": "^3.3",
         "symfony/console": "~3.3",
         "symfony/debug": "~3.3",

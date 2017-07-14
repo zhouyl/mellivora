@@ -20,9 +20,9 @@ use PDOStatement;
 
 class Connection implements ConnectionInterface
 {
-    use DetectsDeadlocks,
-    DetectsLostConnections,
-    Concerns\ManagesTransactions;
+    use DetectsDeadlocks;
+    use DetectsLostConnections;
+    use Concerns\ManagesTransactions;
 
     /**
      * The active PDO connection.

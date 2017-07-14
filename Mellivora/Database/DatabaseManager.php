@@ -13,9 +13,9 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * The application instance.
      *
-     * @var \Mellivora\Foundation\Application
+     * @var \Mellivora\Application\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The database connection factory instance.
@@ -41,14 +41,14 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Create a new database manager instance.
      *
-     * @param  \Mellivora\Foundation\Application                $app
+     * @param  \Mellivora\Application\Container                 $container
      * @param  \Mellivora\Database\Connectors\ConnectionFactory $factory
      * @return void
      */
-    public function __construct($app, ConnectionFactory $factory)
+    public function __construct($container, ConnectionFactory $factory)
     {
-        $this->app     = $app;
-        $this->factory = $factory;
+        $this->container = $container;
+        $this->factory   = $factory;
     }
 
     /**
@@ -130,7 +130,7 @@ class DatabaseManager implements ConnectionResolverInterface
         // To get the database connection configuration, we will just pull each of the
         // connection configurations and get the configurations for the given name.
         // If the configuration doesn't exist, we'll throw an exception and bail.
-        $connections = $this->app['config']['database.connections'];
+        $connections = $this->container['config']['database.connections']->toArray();
 
         if (is_null($config = Arr::get($connections, $name))) {
             throw new InvalidArgumentException("Database [$name] not configured.");
@@ -153,8 +153,8 @@ class DatabaseManager implements ConnectionResolverInterface
         // First we'll set the fetch mode and a few other dependencies of the database
         // connection. This method basically just configures and prepares it to get
         // used by the application. Once we're finished we'll return it back out.
-        if ($this->app->bound('events')) {
-            $connection->setEventDispatcher($this->app['events']);
+        if ($this->container->has('events')) {
+            $connection->setEventDispatcher($this->container['events']);
         }
 
         // Here we'll set a reconnector callback. This reconnector can be any callable
@@ -250,7 +250,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function getDefaultConnection()
     {
-        return $this->app['config']['database.default'];
+        return $this->container['config']['database.default'];
     }
 
     /**
@@ -261,7 +261,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function setDefaultConnection($name)
     {
-        $this->app['config']['database.default'] = $name;
+        $this->container['config']['database.default'] = $name;
     }
 
     /**

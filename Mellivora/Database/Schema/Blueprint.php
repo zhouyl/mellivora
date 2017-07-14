@@ -4,6 +4,7 @@ namespace Mellivora\Database\Schema;
 
 use Closure;
 use Mellivora\Database\Connection;
+use Mellivora\Database\Query\Expression;
 use Mellivora\Database\Schema\Grammars\Grammar;
 use Mellivora\Support\Fluent;
 
@@ -687,6 +688,18 @@ class Blueprint
     }
 
     /**
+     * Create a new 'set' column on the table.
+     *
+     * @param  string                       $column
+     * @param  array                        $allowed
+     * @return \Illuminate\Support\Fluent
+     */
+    public function set($column, array $allowed)
+    {
+        return $this->addColumn('set', $column, compact('allowed'));
+    }
+
+    /**
      * Create a new json column on the table.
      *
      * @param  string                      $column
@@ -786,15 +799,17 @@ class Blueprint
     }
 
     /**
-     * Add nullable creation and update timestamps to the table.
+     * Add creation and update timestamps to the table.
      *
      * @return void
      */
     public function timestamps()
     {
-        $this->timestamp('created_at')->nullable();
+        $this->timestamp('created_at')
+            ->default(new Expression('CURRENT_TIMESTAMP'));
 
-        $this->timestamp('updated_at')->nullable();
+        $this->timestamp('updated_at')
+            ->default(new Expression('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
     }
 
     /**
@@ -806,7 +821,13 @@ class Blueprint
      */
     public function nullableTimestamps()
     {
-        $this->timestamps();
+        $this->timestamp('created_at')
+            ->default(new Expression('CURRENT_TIMESTAMP'))
+            ->nullable();
+
+        $this->timestamp('updated_at')
+            ->default(new Expression('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'))
+            ->nullable();
     }
 
     /**
@@ -816,9 +837,11 @@ class Blueprint
      */
     public function timestampsTz()
     {
-        $this->timestampTz('created_at')->nullable();
+        $this->timestampTz('created_at')
+            ->default(new Expression('CURRENT_TIMESTAMP'));
 
-        $this->timestampTz('updated_at')->nullable();
+        $this->timestampTz('updated_at')
+            ->default(new Expression('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
     }
 
     /**
@@ -981,7 +1004,7 @@ class Blueprint
      */
     protected function createIndexName($type, array $columns)
     {
-        $index = strtolower($this->table . '_' . implode('_', $columns) . '_' . $type);
+        $index = strtolower($type . '_' . implode('_', $columns));
 
         return str_replace(['-', '.'], '_', $index);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\Cache;
 
 use Mellivora\Cache\Manager;
 use Mellivora\Support\ServiceProvider;

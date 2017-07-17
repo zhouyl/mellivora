@@ -1,6 +1,6 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\Config;
 
 use Mellivora\Config\Accessor;
 use Mellivora\Support\ServiceProvider;

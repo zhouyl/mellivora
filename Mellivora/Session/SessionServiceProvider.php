@@ -1,9 +1,8 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\Session;
 
 use InvalidArgumentException;
-use Mellivora\Session\Session;
 use Mellivora\Support\ServiceProvider;
 use SessionHandlerInterface;
 

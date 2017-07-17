@@ -1,6 +1,6 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\View;
 
 use Mellivora\Support\ServiceProvider;
 use Mellivora\View\Compilers\BladeCompiler;
@@ -8,8 +8,6 @@ use Mellivora\View\Engines\CompilerEngine;
 use Mellivora\View\Engines\EngineResolver;
 use Mellivora\View\Engines\FileEngine;
 use Mellivora\View\Engines\PhpEngine;
-use Mellivora\View\Factory;
-use Mellivora\View\FileViewFinder;
 
 class ViewServiceProvider extends ServiceProvider
 {

@@ -1,8 +1,7 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\Encryption;
 
-use Mellivora\Encryption\Crypt;
 use Mellivora\Support\ServiceProvider;
 
 class CryptServiceProvider extends ServiceProvider

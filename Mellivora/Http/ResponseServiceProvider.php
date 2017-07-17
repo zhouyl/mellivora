@@ -1,8 +1,7 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\Http;
 
-use Mellivora\Http\Response;
 use Mellivora\Support\ServiceProvider;
 use Slim\Http\Headers;
 

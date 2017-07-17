@@ -80,7 +80,7 @@ class Translator
                 }
 
                 // 新增加的目录，需要重新扫描已加载的语言包
-                $this->loadPackages($lang, $path, [$lang] + $this->packages);
+                $this->load($lang, $path, [$lang] + $this->packages);
             }
         }
 
@@ -161,7 +161,7 @@ class Translator
 
         // 载入新增的语言包
         foreach ($this->paths as $lang => $path) {
-            $this->loadPackages($lang, $path, $diff);
+            $this->load($lang, $path, $diff);
         }
 
         return $this;
@@ -238,7 +238,7 @@ class Translator
      * @param string $path
      * @param array  $packages
      */
-    protected function loadPackages($lang, $path, array $packages)
+    protected function load($lang, $path, array $packages)
     {
         // 扫描目录并加载语言包
         foreach ($packages as $package) {

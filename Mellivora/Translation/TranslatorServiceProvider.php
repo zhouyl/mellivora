@@ -1,10 +1,9 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\Translation;
 
 use Mellivora\Support\Arr;
 use Mellivora\Support\ServiceProvider;
-use Mellivora\Translation\Translator;
 
 class TranslatorServiceProvider extends ServiceProvider
 {

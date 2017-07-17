@@ -1,8 +1,7 @@
 <?php
 
-namespace Mellivora\Support\Providers;
+namespace Mellivora\Http;
 
-use Mellivora\Http\Request;
 use Mellivora\Support\ServiceProvider;
 
 class RequestServiceProvider extends ServiceProvider

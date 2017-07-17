@@ -24,9 +24,7 @@ class MigrationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerRepository();
-
         $this->registerMigrator();
-
         $this->registerCreator();
     }
 
@@ -37,11 +35,11 @@ class MigrationServiceProvider extends ServiceProvider
      */
     protected function registerRepository()
     {
-        $this->app->singleton('migration.repository', function ($app) {
-            $table = $app['config']['database.migrations'];
+        $this->container['migration.repository'] = function ($container) {
+            $table = $container['config']['database.migrations'];
 
-            return new DatabaseMigrationRepository($app['db'], $table);
-        });
+            return new DatabaseMigrationRepository($container['db'], $table);
+        };
     }
 
     /**
@@ -54,11 +52,11 @@ class MigrationServiceProvider extends ServiceProvider
         // The migrator is responsible for actually running and rollback the migration
         // files in the application. We'll pass in our database connection resolver
         // so the migrator can resolve any of these connections when it needs to.
-        $this->app->singleton('migrator', function ($app) {
-            $repository = $app['migration.repository'];
+        $this->container['migrator'] = function ($container) {
+            $repository = $container['migration.repository'];
 
-            return new Migrator($repository, $app['db'], $app['files']);
-        });
+            return new Migrator($repository, $container['db']);
+        };
     }
 
     /**
@@ -68,20 +66,8 @@ class MigrationServiceProvider extends ServiceProvider
      */
     protected function registerCreator()
     {
-        $this->app->singleton('migration.creator', function ($app) {
-            return new MigrationCreator($app['files']);
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [
-            'migrator', 'migration.repository', 'migration.creator',
-        ];
+        $this->container['migration.creator'] = function ($container) {
+            return new MigrationCreator;
+        };
     }
 }

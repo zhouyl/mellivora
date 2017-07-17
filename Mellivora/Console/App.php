@@ -4,6 +4,7 @@ namespace Mellivora\Console;
 
 use InvalidArgumentException;
 use Mellivora\Application\Container;
+use Mellivora\Console\Command;
 use Mellivora\Support\Facades\Facade;
 use Mellivora\Support\ServiceProvider;
 use Mellivora\Support\Traits\Singleton;
@@ -27,13 +28,6 @@ class App extends Application
     use Singleton;
 
     /**
-     * Current version
-     *
-     * @var string
-     */
-    const VERSION = '1.0.0';
-
-    /**
      * @var Mellivora\Application\Container
      */
     protected $container;
@@ -41,18 +35,27 @@ class App extends Application
     /**
      * {@inheritdoc}
      */
-    public function __construct($container = [], $name = 'Mellivora Framework', $version = self::VERSION)
+    public function __construct($container = [], $name = 'Mellivora Console Tools', $version = 'UNKNOWN')
     {
+        if (is_array($container)) {
+            $container = new Container($container);
+        }
+
+        if (!$container instanceof ContainerInterface) {
+            throw new InvalidArgumentException('Expected a ContainerInterface');
+        }
+
+        $this->container = $container;
+
         parent::__construct($name, $version);
 
         // Facade 初始化设
         Facade::setFacadeApplication($this);
-
         $this->registerSingleton();
-        $this->registerContainer($container);
         $this->registerFacades();
         $this->registerProviders();
-        $this->registerCommands();
+        $this->registerUserCommands();
+        $this->registerDefaultCommands();
     }
 
     /**
@@ -66,34 +69,12 @@ class App extends Application
     }
 
     /**
-     * 注册 container 容器
-     *
-     * @param  array                       $container
-     * @throws \InvalidArgumentException
-     */
-    protected function registerContainer($container = [])
-    {
-        // 构造 container
-        if (is_array($container)) {
-            $container = new Container($container);
-        }
-
-        if (!$container instanceof ContainerInterface) {
-            throw new InvalidArgumentException('Expected a ContainerInterface');
-        }
-
-        $this->container = $container;
-    }
-
-    /**
      * 注册类别名
      */
     protected function registerFacades()
     {
-        $container = $this->getContainer();
-
-        if ($container->has('facades')) {
-            foreach ($container->get('facades') as $alias => $abstract) {
+        if (isset($this->container['facades'])) {
+            foreach ($this->container['facades'] as $alias => $abstract) {
                 class_alias($abstract, $alias);
             }
         }
@@ -104,10 +85,8 @@ class App extends Application
      */
     protected function registerProviders()
     {
-        $container = $this->getContainer();
-
-        if ($container->has('providers')) {
-            foreach ($container->get('providers') as $class) {
+        if (isset($this->container['providers'])) {
+            foreach ($this->container['providers'] as $class) {
                 if (!is_subclass_of($class, ServiceProvider::class)) {
                     throw new UnexpectedValueException(
                         $class . ' must return instance of ' . ServiceProvider::class);
@@ -119,16 +98,61 @@ class App extends Application
     }
 
     /**
-     * 注册 Commands
+     * {@inheritdoc}
      */
-    protected function registerCommands()
+    public function register($name)
     {
-        $container = $this->getContainer();
+        return $this->add((new Command($his->getContainer()))->setName($name));
+    }
 
-        if ($container->has('commands')) {
-            foreach ($container->get('commands') as $class) {
-                $this->add(new $class);
+    /**
+     * {@inheritdoc}
+     */
+    public function addCommands(array $commands)
+    {
+        foreach ($commands as $command) {
+            if (is_string($command) && is_subclass_of($command, Command::class)) {
+                $command = new $command($this->getContainer());
             }
+
+            $this->add($command);
         }
+    }
+
+    /**
+     * 注册用户定义的 Commands
+     */
+    protected function registerUserCommands()
+    {
+        if (isset($this->container['commands'])) {
+            $this->addCommands($this->container['commands']);
+        }
+    }
+
+    /**
+     * 注册默认的 Commands
+     */
+    protected function registerDefaultCommands()
+    {
+        $this->addCommands([
+            \Mellivora\Database\Console\Seeds\SeedCommand::class,
+            \Mellivora\Database\Console\Seeds\SeederMakeCommand::class,
+            \Mellivora\Database\Console\Migrations\InstallCommand::class,
+            \Mellivora\Database\Console\Migrations\MigrateCommand::class,
+            \Mellivora\Database\Console\Migrations\ResetCommand::class,
+            \Mellivora\Database\Console\Migrations\RollbackCommand::class,
+            \Mellivora\Database\Console\Migrations\RefreshCommand::class,
+            \Mellivora\Database\Console\Migrations\StatusCommand::class,
+        ]);
+    }
+
+    /**
+     * 获取当前系统环境
+     *
+     * @return string
+     */
+    public function environment()
+    {
+        return $this->container['settings']['environment'];
     }
 }

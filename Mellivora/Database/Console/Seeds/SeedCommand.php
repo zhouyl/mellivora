@@ -2,10 +2,11 @@
 
 namespace Mellivora\Database\Console\Seeds;
 
+use Mellivora\Application\Container;
 use Mellivora\Console\Command;
 use Mellivora\Console\ConfirmableTrait;
-use Mellivora\Database\ConnectionResolverInterface as Resolver;
 use Mellivora\Database\Eloquent\Model;
+use Mellivora\Database\Seeder\NullSeeder;
 use Symfony\Component\Console\Input\InputOption;
 
 class SeedCommand extends Command
@@ -27,26 +28,6 @@ class SeedCommand extends Command
     protected $description = 'Seed the database with records';
 
     /**
-     * The connection resolver instance.
-     *
-     * @var \Mellivora\Database\ConnectionResolverInterface
-     */
-    protected $resolver;
-
-    /**
-     * Create a new database seed command instance.
-     *
-     * @param  \Mellivora\Database\ConnectionResolverInterface $resolver
-     * @return void
-     */
-    public function __construct(Resolver $resolver)
-    {
-        parent::__construct();
-
-        $this->resolver = $resolver;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -57,7 +38,7 @@ class SeedCommand extends Command
             return;
         }
 
-        $this->resolver->setDefaultConnection($this->getDatabase());
+        $this->container['db']->setDefaultConnection($this->getDatabase());
 
         Model::unguarded(function () {
             $this->getSeeder()->__invoke();
@@ -71,9 +52,9 @@ class SeedCommand extends Command
      */
     protected function getSeeder()
     {
-        $class = $this->laravel->make($this->input->getOption('class'));
+        $class = $this->input->getOption('class');
 
-        return $class->setContainer($this->laravel)->setCommand($this);
+        return new $class($this->container, $this);
     }
 
     /**
@@ -85,7 +66,7 @@ class SeedCommand extends Command
     {
         $database = $this->input->getOption('database');
 
-        return $database ?: $this->laravel['config']['database.default'];
+        return $database ?: $this->container['config']['database.default'];
     }
 
     /**
@@ -96,7 +77,7 @@ class SeedCommand extends Command
     protected function getOptions()
     {
         return [
-            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', 'DatabaseSeeder'],
+            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', NullSeeder::class],
 
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to seed'],
 

@@ -3,7 +3,6 @@
 namespace Mellivora\Database\Console\Migrations;
 
 use Mellivora\Console\ConfirmableTrait;
-use Mellivora\Database\Migrations\Migrator;
 use Symfony\Component\Console\Input\InputOption;
 
 class ResetCommand extends BaseCommand
@@ -25,26 +24,6 @@ class ResetCommand extends BaseCommand
     protected $description = 'Rollback all database migrations';
 
     /**
-     * The migrator instance.
-     *
-     * @var \Mellivora\Database\Migrations\Migrator
-     */
-    protected $migrator;
-
-    /**
-     * Create a new migration rollback command instance.
-     *
-     * @param  \Mellivora\Database\Migrations\Migrator $migrator
-     * @return void
-     */
-    public function __construct(Migrator $migrator)
-    {
-        parent::__construct();
-
-        $this->migrator = $migrator;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -55,23 +34,25 @@ class ResetCommand extends BaseCommand
             return;
         }
 
-        $this->migrator->setConnection($this->option('database'));
+        $migrator = $this->container['migrator'];
+
+        $migrator->setConnection($this->option('database'));
 
         // First, we'll make sure that the migration table actually exists before we
         // start trying to rollback and re-run all of the migrations. If it's not
         // present we'll just bail out with an info message for the developers.
-        if (!$this->migrator->repositoryExists()) {
+        if (!$migrator->repositoryExists()) {
             return $this->comment('Migration table not found.');
         }
 
-        $this->migrator->reset(
+        $migrator->reset(
             $this->getMigrationPaths(), $this->option('pretend')
         );
 
         // Once the migrator has run we will grab the note output and send it out to
         // the console screen, since the migrator itself functions without having
         // any instances of the OutputInterface contract passed into the class.
-        foreach ($this->migrator->getNotes() as $note) {
+        foreach ($migrator->getNotes() as $note) {
             $this->output->writeln($note);
         }
     }

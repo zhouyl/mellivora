@@ -2,9 +2,6 @@
 
 namespace Mellivora\Database\Console\Migrations;
 
-use Mellivora\Database\Migrations\MigrationCreator;
-use Mellivora\Support\Composer;
-
 class MigrateMakeCommand extends BaseCommand
 {
     /**
@@ -23,35 +20,6 @@ class MigrateMakeCommand extends BaseCommand
      * @var string
      */
     protected $description = 'Create a new migration file';
-
-    /**
-     * The migration creator instance.
-     *
-     * @var \Mellivora\Database\Migrations\MigrationCreator
-     */
-    protected $creator;
-
-    /**
-     * The Composer instance.
-     *
-     * @var \Mellivora\Support\Composer
-     */
-    protected $composer;
-
-    /**
-     * Create a new migration install command instance.
-     *
-     * @param  \Mellivora\Database\Migrations\MigrationCreator $creator
-     * @param  \Mellivora\Support\Composer                     $composer
-     * @return void
-     */
-    public function __construct(MigrationCreator $creator, Composer $composer)
-    {
-        parent::__construct();
-
-        $this->creator  = $creator;
-        $this->composer = $composer;
-    }
 
     /**
      * Execute the console command.
@@ -82,8 +50,6 @@ class MigrateMakeCommand extends BaseCommand
         // the migration out, we will dump-autoload for the entire framework to
         // make sure that the migrations are registered by the class loaders.
         $this->writeMigration($name, $table, $create);
-
-        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -96,7 +62,7 @@ class MigrateMakeCommand extends BaseCommand
      */
     protected function writeMigration($name, $table, $create)
     {
-        $file = pathinfo($this->creator->create(
+        $file = pathinfo($this->container['migration.creator']->create(
             $name, $this->getMigrationPath(), $table, $create
         ), PATHINFO_FILENAME);
 
@@ -111,7 +77,7 @@ class MigrateMakeCommand extends BaseCommand
     protected function getMigrationPath()
     {
         if (!is_null($targetPath = $this->input->getOption('path'))) {
-            return $this->laravel->basePath() . '/' . $targetPath;
+            return root_path($targetPath);
         }
 
         return parent::getMigrationPath();

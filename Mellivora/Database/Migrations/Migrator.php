@@ -3,7 +3,6 @@
 namespace Mellivora\Database\Migrations;
 
 use Mellivora\Database\ConnectionResolverInterface as Resolver;
-use Mellivora\Filesystem\Filesystem;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Collection;
 use Mellivora\Support\Str;
@@ -16,13 +15,6 @@ class Migrator
      * @var \Mellivora\Database\Migrations\MigrationRepositoryInterface
      */
     protected $repository;
-
-    /**
-     * The filesystem instance.
-     *
-     * @var \Mellivora\Filesystem\Filesystem
-     */
-    protected $files;
 
     /**
      * The connection resolver instance.
@@ -57,13 +49,10 @@ class Migrator
      *
      * @param  \Mellivora\Database\Migrations\MigrationRepositoryInterface $repository
      * @param  \Mellivora\Database\ConnectionResolverInterface             $resolver
-     * @param  \Mellivora\Filesystem\Filesystem                            $files
      * @return void
      */
-    public function __construct(MigrationRepositoryInterface $repository,
-        Resolver $resolver,
-        Filesystem $files) {
-        $this->files      = $files;
+    public function __construct(MigrationRepositoryInterface $repository, Resolver $resolver)
+    {
         $this->resolver   = $resolver;
         $this->repository = $repository;
     }
@@ -411,7 +400,7 @@ class Migrator
     public function getMigrationFiles($paths)
     {
         return Collection::make($paths)->flatMap(function ($path) {
-            return $this->files->glob($path . '/*_*.php');
+            return glob($path . '/*_*.php');
         })->filter()->sortBy(function ($file) {
             return $this->getMigrationName($file);
         })->values()->keyBy(function ($file) {
@@ -428,7 +417,7 @@ class Migrator
     public function requireFiles(array $files)
     {
         foreach ($files as $file) {
-            $this->files->requireOnce($file);
+            require_once $file;
         }
     }
 
@@ -523,16 +512,6 @@ class Migrator
     public function repositoryExists()
     {
         return $this->repository->repositoryExists();
-    }
-
-    /**
-     * Get the file system instance.
-     *
-     * @return \Mellivora\Filesystem\Filesystem
-     */
-    public function getFilesystem()
-    {
-        return $this->files;
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Mellivora\Database\Console\Migrations;
 
 use Mellivora\Console\ConfirmableTrait;
-use Mellivora\Database\Migrations\Migrator;
 
 class MigrateCommand extends BaseCommand
 {
@@ -29,26 +28,6 @@ class MigrateCommand extends BaseCommand
     protected $description = 'Run the database migrations';
 
     /**
-     * The migrator instance.
-     *
-     * @var \Mellivora\Database\Migrations\Migrator
-     */
-    protected $migrator;
-
-    /**
-     * Create a new migration command instance.
-     *
-     * @param  \Mellivora\Database\Migrations\Migrator $migrator
-     * @return void
-     */
-    public function __construct(Migrator $migrator)
-    {
-        parent::__construct();
-
-        $this->migrator = $migrator;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -64,7 +43,7 @@ class MigrateCommand extends BaseCommand
         // Next, we will check to see if a path option has been defined. If it has
         // we will use the path relative to the root of this installation folder
         // so that migrations may be run for any path within the applications.
-        $this->migrator->run($this->getMigrationPaths(), [
+        $this->container['migrator']->run($this->getMigrationPaths(), [
             'pretend' => $this->option('pretend'),
             'step'    => $this->option('step'),
         ]);
@@ -72,7 +51,7 @@ class MigrateCommand extends BaseCommand
         // Once the migrator has run we will grab the note output and send it out to
         // the console screen, since the migrator itself functions without having
         // any instances of the OutputInterface contract passed into the class.
-        foreach ($this->migrator->getNotes() as $note) {
+        foreach ($this->container['migrator']->getNotes() as $note) {
             $this->output->writeln($note);
         }
 
@@ -91,9 +70,9 @@ class MigrateCommand extends BaseCommand
      */
     protected function prepareDatabase()
     {
-        $this->migrator->setConnection($this->option('database'));
+        $this->container['migrator']->setConnection($this->option('database'));
 
-        if (!$this->migrator->repositoryExists()) {
+        if (!$this->container['migrator']->repositoryExists()) {
             $this->call(
                 'migrate:install', ['--database' => $this->option('database')]
             );

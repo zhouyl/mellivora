@@ -79,6 +79,16 @@ class App extends SlimApp
     }
 
     /**
+     * 获取当前系统环境
+     *
+     * @return string
+     */
+    public function environment()
+    {
+        return $this->getContainer()['settings']['environment'];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function run($silent = false)

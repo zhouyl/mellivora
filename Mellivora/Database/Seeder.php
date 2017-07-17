@@ -3,15 +3,15 @@
 namespace Mellivora\Database;
 
 use InvalidArgumentException;
+use Mellivora\Application\Container;
 use Mellivora\Console\Command;
-use Mellivora\Container\Container;
 
 abstract class Seeder
 {
     /**
      * The container instance.
      *
-     * @var \Mellivora\Container\Container
+     * @var \Mellivora\Application\Container
      */
     protected $container;
 
@@ -23,6 +23,18 @@ abstract class Seeder
     protected $command;
 
     /**
+     * Constructor
+     *
+     * @param \Mellivora\Application\Container $container
+     * @param \Mellivora\Console\Command       $command
+     */
+    public function __construct(Container $container, Command $command)
+    {
+        $this->container = $container;
+        $this->command   = $command;
+    }
+
+    /**
      * Seed the given connection from the given path.
      *
      * @param  string $class
@@ -30,60 +42,11 @@ abstract class Seeder
      */
     public function call($class)
     {
-        if (isset($this->command)) {
-            $this->command->getOutput()->writeln("<info>Seeding:</info> $class");
-        }
+        $this->command->getOutput()->writeln("<info>Seeding:</info> $class");
 
-        $this->resolve($class)->__invoke();
-    }
+        $seeder = new $class($this->container, $this->command);
 
-    /**
-     * Resolve an instance of the given seeder class.
-     *
-     * @param  string                       $class
-     * @return \Mellivora\Database\Seeder
-     */
-    protected function resolve($class)
-    {
-        if (isset($this->container)) {
-            $instance = $this->container->make($class);
-
-            $instance->setContainer($this->container);
-        } else {
-            $instance = new $class;
-        }
-
-        if (isset($this->command)) {
-            $instance->setCommand($this->command);
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Set the IoC container instance.
-     *
-     * @param  \Mellivora\Container\Container $container
-     * @return $this
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * Set the console command instance.
-     *
-     * @param  \Mellivora\Console\Command $command
-     * @return $this
-     */
-    public function setCommand(Command $command)
-    {
-        $this->command = $command;
-
-        return $this;
+        return $seeder->__invoke();
     }
 
     /**
@@ -97,9 +60,8 @@ abstract class Seeder
         if (!method_exists($this, 'run')) {
             throw new InvalidArgumentException('Method [run] missing from ' . get_class($this));
         }
+        $this->command->getOutput()->writeln('<info>Runing:</info> ' . get_class($this));
 
-        return isset($this->container)
-            ? $this->container->call([$this, 'run'])
-            : $this->run();
+        return $this->run();
     }
 }

@@ -3,7 +3,6 @@
 namespace Mellivora\Database\Console\Migrations;
 
 use Mellivora\Console\Command;
-use Mellivora\Database\Migrations\MigrationRepositoryInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 class InstallCommand extends Command
@@ -23,35 +22,15 @@ class InstallCommand extends Command
     protected $description = 'Create the migration repository';
 
     /**
-     * The repository instance.
-     *
-     * @var \Mellivora\Database\Migrations\MigrationRepositoryInterface
-     */
-    protected $repository;
-
-    /**
-     * Create a new migration install command instance.
-     *
-     * @param  \Mellivora\Database\Migrations\MigrationRepositoryInterface $repository
-     * @return void
-     */
-    public function __construct(MigrationRepositoryInterface $repository)
-    {
-        parent::__construct();
-
-        $this->repository = $repository;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
      */
     public function fire()
     {
-        $this->repository->setSource($this->input->getOption('database'));
+        $this->container['migration.repository']->setSource($this->input->getOption('database'));
 
-        $this->repository->createRepository();
+        $this->container['migration.repository']->createRepository();
 
         $this->info('Migration table created successfully.');
     }

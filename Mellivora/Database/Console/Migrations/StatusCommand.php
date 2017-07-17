@@ -2,7 +2,6 @@
 
 namespace Mellivora\Database\Console\Migrations;
 
-use Mellivora\Database\Migrations\Migrator;
 use Mellivora\Support\Collection;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -23,39 +22,21 @@ class StatusCommand extends BaseCommand
     protected $description = 'Show the status of each migration';
 
     /**
-     * The migrator instance.
-     *
-     * @var \Mellivora\Database\Migrations\Migrator
-     */
-    protected $migrator;
-
-    /**
-     * Create a new migration rollback command instance.
-     *
-     * @param  \Mellivora\Database\Migrations\Migrator                $migrator
-     * @return \Mellivora\Database\Console\Migrations\StatusCommand
-     */
-    public function __construct(Migrator $migrator)
-    {
-        parent::__construct();
-
-        $this->migrator = $migrator;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
      */
     public function fire()
     {
-        $this->migrator->setConnection($this->option('database'));
+        $migrator = $this->container['migrator'];
 
-        if (!$this->migrator->repositoryExists()) {
+        $migrator->setConnection($this->option('database'));
+
+        if (!$migrator->repositoryExists()) {
             return $this->error('No migrations found.');
         }
 
-        $ran = $this->migrator->getRepository()->getRan();
+        $ran = $migrator->getRepository()->getRan();
 
         if (count($migrations = $this->getStatusFor($ran)) > 0) {
             $this->table(['Ran?', 'Migration'], $migrations);
@@ -74,7 +55,7 @@ class StatusCommand extends BaseCommand
     {
         return Collection::make($this->getAllMigrationFiles())
             ->map(function ($migration) use ($ran) {
-                $migrationName = $this->migrator->getMigrationName($migration);
+                $migrationName = $this->container['migrator']->getMigrationName($migration);
 
                 return in_array($migrationName, $ran)
                     ? ['<info>Y</info>', $migrationName]
@@ -89,7 +70,8 @@ class StatusCommand extends BaseCommand
      */
     protected function getAllMigrationFiles()
     {
-        return $this->migrator->getMigrationFiles($this->getMigrationPaths());
+        return $this->container['migrator']
+            ->getMigrationFiles($this->getMigrationPaths());
     }
 
     /**

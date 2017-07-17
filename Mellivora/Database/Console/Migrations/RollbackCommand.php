@@ -3,7 +3,6 @@
 namespace Mellivora\Database\Console\Migrations;
 
 use Mellivora\Console\ConfirmableTrait;
-use Mellivora\Database\Migrations\Migrator;
 use Symfony\Component\Console\Input\InputOption;
 
 class RollbackCommand extends BaseCommand
@@ -25,26 +24,6 @@ class RollbackCommand extends BaseCommand
     protected $description = 'Rollback the last database migration';
 
     /**
-     * The migrator instance.
-     *
-     * @var \Mellivora\Database\Migrations\Migrator
-     */
-    protected $migrator;
-
-    /**
-     * Create a new migration rollback command instance.
-     *
-     * @param  \Mellivora\Database\Migrations\Migrator $migrator
-     * @return void
-     */
-    public function __construct(Migrator $migrator)
-    {
-        parent::__construct();
-
-        $this->migrator = $migrator;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -55,9 +34,11 @@ class RollbackCommand extends BaseCommand
             return;
         }
 
-        $this->migrator->setConnection($this->option('database'));
+        $migrator = $this->container['migrator'];
 
-        $this->migrator->rollback(
+        $migrator->setConnection($this->option('database'));
+
+        $migrator->rollback(
             $this->getMigrationPaths(), [
                 'pretend' => $this->option('pretend'),
                 'step'    => (int) $this->option('step'),
@@ -67,7 +48,7 @@ class RollbackCommand extends BaseCommand
         // Once the migrator has run we will grab the note output and send it out to
         // the console screen, since the migrator itself functions without having
         // any instances of the OutputInterface contract passed into the class.
-        foreach ($this->migrator->getNotes() as $note) {
+        foreach ($migrator->getNotes() as $note) {
             $this->output->writeln($note);
         }
     }

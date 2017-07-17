@@ -25,7 +25,7 @@ if (!function_exists('app')) {
      */
     function app($id = null)
     {
-        $container = App::instance()->getContainer();
+        $container = App::getContainer();
 
         return $id ? $container->get($id) : $container;
     }
@@ -41,10 +41,10 @@ if (!function_exists('env')) {
     function env($environment = null)
     {
         if (is_null($environment)) {
-            return app('settings')['environment'];
+            return App::environment();
         }
 
-        return strtolower($environment) === app('settings')['environment'];
+        return strtolower($environment) === App::environment();
     }
 }
 
@@ -379,6 +379,19 @@ if (!function_exists('resource_path')) {
     function resource_path($path = '')
     {
         return root_path('resources/' . $path);
+    }
+}
+
+if (!function_exists('database_path')) {
+    /**
+     * 获取 database 目录下的路径
+     *
+     * @param  string   $path
+     * @return string
+     */
+    function database_path($path = '')
+    {
+        return root_path('database/' . $path);
     }
 }
 

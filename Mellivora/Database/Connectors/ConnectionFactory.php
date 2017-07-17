@@ -10,8 +10,6 @@ use Mellivora\Database\PostgresConnection;
 use Mellivora\Database\SQLiteConnection;
 use Mellivora\Database\SqlServerConnection;
 use Mellivora\Support\Arr;
-use Mellivora\Support\Contracts\Debug\ExceptionHandler;
-use PDOException;
 
 class ConnectionFactory
 {
@@ -25,7 +23,7 @@ class ConnectionFactory
     /**
      * Create a new connection factory instance.
      *
-     * @param  \Mellivora\Application\Container$container
+     * @param  \Mellivora\Application\Container $container
      * @return void
      */
     public function __construct(Container $container)
@@ -179,13 +177,7 @@ class ConnectionFactory
             foreach (Arr::shuffle($hosts = $this->parseHosts($config)) as $key => $host) {
                 $config['host'] = $host;
 
-                try {
-                    return $this->createConnector($config)->connect($config);
-                } catch (PDOException $e) {
-                    if (count($hosts) - 1 === $key && $this->container->bound(ExceptionHandler::class)) {
-                        $this->container->make(ExceptionHandler::class)->report($e);
-                    }
-                }
+                return $this->createConnector($config)->connect($config);
             }
 
             throw $e;

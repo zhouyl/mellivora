@@ -4,17 +4,10 @@ namespace Mellivora\Database\Migrations;
 
 use Closure;
 use InvalidArgumentException;
-use Mellivora\Filesystem\Filesystem;
 use Mellivora\Support\Str;
 
 class MigrationCreator
 {
-    /**
-     * The filesystem instance.
-     *
-     * @var \Mellivora\Filesystem\Filesystem
-     */
-    protected $files;
 
     /**
      * The registered post create hooks.
@@ -22,17 +15,6 @@ class MigrationCreator
      * @var array
      */
     protected $postCreate = [];
-
-    /**
-     * Create a new migration creator instance.
-     *
-     * @param  \Mellivora\Filesystem\Filesystem $files
-     * @return void
-     */
-    public function __construct(Filesystem $files)
-    {
-        $this->files = $files;
-    }
 
     /**
      * Create a new migration at the given path.
@@ -53,7 +35,7 @@ class MigrationCreator
         // various place-holders, save the file, and run the post create event.
         $stub = $this->getStub($table, $create);
 
-        $this->files->put(
+        file_put_contents(
             $path = $this->getPath($name, $path),
             $this->populateStub($name, $stub, $table)
         );
@@ -90,7 +72,7 @@ class MigrationCreator
     protected function getStub($table, $create)
     {
         if (is_null($table)) {
-            return $this->files->get($this->stubPath() . '/blank.stub');
+            return file_get_contents($this->stubPath() . '/blank.stub');
         }
 
         // We also have stubs for creating new tables and modifying existing tables
@@ -99,7 +81,7 @@ class MigrationCreator
         else {
             $stub = $create ? 'create.stub' : 'update.stub';
 
-            return $this->files->get($this->stubPath() . "/{$stub}");
+            return file_get_contents($this->stubPath() . "/{$stub}");
         }
     }
 
@@ -189,15 +171,5 @@ class MigrationCreator
     public function stubPath()
     {
         return __DIR__ . '/stubs';
-    }
-
-    /**
-     * Get the filesystem instance.
-     *
-     * @return \Mellivora\Filesystem\Filesystem
-     */
-    public function getFilesystem()
-    {
-        return $this->files;
     }
 }

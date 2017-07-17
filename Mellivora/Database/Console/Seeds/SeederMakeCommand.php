@@ -3,8 +3,6 @@
 namespace Mellivora\Database\Console\Seeds;
 
 use Mellivora\Console\GeneratorCommand;
-use Mellivora\Filesystem\Filesystem;
-use Mellivora\Support\Composer;
 
 class SeederMakeCommand extends GeneratorCommand
 {
@@ -30,27 +28,6 @@ class SeederMakeCommand extends GeneratorCommand
     protected $type = 'Seeder';
 
     /**
-     * The Composer instance.
-     *
-     * @var \Mellivora\Support\Composer
-     */
-    protected $composer;
-
-    /**
-     * Create a new command instance.
-     *
-     * @param  \Mellivora\Filesystem\Filesystem $files
-     * @param  \Mellivora\Support\Composer      $composer
-     * @return void
-     */
-    public function __construct(Filesystem $files, Composer $composer)
-    {
-        parent::__construct($files);
-
-        $this->composer = $composer;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
@@ -58,8 +35,6 @@ class SeederMakeCommand extends GeneratorCommand
     public function fire()
     {
         parent::fire();
-
-        $this->composer->dumpAutoloads();
     }
 
     /**
@@ -80,7 +55,7 @@ class SeederMakeCommand extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return $this->laravel->databasePath() . '/seeds/' . $name . '.php';
+        return database_path('/seeds/' . $name . '.php');
     }
 
     /**

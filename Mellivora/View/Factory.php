@@ -5,12 +5,14 @@ namespace Mellivora\View;
 use InvalidArgumentException;
 use Mellivora\Application\Container;
 use Mellivora\Support\Arr;
+use Mellivora\Support\Contracts\Events\Dispatcher;
 use Mellivora\Support\Str;
 use Mellivora\View\Engines\EngineResolver;
 
 class Factory
 {
     use Concerns\ManagesComponents;
+    use Concerns\ManagesEvents;
     use Concerns\ManagesLayouts;
     use Concerns\ManagesLoops;
     use Concerns\ManagesStacks;
@@ -29,6 +31,13 @@ class Factory
      * @var \Mellivora\View\ViewFinderInterface
      */
     protected $finder;
+
+    /**
+     * The event dispatcher instance.
+     *
+     * @var \Mellivora\Support\Contracts\Events\Dispatcher
+     */
+    protected $events;
 
     /**
      * The IoC container instance.
@@ -57,6 +66,13 @@ class Factory
     ];
 
     /**
+     * The view composer events.
+     *
+     * @var array
+     */
+    protected $composers = [];
+
+    /**
      * The number of active rendering operations.
      *
      * @var int
@@ -66,14 +82,16 @@ class Factory
     /**
      * Create a new view factory instance.
      *
-     * @param  \Mellivora\View\Engines\EngineResolver $engines
-     * @param  \Mellivora\View\ViewFinderInterface    $finder
+     * @param  \Mellivora\View\Engines\EngineResolver         $engines
+     * @param  \Mellivora\View\ViewFinderInterface            $finder
+     * @param  \Mellivora\Support\Contracts\Events\Dispatcher $events
      * @return void
      */
-    public function __construct(EngineResolver $engines, ViewFinderInterface $finder)
+    public function __construct(EngineResolver $engines, ViewFinderInterface $finder, Dispatcher $events)
     {
         $this->finder  = $finder;
         $this->engines = $engines;
+        $this->events  = $events;
 
         $this->share('__env', $this);
     }
@@ -90,7 +108,9 @@ class Factory
     {
         $data = array_merge($mergeData, $this->parseData($data));
 
-        return $this->viewInstance($path, $path, $data);
+        return tap($this->viewInstance($path, $path, $data), function ($view) {
+            $this->callCreator($view);
+        });
     }
 
     /**
@@ -110,7 +130,9 @@ class Factory
         // the caller for rendering or performing other view manipulations on this.
         $data = array_merge($mergeData, $this->parseData($data));
 
-        return $this->viewInstance($view, $path, $data);
+        return tap($this->viewInstance($view, $path, $data), function ($view) {
+            $this->callCreator($view);
+        });
     }
 
     /**
@@ -461,6 +483,27 @@ class Factory
     public function flushFinderCache()
     {
         $this->getFinder()->flush();
+    }
+
+    /**
+     * Get the event dispatcher instance.
+     *
+     * @return \Mellivora\Support\Contracts\Events\Dispatcher
+     */
+    public function getDispatcher()
+    {
+        return $this->events;
+    }
+
+    /**
+     * Set the event dispatcher instance.
+     *
+     * @param  \Mellivora\Support\Contracts\Events\Dispatcher $events
+     * @return void
+     */
+    public function setDispatcher(Dispatcher $events)
+    {
+        $this->events = $events;
     }
 
     /**

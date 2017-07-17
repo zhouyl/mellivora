@@ -36,9 +36,7 @@ class ViewServiceProvider extends ServiceProvider
             // the various engine implementations such as plain PHP or Blade engine.
             $resolver = $container['view.engine.resolver'];
 
-            $finder = $container['view.finder'];
-
-            $view = new Factory($resolver, $finder);
+            $view = new Factory($resolver, $container['view.finder'], $container['events']);
 
             // We will also set the container instance on this view environment since the
             // view composers may be classes registered in the container, which allows

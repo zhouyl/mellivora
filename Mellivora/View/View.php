@@ -6,12 +6,13 @@ use ArrayAccess;
 use BadMethodCallException;
 use Exception;
 use Mellivora\Support\Arr;
+use Mellivora\Support\Contracts\View\View as ViewContract;
 use Mellivora\Support\MessageBag;
 use Mellivora\Support\Str;
 use Mellivora\View\Engines\EngineInterface;
 use Throwable;
 
-class View implements ArrayAccess
+class View implements ArrayAccess, ViewContract
 {
     /**
      * The view factory instance.
@@ -110,6 +111,8 @@ class View implements ArrayAccess
         // the section after the complete rendering operation is done. This will
         // clear out the sections for any separate views that may be rendered.
         $this->factory->incrementRender();
+
+        $this->factory->callComposer($this);
 
         $contents = $this->getContents();
 

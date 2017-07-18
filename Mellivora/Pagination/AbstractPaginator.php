@@ -7,6 +7,7 @@ use Closure;
 use Mellivora\Support\Collection;
 use Mellivora\Support\Contracts\Htmlable;
 use Mellivora\Support\Str;
+use Slim\Http\Uri;
 
 abstract class AbstractPaginator implements Htmlable
 {
@@ -152,10 +153,13 @@ abstract class AbstractPaginator implements Htmlable
             $parameters = array_merge($this->query, $parameters);
         }
 
-        return $this->path
-        . (Str::contains($this->path, '?') ? '&' : '?')
-        . http_build_query($parameters, '', '&')
-        . $this->buildFragment();
+        $uri = Uri::createFromString($this->path);
+
+        parse_str($uri->getQuery(), $queryParts);
+
+        return $uri->withQuery(http_build_query($parameters + $queryParts))
+            ->withFragment($this->buildFragment())
+            ->__toString();
     }
 
     /**

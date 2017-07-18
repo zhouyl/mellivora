@@ -148,13 +148,13 @@ if (!function_exists('__')) {
      * @param  string                                    $lang
      * @return Mellivora\Translation\Translator|string
      */
-    function __($key = null, array $replace = [], $lang = null)
+    function __($text = null, array $replace = [], $lang = null)
     {
-        if (is_null($id)) {
+        if (is_null($text)) {
             return app('translator');
         }
 
-        return app('translator')->trans($id, $replace, $locale);
+        return app('translator')->trans($text, $replace, $lang);
     }
 }
 

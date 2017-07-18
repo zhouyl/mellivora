@@ -122,6 +122,16 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     }
 
     /**
+     * Get the total pages.
+     *
+     * @return int
+     */
+    public function totalPages()
+    {
+        return $this->lastPage;
+    }
+
+    /**
      * Determine if there are more items in the data source.
      *
      * @return bool

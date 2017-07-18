@@ -146,6 +146,7 @@ class App extends Application
             \Mellivora\Database\Console\Seeds\SeederMakeCommand::class,
             \Mellivora\Database\Console\Migrations\InstallCommand::class,
             \Mellivora\Database\Console\Migrations\MigrateCommand::class,
+            \Mellivora\Database\Console\Migrations\MigrateMakeCommand::class,
             \Mellivora\Database\Console\Migrations\ResetCommand::class,
             \Mellivora\Database\Console\Migrations\RollbackCommand::class,
             \Mellivora\Database\Console\Migrations\RefreshCommand::class,

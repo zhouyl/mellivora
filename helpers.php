@@ -3,6 +3,7 @@
 use Mellivora\Support\Arr;
 use Mellivora\Support\Collection;
 use Mellivora\Support\Contracts\Htmlable;
+use Mellivora\Support\Contracts\Jsonable;
 use Mellivora\Support\Facades\App;
 use Mellivora\Support\HigherOrderTapProxy;
 use Mellivora\Support\HtmlString;
@@ -327,6 +328,102 @@ if (!function_exists('csrf_check')) {
     function csrf_check()
     {
         return app('session')->checkToken(app('request')->input('csrf_token'));
+    }
+}
+
+if (!function_exists('encrypt')) {
+    /**
+     * Encrypt the given value.
+     *
+     * @param  mixed    $value
+     * @param  string   $key
+     * @return string
+     */
+    function encrypt($value, $key = null)
+    {
+        return app('encryption')->encrypt($value, $key);
+    }
+}
+
+if (!function_exists('decrypt')) {
+    /**
+     * Decrypt the given value.
+     *
+     * @param  mixed    $value
+     * @param  string   $key
+     * @return string
+     */
+    function decrypt($value, $key = null)
+    {
+        return app('encryption')->decrypt($value, $key);
+    }
+}
+
+if (!function_exists('encrypt_base64')) {
+    /**
+     * Decrypt the given value for base64.
+     *
+     * @param  mixed    $value
+     * @param  string   $key
+     * @param  boolean  $safe
+     * @return string
+     */
+    function encrypt_base64($value, $key = null, $safe = false)
+    {
+        return app('encryption')->encryptBase64($value, $key, $safe);
+    }
+}
+
+if (!function_exists('decrypt_base64')) {
+    /**
+     * Decrypt the given value for base64.
+     *
+     * @param  mixed    $value
+     * @param  string   $key
+     * @param  boolean  $safe
+     * @return string
+     */
+    function decrypt_base64($value, $key = null, $safe = false)
+    {
+        return app('encryption')->decryptBase64($value, $key);
+    }
+}
+
+if (!function_exists('event')) {
+    /**
+     * Dispatch an event and call the listeners.
+     *
+     * @param  string|object $event
+     * @param  mixed         $payload
+     * @param  bool          $halt
+     * @return array|null
+     */
+    function event(...$args)
+    {
+        return app('events')->dispatch(...$args);
+    }
+}
+
+if (!function_exists('factory')) {
+    /**
+     * Create a model factory builder for a given class, name, and amount.
+     *
+     * @param  dynamic                                       class|class,name|class,amount|class,name,amount
+     * @return \Mellivora\Database\Eloquent\FactoryBuilder
+     */
+    function factory()
+    {
+        $factory = app('db.eloquent');
+
+        $arguments = func_get_args();
+
+        if (isset($arguments[1]) && is_string($arguments[1])) {
+            return $factory->of($arguments[0], $arguments[1])->times(isset($arguments[2]) ? $arguments[2] : null);
+        } elseif (isset($arguments[1])) {
+            return $factory->of($arguments[0])->times($arguments[1]);
+        } else {
+            return $factory->of($arguments[0]);
+        }
     }
 }
 
@@ -1331,6 +1428,36 @@ if (!function_exists('value')) {
     function value($value)
     {
         return $value instanceof Closure ? $value() : $value;
+    }
+}
+
+if (!function_exists('json')) {
+    /**
+     * JSON 数据的编码
+     *
+     * @param  mixed   $value
+     * @return mixed
+     */
+    function json($value)
+    {
+        if ($value instanceof Jsonable) {
+            $value = $value->toJson();
+        }
+
+        return json_encode(array_convert($value), JSON_ENCODE_OPTION);
+    }
+}
+
+if (!function_exists('unjson')) {
+    /**
+     * JSON 数据的解码
+     *
+     * @param  mixed   $value
+     * @return mixed
+     */
+    function unjson($value)
+    {
+        return json_decode($value, true);
     }
 }
 

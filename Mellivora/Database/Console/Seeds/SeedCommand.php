@@ -54,6 +54,14 @@ class SeedCommand extends Command
     {
         $class = $this->input->getOption('class');
 
+        if (!class_exists($class)) {
+            $file = database_path('/seeds/' . $class . '.php');
+
+            if (is_file($file)) {
+                require_once $file;
+            }
+        }
+
         return new $class($this->container, $this);
     }
 

@@ -135,6 +135,13 @@ class App extends Application
     protected function registerDefaultCommands()
     {
         $this->addCommands([
+            \Mellivora\Console\Commands\ViewClearCommand::class,
+            \Mellivora\Console\Commands\TestMakeCommand::class,
+            \Mellivora\Console\Commands\ConsoleMakeCommand::class,
+            \Mellivora\Console\Commands\ProviderMakeCommand::class,
+            \Mellivora\Console\Commands\MiddlewareMakeCommand::class,
+            \Mellivora\Console\Commands\ControllerMakeCommand::class,
+            \Mellivora\Console\Commands\ModelMakeCommand::class,
             \Mellivora\Database\Console\Seeds\SeedCommand::class,
             \Mellivora\Database\Console\Seeds\SeederMakeCommand::class,
             \Mellivora\Database\Console\Migrations\InstallCommand::class,
@@ -143,13 +150,6 @@ class App extends Application
             \Mellivora\Database\Console\Migrations\RollbackCommand::class,
             \Mellivora\Database\Console\Migrations\RefreshCommand::class,
             \Mellivora\Database\Console\Migrations\StatusCommand::class,
-            Commands\ViewClearCommand::class,
-            Commands\TestMakeCommand::class,
-            Commands\ConsoleMakeCommand::class,
-            Commands\ProviderMakeCommand::class,
-            Commands\MiddlewareMakeCommand::class,
-            Commands\ControllerMakeCommand::class,
-            Commands\ModelMakeCommand::class,
         ]);
     }
 

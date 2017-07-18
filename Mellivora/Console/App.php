@@ -143,6 +143,13 @@ class App extends Application
             \Mellivora\Database\Console\Migrations\RollbackCommand::class,
             \Mellivora\Database\Console\Migrations\RefreshCommand::class,
             \Mellivora\Database\Console\Migrations\StatusCommand::class,
+            Commands\ViewClearCommand::class,
+            Commands\TestMakeCommand::class,
+            Commands\ConsoleMakeCommand::class,
+            Commands\ProviderMakeCommand::class,
+            Commands\MiddlewareMakeCommand::class,
+            Commands\ControllerMakeCommand::class,
+            Commands\ModelMakeCommand::class,
         ]);
     }
 

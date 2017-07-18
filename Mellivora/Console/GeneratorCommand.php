@@ -4,7 +4,6 @@ namespace Mellivora\Console;
 
 use Mellivora\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 abstract class GeneratorCommand extends Command
 {
@@ -104,9 +103,11 @@ abstract class GeneratorCommand extends Command
      */
     protected function getPath($name)
     {
-        $name = str_replace_first($this->rootNamespace(), '', $name);
+        if (Str::startsWith($name, 'App\\')) {
+            $name = str_replace_first('App\\', 'app/', $name);
+        }
 
-        return database_path("seeds/$name.php");
+        return root_path("$name.php");
     }
 
     /**
@@ -187,7 +188,24 @@ abstract class GeneratorCommand extends Command
      */
     protected function getNameInput()
     {
-        return Str::studly($this->argument('name'));
+        $name   = Str::studly($this->argument('name'));
+        $suffix = $this->getNameSuffix();
+
+        if ($suffix && !Str::endsWith($name, $suffix)) {
+            $name .= $suffix;
+        }
+
+        return $name;
+    }
+
+    /**
+     * Get the name suffix
+     *
+     * @return string|false
+     */
+    protected function getNameSuffix()
+    {
+        return false;
     }
 
     /**
@@ -197,7 +215,7 @@ abstract class GeneratorCommand extends Command
      */
     protected function rootNamespace()
     {
-        return $this->option('namespace');
+        return $this->hasOption('root') ? $this->option('root') : 'App';
     }
 
     /**
@@ -209,18 +227,6 @@ abstract class GeneratorCommand extends Command
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the class'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['namespace', 'ns', InputOption::VALUE_OPTIONAL, 'The root namespace of the seeder', ''],
         ];
     }
 }

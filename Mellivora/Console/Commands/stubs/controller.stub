@@ -1,0 +1,15 @@
+<?php
+
+namespace DummyNamespace;
+
+use Mellivora\Application\Controller
+
+class DummyClass extends Controller
+{
+
+    public function indexAction()
+    {
+        //
+    }
+
+}

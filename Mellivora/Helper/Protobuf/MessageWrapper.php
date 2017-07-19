@@ -52,7 +52,7 @@ class MessageWrapper implements ArrayAccess
             if (is_string($message) && is_subclass_of($message, ProtobufMessage::class)) {
                 $message = new $message;
             } else {
-                throw new InvalidArgumentException('Invalid argument for "$message"');
+                throw new InvalidArgumentException("Invalid message argument [$message]");
             }
         }
 

@@ -1451,13 +1451,17 @@ if (!function_exists('json')) {
      * @param  mixed   $value
      * @return mixed
      */
-    function json($value)
+    function json($value, $pretty = true)
     {
+        $option = $pretty
+            ? JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+            : JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+
         if ($value instanceof Jsonable) {
-            $value = $value->toJson();
+            $value = $value->toJson($option);
         }
 
-        return json_encode(array_convert($value), JSON_ENCODE_OPTION);
+        return json_encode(array_convert($value), $option);
     }
 }
 

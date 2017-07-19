@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use Mellivora\Application\Controller
+use Mellivora\Application\Controller;
 
 class DummyClass extends Controller
 {

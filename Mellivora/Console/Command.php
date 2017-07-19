@@ -550,4 +550,15 @@ class Command extends SymfonyCommand
     {
         return $this->output;
     }
+
+    /**
+     * 获取 Container 容器中注入的对象
+     *
+     * @param  string  $id
+     * @return mixed
+     */
+    public function __get($id)
+    {
+        return $this->container->{$id};
+    }
 }

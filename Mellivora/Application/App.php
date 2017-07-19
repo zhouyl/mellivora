@@ -87,12 +87,4 @@ class App extends SlimApp
     {
         return $this->getContainer()['settings']['environment'];
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function run($silent = false)
-    {
-        return parent::run($silent);
-    }
 }

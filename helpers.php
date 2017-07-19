@@ -250,6 +250,19 @@ if (!function_exists('route')) {
     }
 }
 
+if (!function_exists('uri')) {
+    /**
+     * 快速调用 Uri::createFromString() 方法
+     *
+     * @param  string          $string
+     * @return Slim\Http\Uri
+     */
+    function uri($string)
+    {
+        return Uri::createFromString($path);
+    }
+}
+
 if (!function_exists('url')) {
     /**
      * URL 生成器，可通过指定 params 来生成 query string

@@ -16,7 +16,6 @@ class Factory
     use Concerns\ManagesLayouts;
     use Concerns\ManagesLoops;
     use Concerns\ManagesStacks;
-    use Concerns\ManagesTranslations;
 
     /**
      * The engine implementation.

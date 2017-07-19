@@ -7,6 +7,18 @@ use Mellivora\Support\Contracts\Events\Dispatcher;
 trait HasEvents
 {
     /**
+     * User exposed observable events.
+     *
+     * These are extra user-defined events observers may subscribe to.
+     *
+     * @var array
+     */
+    protected static $observables = [
+        'booting', 'booted', 'creating', 'created', 'updating', 'updated',
+        'deleting', 'deleted', 'saving', 'saved', 'restoring', 'restored',
+    ];
+
+    /**
      * The event map for the model.
      *
      * Allows for object-based events for native Eloquent events.
@@ -16,15 +28,6 @@ trait HasEvents
     protected $events = [];
 
     /**
-     * User exposed observable events.
-     *
-     * These are extra user-defined events observers may subscribe to.
-     *
-     * @var array
-     */
-    protected $observables = [];
-
-    /**
      * Register an observer with the Model.
      *
      * @param  object|string $class
@@ -32,74 +35,16 @@ trait HasEvents
      */
     public static function observe($class)
     {
-        $instance = new static;
-
         $className = is_string($class) ? $class : get_class($class);
 
         // When registering a model observer, we will spin through the possible events
         // and determine if this observer has that method. If it does, we will hook
         // it into the model's event system, making it convenient to watch these.
-        foreach ($instance->getObservableEvents() as $event) {
+        foreach (static::$observables as $event) {
             if (method_exists($class, $event)) {
                 static::registerModelEvent($event, $className . '@' . $event);
             }
         }
-    }
-
-    /**
-     * Get the observable event names.
-     *
-     * @return array
-     */
-    public function getObservableEvents()
-    {
-        return array_merge(
-            [
-                'creating', 'created', 'updating', 'updated',
-                'deleting', 'deleted', 'saving', 'saved',
-                'restoring', 'restored',
-            ],
-            $this->observables
-        );
-    }
-
-    /**
-     * Set the observable event names.
-     *
-     * @param  array   $observables
-     * @return $this
-     */
-    public function setObservableEvents(array $observables)
-    {
-        $this->observables = $observables;
-
-        return $this;
-    }
-
-    /**
-     * Add an observable event name.
-     *
-     * @param  array|mixed $observables
-     * @return void
-     */
-    public function addObservableEvents($observables)
-    {
-        $this->observables = array_unique(array_merge(
-            $this->observables, is_array($observables) ? $observables : func_get_args()
-        ));
-    }
-
-    /**
-     * Remove an observable event name.
-     *
-     * @param  array|mixed $observables
-     * @return void
-     */
-    public function removeObservableEvents($observables)
-    {
-        $this->observables = array_diff(
-            $this->observables, is_array($observables) ? $observables : func_get_args()
-        );
     }
 
     /**
@@ -112,9 +57,7 @@ trait HasEvents
     protected static function registerModelEvent($event, $callback)
     {
         if (isset(static::$dispatcher)) {
-            $name = static::class;
-
-            static::$dispatcher->listen("eloquent.{$event}: {$name}", $callback);
+            static::$dispatcher->listen("eloquent.{$event}", $callback);
         }
     }
 
@@ -139,7 +82,7 @@ trait HasEvents
         $result = $this->fireCustomModelEvent($event, $method);
 
         return !is_null($result) ? $result : static::$dispatcher->{$method}(
-            "eloquent.{$event}: " . static::class, $this
+            "eloquent.{$event}", $this
         );
     }
 

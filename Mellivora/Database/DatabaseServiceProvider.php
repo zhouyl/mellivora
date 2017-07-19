@@ -5,6 +5,7 @@ namespace Mellivora\Database;
 use Faker\Factory as FakerFactory;
 use Mellivora\Database\Connectors\ConnectionFactory;
 use Mellivora\Database\Eloquent\Factory as EloquentFactory;
+use Mellivora\Database\Eloquent\InternalObserve;
 use Mellivora\Database\Eloquent\Model;
 use Mellivora\Database\Eloquent\QueueEntityResolver;
 use Mellivora\Support\ServiceProvider;
@@ -25,6 +26,7 @@ class DatabaseServiceProvider extends ServiceProvider
         Model::setConnectionResolver($this->container['db']);
         Model::setEventDispatcher($this->container['events']);
         Model::clearBootedModels();
+        Model::observe(InternalObserve::class);
     }
 
     /**

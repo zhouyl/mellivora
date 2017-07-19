@@ -127,7 +127,7 @@ class Manager
      */
     protected function getConnector($name)
     {
-        $config = isset($this->drivers[$name]) ? $this->drivers[$name] : false
+        $config = isset($this->drivers[$name]) ? $this->drivers[$name] : false;
 
         if ($config === false) {
             throw new InvalidArgumentException(

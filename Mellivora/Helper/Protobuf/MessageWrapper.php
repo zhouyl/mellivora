@@ -170,7 +170,7 @@ class MessageWrapper implements ArrayAccess
      */
     public function has($key)
     {
-        return in_array($key, $this->properties);
+        return in_array(Str::snake($key), $this->properties);
     }
 
     /**

@@ -1015,6 +1015,35 @@ if (!function_exists('data_set')) {
     }
 }
 
+if (!function_exists('if_get')) {
+    /**
+     * 对 $args 中的值或回调函数进行逐一判定，如果非 empty 则返回其结果
+     *
+     *  // 1
+     *  if_get(null, 1, 2, 3);
+     *
+     *  // yes
+     *  if_get(false, function(){return [];}, function(){ return 'yes'; })
+     *
+     * @param  mixed   $args
+     * @return mixed
+     */
+    function if_get(...$args)
+    {
+        foreach ($args as $cond) {
+            if ($cond instanceof \Closure) {
+                $cond = $cond();
+            }
+
+            if (!empty($cond)) {
+                return $cond;
+            }
+        }
+
+        return null;
+    }
+}
+
 if (!function_exists('dd')) {
     /**
      * Dump the passed variables and end the script.

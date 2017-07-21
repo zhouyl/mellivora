@@ -1499,11 +1499,13 @@ if (!function_exists('unjson')) {
      * JSON 数据的解码
      *
      * @param  mixed   $value
-     * @return mixed
+     * @return array
      */
     function unjson($value)
     {
-        return json_decode($value, true);
+        $data = json_decode($value, true);
+
+        return is_array($data) ? $data : [];
     }
 }
 

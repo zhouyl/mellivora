@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see Symfony\Component\Cache\Adapter\AbstractAdapter
+ * @see \Symfony\Component\Cache\Adapter\AbstractAdapter
  */
 class Cache extends Facade
 {

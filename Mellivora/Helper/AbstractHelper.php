@@ -10,12 +10,12 @@ use Mellivora\Application\Container;
 class AbstractHelper
 {
     /**
-     * @param Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
      */
     protected $container;
 
     /**
-     * @param object $app
+     * @param \Mellivora\Application\Container $container
      */
     public function __construct(Container $container)
     {

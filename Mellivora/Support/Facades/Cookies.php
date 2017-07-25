@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see Mellivora\Http\Cookies
+ * @see \Mellivora\Http\Cookies
  */
 class Cookies extends Facade
 {

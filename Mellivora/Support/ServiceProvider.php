@@ -14,7 +14,7 @@ abstract class ServiceProvider
     protected $app;
 
     /**
-     * @param Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
      */
     protected $container;
 

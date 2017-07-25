@@ -87,7 +87,7 @@ class Command extends SymfonyCommand
     /**
      * Create a new console command instance.
      *
-     * @param  Mellivora\Application\Container $container
+     * @param  \Mellivora\Application\Container $container
      * @return void
      */
     public function __construct(Container $container)

@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see Mellivora\Encryption\Crypt
+ * @see \Mellivora\Encryption\Crypt
  */
 class Crypt extends Facade
 {

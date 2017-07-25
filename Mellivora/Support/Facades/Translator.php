@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see Mellivora\Translation\Translator
+ * @see \Mellivora\Translation\Translator
  */
 class Translator extends Facade
 {

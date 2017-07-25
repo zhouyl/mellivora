@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see Mellivora\Http\Response
+ * @see \Mellivora\Http\Response
  */
 class Response extends Facade
 {

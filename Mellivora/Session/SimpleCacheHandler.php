@@ -16,7 +16,7 @@ class SimpleCacheHandler implements SessionHandlerInterface
     /**
      * simple cache 适配器
      *
-     * @var Symfony\Component\Cache\Simple\AbstractCache
+     * @var \Symfony\Component\Cache\Simple\AbstractCache
      */
     protected $simpleCache;
 

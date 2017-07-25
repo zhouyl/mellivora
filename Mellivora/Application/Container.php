@@ -9,6 +9,8 @@ use Slim\Container as SlimContainer;
 
 /**
  * 重写 Slim\Container 容器类
+ *
+ * @see \Slim\Container
  */
 class Container extends SlimContainer
 {
@@ -29,7 +31,7 @@ class Container extends SlimContainer
     /**
      * 调用 Container 的 offsetSet 方法
      *
-     * @see   Pimple\Container::offsetSet
+     * @see   \Pimple\Container::offsetSet
      *
      * @param string $id
      * @param mixed  $value
@@ -42,7 +44,7 @@ class Container extends SlimContainer
     /**
      * 调用 Container 的 offsetUnset 方法
      *
-     * @see   Pimple\Container::offsetUnset
+     * @see   \Pimple\Container::offsetUnset
      *
      * @param string $id
      * @param mixed  $value

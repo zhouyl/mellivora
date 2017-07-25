@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see Mellivora\Session\Session
+ * @see \Mellivora\Session\Session
  */
 class Session extends Facade
 {

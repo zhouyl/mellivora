@@ -144,10 +144,10 @@ if (!function_exists('__')) {
     /**
      * 执行翻译
      *
-     * @param  string                                    $text
-     * @param  array                                     $replace
-     * @param  string                                    $lang
-     * @return Mellivora\Translation\Translator|string
+     * @param  string                                     $text
+     * @param  array                                      $replace
+     * @param  string                                     $lang
+     * @return \Mellivora\Translation\Translator|string
      */
     function __($text = null, array $replace = [], $lang = null)
     {
@@ -182,9 +182,9 @@ if (!function_exists('redirect')) {
     /**
      * 重定向当前页面，response http 302 header
      *
-     * @param  string                    $to
-     * @param  int                       $status
-     * @return Mellivora\Http\Response
+     * @param  string                     $to
+     * @param  int                        $status
+     * @return \Mellivora\Http\Response
      */
     function redirect($to, $status = null)
     {
@@ -196,9 +196,9 @@ if (!function_exists('request')) {
     /**
      * 获取当前 http request 输入的数据
      *
-     * @param  array|string                          $key
-     * @param  mixed                                 $default
-     * @return Mellivora\Http\Request|string|array
+     * @param  array|string                           $key
+     * @param  mixed                                  $default
+     * @return \Mellivora\Http\Request|string|array
      */
     function request($key = null, $default = null)
     {
@@ -218,10 +218,10 @@ if (!function_exists('response')) {
     /**
      * 返回 http response 的结果
      *
-     * @param  string                    $content
-     * @param  int                       $status
-     * @param  array                     $headers
-     * @return Mellivora\Http\Response
+     * @param  string                     $content
+     * @param  int                        $status
+     * @param  array                      $headers
+     * @return \Mellivora\Http\Response
      */
     function response($content = '', $status = 200, array $headers = [])
     {
@@ -254,8 +254,8 @@ if (!function_exists('uri')) {
     /**
      * 快速调用 Uri::createFromString() 方法
      *
-     * @param  string          $string
-     * @return Slim\Http\Uri
+     * @param  string           $string
+     * @return \Slim\Http\Uri
      */
     function uri($string)
     {

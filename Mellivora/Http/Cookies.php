@@ -32,7 +32,7 @@ class Cookies implements ArrayAccess
     /**
      * crypt 加密类
      *
-     * @var Mellivora\Encryption\EncryptionInterface
+     * @var \Mellivora\Encryption\EncryptionInterface
      */
     protected $encryption;
 
@@ -63,7 +63,7 @@ class Cookies implements ArrayAccess
     /**
      * 设定 crypt 加密类
      *
-     * @param Mellivora\Encryption\EncryptionInterface $encryption
+     * @param \Mellivora\Encryption\EncryptionInterface $encryption
      */
     public function setEncryption(EncryptionInterface $encryption)
     {
@@ -73,7 +73,7 @@ class Cookies implements ArrayAccess
     /**
      * 获取 crypt 加密类
      *
-     * @return Mellivora\Encryption\EncryptionInterface
+     * @return \Mellivora\Encryption\EncryptionInterface
      */
     public function getEncryption()
     {
@@ -114,10 +114,10 @@ class Cookies implements ArrayAccess
     /**
      * 设置 cookie 值
      *
-     * @param  string                   $key
-     * @param  mixed                    $value
-     * @param  integer                  $minutes
-     * @return Mellivora\Http\Cookies
+     * @param  string                    $key
+     * @param  mixed                     $value
+     * @param  integer                   $minutes
+     * @return \Mellivora\Http\Cookies
      */
     public function set($key, $value = null, $minutes = null)
     {
@@ -168,8 +168,8 @@ class Cookies implements ArrayAccess
     /**
      * 删除 cookie
      *
-     * @param  string                   $key
-     * @return Mellivora\Http\Cookies
+     * @param  string                    $key
+     * @return \Mellivora\Http\Cookies
      */
     public function delete($key)
     {
@@ -181,7 +181,7 @@ class Cookies implements ArrayAccess
     /**
      * 清空所有 cookie
      *
-     * @return Mellivora\Http\Cookies
+     * @return \Mellivora\Http\Cookies
      */
     public function clear()
     {

@@ -96,8 +96,8 @@ class Accessor implements ArrayAccess
     /**
      * 设定配置查找路径
      *
-     * @param  array                       $paths
-     * @return Mellivora\Config\Accessor
+     * @param  array                        $paths
+     * @return \Mellivora\Config\Accessor
      */
     public function setPaths(array $paths)
     {
@@ -109,8 +109,8 @@ class Accessor implements ArrayAccess
     /**
      * 新增配置查找路径，最后增加的路径会被优先查找
      *
-     * @param  string                      $path
-     * @return Mellivora\Config\Accessor
+     * @param  string                       $path
+     * @return \Mellivora\Config\Accessor
      */
     public function addPath($path)
     {
@@ -122,8 +122,8 @@ class Accessor implements ArrayAccess
     /**
      * 设定配置文件解释器
      *
-     * @param array                        $parsers
-     * @param Mellivora\Config\NativeArray $parser
+     * @param array                         $parsers
+     * @param \Mellivora\Config\NativeArray $parser
      */
     public function setParsers(array $parsers)
     {
@@ -135,8 +135,8 @@ class Accessor implements ArrayAccess
     /**
      * 新增配置解释器
      *
-     * @param string                       $ext
-     * @param Mellivora\Config\NativeArray $parser
+     * @param string                        $ext
+     * @param \Mellivora\Config\NativeArray $parser
      */
     public function addParser($ext, NativeArray $parser)
     {
@@ -199,10 +199,10 @@ class Accessor implements ArrayAccess
     /**
      * 根据配置名称及路径，对配置数据进行设置
      *
-     * @param  string                         $key
-     * @param  mixed                          $value
-     * @throws RuntimeException
-     * @return Mellivora\Config\NativeArray
+     * @param  string                          $key
+     * @param  mixed                           $value
+     * @throws \RuntimeException
+     * @return \Mellivora\Config\NativeArray
      */
     public function set($path, $value)
     {
@@ -218,8 +218,8 @@ class Accessor implements ArrayAccess
     /**
      * 根据配置名称及路径，删除配置数据
      *
-     * @param  string                         $path
-     * @return Mellivora\Config\NativeArray
+     * @param  string                          $path
+     * @return \Mellivora\Config\NativeArray
      */
     public function remove($path)
     {

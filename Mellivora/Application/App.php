@@ -19,6 +19,8 @@ if (!defined('JSON_ENCODE_OPTION')) {
  * 重写 Slim\App 类
  *
  * 对 facades/provider 进行扩展
+ *
+ * @see \Slim\App
  */
 class App extends SlimApp
 {

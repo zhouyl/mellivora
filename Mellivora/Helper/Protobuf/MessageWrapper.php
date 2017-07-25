@@ -30,7 +30,7 @@ class MessageWrapper implements ArrayAccess
     use MagicAccess;
 
     /**
-     * @var Google\Protobuf\Internal\Message
+     * @var \Google\Protobuf\Internal\Message
      */
     protected $message;
 
@@ -70,7 +70,7 @@ class MessageWrapper implements ArrayAccess
     /**
      * 获取源 Message 实例
      *
-     * @return Google\Protobuf\Internal\Message
+     * @return \Google\Protobuf\Internal\Message
      */
     public function raw()
     {
@@ -80,8 +80,8 @@ class MessageWrapper implements ArrayAccess
     /**
      * 设定来源数据，可以是序列化之后的字符，也可以是数组数据
      *
-     * @param  mixed                                      $data
-     * @return Mellivora\Helper\Protobuf\MessageWrapper
+     * @param  mixed                                       $data
+     * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function from($data)
     {
@@ -117,9 +117,9 @@ class MessageWrapper implements ArrayAccess
     /**
      * 为 Message 设定数据
      *
-     * @param  mixed                                      $key
-     * @param  mixed                                      $value
-     * @return Mellivora\Helper\Protobuf\MessageWrapper
+     * @param  mixed                                       $key
+     * @param  mixed                                       $value
+     * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function set($key, $value = null)
     {
@@ -176,8 +176,8 @@ class MessageWrapper implements ArrayAccess
     /**
      * 删除指定的属性数据，设置为 NULL
      *
-     * @param  string                                     $key
-     * @return Mellivora\Helper\Protobuf\MessageWrapper
+     * @param  string                                      $key
+     * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function delete($key)
     {

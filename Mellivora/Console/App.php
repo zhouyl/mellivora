@@ -28,7 +28,7 @@ class App extends Application
     use Singleton;
 
     /**
-     * @var Mellivora\Application\Container
+     * @var \Mellivora\Application\Container
      */
     protected $container;
 

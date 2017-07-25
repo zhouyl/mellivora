@@ -13,7 +13,7 @@ use Slim\Exception\NotFoundException;
 class Controller
 {
     /**
-     * @var Mellivora\Application\Container
+     * @var \Mellivora\Application\Container
      */
     protected $container;
 
@@ -23,7 +23,7 @@ class Controller
     protected $parameters = [];
 
     /**
-     * @param Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
      */
     public function __construct(Container $container, array $parameters)
     {
@@ -85,6 +85,11 @@ class Controller
      */
     public function __call($method, array $args)
     {
+        // 重定向到 notFound 的 action
+        if (method_exists($this, 'notFoundAction')) {
+            return $this->notFoundAction(...$args);
+        }
+
         // action 不存在，返回 http not found
         if (Str::endsWith($method, 'Action')) {
             throw new NotFoundException($this->container['request'], $this->container['response']);

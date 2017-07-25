@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see ellivora\Database\DatabaseManager
+ * @see \Mellivora\Database\DatabaseManager
  */
 class DB extends Facade
 {

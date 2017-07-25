@@ -57,9 +57,9 @@ class Manager
     /**
      * 设定默认的缓存名称
      *
-     * @param  string                                                       $name
-     * @throws Symfony\Component\Cache\Exception\InvalidArgumentException
-     * @return Mellivora\Cache\Manager
+     * @param  string                                                        $name
+     * @throws \Symfony\Component\Cache\Exception\InvalidArgumentException
+     * @return \Mellivora\Cache\Manager
      */
     public function setDefault($name)
     {
@@ -88,8 +88,8 @@ class Manager
     /**
      * 批量设定缓存驱动配置
      *
-     * @param  array                     $drivers
-     * @return Mellivora\Cache\Manager
+     * @param  array                      $drivers
+     * @return \Mellivora\Cache\Manager
      */
     public function setDrivers(array $drivers)
     {
@@ -103,9 +103,9 @@ class Manager
     /**
      * 设定缓存驱动配置
      *
-     * @param  string                    $name
-     * @param  array                     $config
-     * @return Mellivora\Cache\Manager
+     * @param  string                     $name
+     * @param  array                      $config
+     * @return \Mellivora\Cache\Manager
      */
     public function setDriver($name, array $config)
     {
@@ -121,9 +121,9 @@ class Manager
     /**
      * 根据名称获取缓存构造器
      *
-     * @param  string                                                       $name
-     * @throws Symfony\Component\Cache\Exception\InvalidArgumentException
-     * @return Mellivora\Cache\Connector
+     * @param  string                                                        $name
+     * @throws \Symfony\Component\Cache\Exception\InvalidArgumentException
+     * @return \Mellivora\Cache\Connector
      */
     protected function getConnector($name)
     {
@@ -151,8 +151,8 @@ class Manager
     /**
      * 获取 psr-6 标准 cache 适配器
      *
-     * @param  string                                            $name
-     * @return Symfony\Component\Cache\Adapter\AbstractAdapter
+     * @param  string                                             $name
+     * @return \Symfony\Component\Cache\Adapter\AbstractAdapter
      */
     public function getCache($name)
     {
@@ -168,8 +168,8 @@ class Manager
     /**
      * 获取 psr-16 标准 simple-cache 适配器
      *
-     * @param  string                                         $name
-     * @return Symfony\Component\Cache\Simple\AbstractCache
+     * @param  string                                          $name
+     * @return \Symfony\Component\Cache\Simple\AbstractCache
      */
     public function getSimpleCache($name)
     {
@@ -185,7 +185,7 @@ class Manager
     /**
      * 获取默认的 psr-6 标准 cache 适配器
      *
-     * @return Symfony\Component\Cache\Adapter\AbstractAdapter
+     * @return \Symfony\Component\Cache\Adapter\AbstractAdapter
      */
     public function getDefaultCache()
     {
@@ -195,7 +195,7 @@ class Manager
     /**
      * 获取 默认的 psr-16 标准 simple-cache 适配器
      *
-     * @return Symfony\Component\Cache\Simple\AbstractCache
+     * @return \Symfony\Component\Cache\Simple\AbstractCache
      */
     public function getDefaultSimpleCache()
     {

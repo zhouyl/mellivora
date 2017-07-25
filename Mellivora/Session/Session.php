@@ -54,8 +54,8 @@ class Session implements ArrayAccess
     /**
      * 设置 session name
      *
-     * @param  string                      $name
-     * @return Mellivora\Session\Session
+     * @param  string                       $name
+     * @return \Mellivora\Session\Session
      */
     public function setName($name)
     {
@@ -77,8 +77,8 @@ class Session implements ArrayAccess
     /**
      * 重新生成 session id
      *
-     * @param  boolean                     $deleteOldSession
-     * @return Mellivora\Session\Session
+     * @param  boolean                      $deleteOldSession
+     * @return \Mellivora\Session\Session
      */
     public function regenerateId($deleteOldSession = true)
     {
@@ -95,9 +95,9 @@ class Session implements ArrayAccess
      * $session->has("foo.bar", 1);
      * </code>
      *
-     * @param  string                      $key
-     * @param  mixed                       $value
-     * @return Mellivora\Session\Session
+     * @param  string                       $key
+     * @param  mixed                        $value
+     * @return \Mellivora\Session\Session
      */
     public function set($key, $value = null)
     {
@@ -158,8 +158,8 @@ class Session implements ArrayAccess
      * $session->delete("foo.*");
      * </code>
      *
-     * @param  string                      $key
-     * @return Mellivora\Session\Session
+     * @param  string                       $key
+     * @return \Mellivora\Session\Session
      */
     public function delete($key)
     {
@@ -171,7 +171,7 @@ class Session implements ArrayAccess
     /**
      * 清空 session 数据
      *
-     * @return Mellivora\Session\Session
+     * @return \Mellivora\Session\Session
      */
     public function clear()
     {
@@ -203,8 +203,8 @@ class Session implements ArrayAccess
     /**
      * 设置 session id
      *
-     * @param  string                      $id
-     * @return Mellivora\Session\Session
+     * @param  string                       $id
+     * @return \Mellivora\Session\Session
      */
     public function setId($id)
     {
@@ -226,8 +226,8 @@ class Session implements ArrayAccess
     /**
      * 销毁 session
      *
-     * @param  boolean                     $removeData
-     * @return Mellivora\Session\Session
+     * @param  boolean                      $removeData
+     * @return \Mellivora\Session\Session
      */
     public function destroy($removeData = false)
     {

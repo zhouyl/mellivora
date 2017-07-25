@@ -31,14 +31,14 @@ abstract class Connector
     /**
      * 返回 psr-6 标准 cache 适配器
      *
-     * @return Symfony\Component\Cache\Adapter\AbstractAdapter
+     * @return \Symfony\Component\Cache\Adapter\AbstractAdapter
      */
     abstract public function getCacheAdapter();
 
     /**
      * 返回 psr-16 标准 simple-cache 接口
      *
-     * @return Symfony\Component\Cache\Simple\AbstractCache
+     * @return \Symfony\Component\Cache\Simple\AbstractCache
      */
     abstract public function getSimpleCacheAdapter();
 

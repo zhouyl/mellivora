@@ -13,9 +13,9 @@ class ProtobufHelper extends AbstractHelper
     /**
      * 对 Message 类进行包裹，并返回包裹类
      *
-     * @param  string|object                              $message
-     * @param  string|array|null                          $data
-     * @return Mellivora\Helper\Protobuf\MessageWrapper
+     * @param  string|object                               $message
+     * @param  string|array|null                           $data
+     * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function wrapper($message, $data = null)
     {
@@ -25,9 +25,9 @@ class ProtobufHelper extends AbstractHelper
     /**
      * 对 Message 类进行包裹，并返回源 Message 类
      *
-     * @param  string|object                      $message
-     * @param  string|array|null                  $data
-     * @return Google\Protobuf\Internal\Message
+     * @param  string|object                       $message
+     * @param  string|array|null                   $data
+     * @return \Google\Protobuf\Internal\Message
      */
     public function rawWrapper($message, $data = null)
     {

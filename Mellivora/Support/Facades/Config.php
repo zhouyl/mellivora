@@ -3,7 +3,7 @@
 namespace Mellivora\Support\Facades;
 
 /**
- * @see Mellivora\Config\Accessor
+ * @see \Mellivora\Config\Accessor
  */
 class Config extends Facade
 {

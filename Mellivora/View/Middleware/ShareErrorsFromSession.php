@@ -11,12 +11,12 @@ class ShareErrorsFromSession
 {
 
     /**
-     * @param Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
      */
     protected $container;
 
     /**
-     * @param Mellivora\Application\Container $app
+     * @param \Mellivora\Application\Container $app
      */
     public function __construct(Container $container)
     {
@@ -26,10 +26,10 @@ class ShareErrorsFromSession
     /**
      * Invoke middleware
      *
-     * @param  Psr\Http\Message\ServerRequestInterface $request
-     * @param  Psr\Http\Message\ResponseInterface      $response
-     * @param  \Closure                                $next
-     * @return Psr\Http\Message\ResponseInterface
+     * @param  \Psr\Http\Message\ServerRequestInterface $request
+     * @param  \Psr\Http\Message\ResponseInterface      $response
+     * @param  \Closure                                 $next
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {

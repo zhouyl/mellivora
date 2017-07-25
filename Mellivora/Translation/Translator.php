@@ -61,8 +61,8 @@ class Translator
     /**
      * 设定语言包加载路径
      *
-     * @param  string                             $basepath
-     * @return Mellivora\Translation\Translator
+     * @param  string                              $basepath
+     * @return \Mellivora\Translation\Translator
      */
     public function addBaseath($basepath)
     {
@@ -90,9 +90,9 @@ class Translator
     /**
      * 设定语言包别名
      *
-     * @param  string                             $lang
-     * @param  string|array                       $aliases
-     * @return Mellivora\Translation\Translator
+     * @param  string                              $lang
+     * @param  string|array                        $aliases
+     * @return \Mellivora\Translation\Translator
      */
     public function setAlias($lang, $aliases)
     {
@@ -112,8 +112,8 @@ class Translator
     /**
      * 设定默认的语言包
      *
-     * @param  string                             $default
-     * @return Mellivora\Translation\Translator
+     * @param  string                              $default
+     * @return \Mellivora\Translation\Translator
      */
     public function setDefault($default)
     {
@@ -144,8 +144,8 @@ class Translator
     /**
      * 加载语言包
      *
-     * @param  string|array                       $packages
-     * @return Mellivora\Translation\Translator
+     * @param  string|array                        $packages
+     * @return \Mellivora\Translation\Translator
      */
     public function import($packages)
     {

@@ -17,12 +17,12 @@ class Dispatcher
 {
 
     /**
-     * @var Mellivora\Application\Container
+     * @var \Mellivora\Application\Container
      */
     protected $container;
 
     /**
-     * @param Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
      */
     public function __construct(Container $container)
     {
@@ -33,9 +33,9 @@ class Dispatcher
      * Invoke a route callable with request, response, and all route parameters
      * as an array of arguments.
      *
-     * @param  Psr\Http\Message\ServerRequestInterface $request
-     * @param  Psr\Http\Message\ResponseInterface      $response
-     * @param  array                                   $args
+     * @param  \Psr\Http\Message\ServerRequestInterface $request
+     * @param  \Psr\Http\Message\ResponseInterface      $response
+     * @param  array                                    $args
      * @return mixed
      */
     public function __invoke(
@@ -84,7 +84,17 @@ class Dispatcher
         // 去除不需要的值，预备 action 调用
         unset($args['module'], $args['controller'], $args['action']);
 
-        // 执行
-        return call_user_func_array([$handler, $method], $args);
+        // 可以在 action 中通过 exceptionHandler 对异常进行集中处理
+        if (method_exists($handler, 'exceptionHandler')) {
+            try {
+                $response = $handler->$method(...$args);
+            } catch (\Exception $e) {
+                $response = $handler->exceptionHandler($e);
+            }
+        } else {
+            $response = $handler->$method(...$args);
+        }
+
+        return $response;
     }
 }

@@ -105,7 +105,7 @@ class Container extends SlimContainer
      * @param  string   $id
      * @return string
      */
-    protected function sanitizeId($id)
+    protected function formatId($id)
     {
         return Str::snake($id, '.');
     }
@@ -165,21 +165,21 @@ class Container extends SlimContainer
 
     public function __set($id, $value)
     {
-        return $this->offsetSet($this->sanitizeId($id), $value);
+        return $this->offsetSet($this->formatId($id), $value);
     }
 
     public function __unset($id)
     {
-        return $this->offsetUnset($this->sanitizeId($id));
+        return $this->offsetUnset($this->formatId($id));
     }
 
     public function __get($id)
     {
-        return $this->get($this->sanitizeId($id));
+        return $this->get($this->formatId($id));
     }
 
     public function __isset($id)
     {
-        return $this->has($this->sanitizeId($id));
+        return $this->has($this->formatId($id));
     }
 }

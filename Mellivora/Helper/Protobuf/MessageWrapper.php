@@ -42,9 +42,9 @@ class MessageWrapper implements ArrayAccess
     /**
      * Constructor
      *
-     * @param  string|object              $message
-     * @param  string|array               $data
-     * @throws InvalidArgumentException
+     * @param  string|object               $message
+     * @param  string|array                $data
+     * @throws \InvalidArgumentException
      */
     public function __construct($message, $data = null)
     {
@@ -208,9 +208,9 @@ class MessageWrapper implements ArrayAccess
     /**
      * 允许直接调用 Message 类的方法
      *
-     * @param  string                   $method
-     * @param  array                    $args
-     * @throws BadMethodCallException
+     * @param  string                    $method
+     * @param  array                     $args
+     * @throws \BadMethodCallException
      * @return mixed
      */
     public function __call($method, $args)

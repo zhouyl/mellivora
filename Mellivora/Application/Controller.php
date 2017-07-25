@@ -79,9 +79,9 @@ class Controller
     /**
      * 当调用不存在的方法时，会调用该方法
      *
-     * @param  string                                                    $method
-     * @param  array                                                     $args
-     * @throws Slim\Exception\NotFoundException|BadMethodCallException
+     * @param  string                                                      $method
+     * @param  array                                                       $args
+     * @throws \Slim\Exception\NotFoundException|\BadMethodCallException
      */
     public function __call($method, array $args)
     {

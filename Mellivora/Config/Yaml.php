@@ -12,9 +12,9 @@ class Yaml extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string             $file
-     * @param  Closure[]          $callbacks
-     * @throws RuntimeException
+     * @param  string              $file
+     * @param  Closure[]           $callbacks
+     * @throws \RuntimeException
      */
     public function __construct($file, array $callbacks = [])
     {

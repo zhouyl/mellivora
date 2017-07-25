@@ -36,7 +36,7 @@ class Facade
     /**
      * Get the registered name of the component.
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      * @return string
      */
     protected static function getFacadeAccessor()
@@ -104,9 +104,9 @@ class Facade
     /**
      * Handle dynamic, static calls to the object.
      *
-     * @param  string             $method
-     * @param  array              $args
-     * @throws RuntimeException
+     * @param  string              $method
+     * @param  array               $args
+     * @throws \RuntimeException
      * @return mixed
      */
     public static function __callStatic($method, $args)

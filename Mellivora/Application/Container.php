@@ -68,9 +68,9 @@ class Container extends SlimContainer
     /**
      * 为兼容 laravel 组件而编写的方法
      *
-     * @param  string             $abstract
-     * @param  array              $parameters
-     * @throws RuntimeException
+     * @param  string              $abstract
+     * @param  array               $parameters
+     * @throws \RuntimeException
      * @return mixed
      */
     public function make($abstract, array $parameters = [])

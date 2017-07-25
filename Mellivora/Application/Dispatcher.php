@@ -30,6 +30,53 @@ class Dispatcher
     }
 
     /**
+     * 刷新 container 中注册的 request/response 组件
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     */
+    protected function refreshContainer(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ) {
+        // 需要在 container 中删除 request/response
+        unset($this->container['request'], $this->container['response']);
+
+        // 重新指定 request/response
+        $this->container['request']  = $request;
+        $this->container['response'] = $response;
+    }
+
+    /**
+     * 检测 controller 的 class 类型
+     *
+     * @param  array                                                         $parameters
+     * @throws \Slim\Exception\NotFoundException|\UnexpectedValueException
+     * @return string
+     */
+    protected function detectControllerClass(array $parameters)
+    {
+        $class = str_replace('\\\\', '\\', sprintf(
+            '%s\\%s\\%sController',
+            $parameters['namespace'],
+            $parameters['module'],
+            $parameters['controller']
+        ));
+
+        if (!class_exists($class)) {
+            throw new NotFoundException($request, $response);
+        }
+
+        // controller 类型检测
+        if (!is_subclass_of($class, Controller::class)) {
+            throw new UnexpectedValueException(
+                $class . ' must return instance of ' . Controller::class);
+        }
+
+        return $class;
+    }
+
+    /**
      * Invoke a route callable with request, response, and all route parameters
      * as an array of arguments.
      *
@@ -43,56 +90,49 @@ class Dispatcher
         ResponseInterface $response,
         array $args
     ) {
-        // 格式化获取到的 module & controller & action & namespace
-        $module     = Str::studly(Arr::get($args, 'module', ''));
-        $controller = Str::studly(Arr::get($args, 'controller', 'index'));
-        $action     = Str::camel(Arr::get($args, 'action', 'index'));
-        $namespace  = Arr::get($args, 'namespace', '\\App\\Controllers');
+        $this->refreshContainer($request, $response);
 
-        // 引用 container
-        $container = &$this->container;
+        // 格式化获取到的参数
+        $parameters = [
+            'namespace'  => Arr::get($args, 'namespace', '\\App\\Controllers'),
+            'module'     => Str::studly(Arr::get($args, 'module', '')),
+            'controller' => Str::studly(Arr::get($args, 'controller', 'index')),
+            'action'     => Str::camel(Arr::get($args, 'action', 'index')),
+        ] + $args;
 
-        // 需要在 container 中删除 request/response
-        unset($container['request'], $container['response']);
+        // 检测，并实例化 controller
+        $class   = $this->detectControllerClass($parameters);
+        $handler = new $class($this->container, $parameters);
 
-        // 重新指定 request/response
-        $container['request']  = $request;
-        $container['response'] = $response;
-
-        // 获取 controller class
-        $class = str_replace('\\\\', '\\',
-            "{$namespace}\\{$module}\\{$controller}Controller");
-
-        // 获取 action method
-        $method = "{$action}Action";
-
-        // controller 检测
-        if (!class_exists($class)) {
-            throw new NotFoundException($request, $response);
-        }
-
-        // controller 类型检测
-        if (!is_subclass_of($class, Controller::class)) {
-            throw new UnexpectedValueException(
-                $class . ' must return instance of ' . Controller::class);
-        }
-
-        // 实例化 controller
-        $handler = new $class($container,
-            array_merge($args, compact('module', 'controller', 'action')));
-
-        // 去除不需要的值，预备 action 调用
-        unset($args['module'], $args['controller'], $args['action']);
-
-        // 可以在 action 中通过 exceptionHandler 对异常进行集中处理
-        if (method_exists($handler, 'exceptionHandler')) {
-            try {
-                $response = $handler->$method(...$args);
-            } catch (\Exception $e) {
-                $response = $handler->exceptionHandler($e);
+        try {
+            // 调用初始化方法，当初始化为 false 时，中断 action 的执行，并返回 response 实例
+            if (method_exists($handler, 'initialize') && $handler->initialize() === false) {
+                return $response;
             }
-        } else {
-            $response = $handler->$method(...$args);
+
+            $method = $parameters['action'] . 'Action';
+
+            // 移除不需要用到的值，以便 action 调用
+            unset($args['namespace'], $args['module'], $args['controller'], $args['action']);
+
+            // call action
+            $return = $handler->$method(...$args);
+        } catch (\Exception $e) {
+            // 当 controller 中存在 exceptionHandler 方法时
+            // 调用该方法来对异常进行统一处理
+            if (method_exists($handler, 'exceptionHandler')) {
+                $return = $handler->exceptionHandler($e);
+            } else {
+                throw $e;
+            }
+        }
+
+        if (is_array($return)) {
+            return $response->withJson($return);
+        }
+
+        if (!$return instanceof ResponseInterface) {
+            return $response->write((string) $return);
         }
 
         return $response;

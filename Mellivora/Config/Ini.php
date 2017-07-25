@@ -10,9 +10,9 @@ class Ini extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string                            $file
-     * @param  integer                           $mode   INI_SCANNER_NORMAL|INI_SCANNER_RAW
-     * @throws Mellivora\Config\ParseException
+     * @param  string                             $file
+     * @param  integer                            $mode   INI_SCANNER_NORMAL|INI_SCANNER_RAW
+     * @throws \Mellivora\Config\ParseException
      */
     public function __construct($file, $mode = INI_SCANNER_RAW)
     {

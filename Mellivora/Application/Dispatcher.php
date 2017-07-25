@@ -64,7 +64,8 @@ class Dispatcher
         ));
 
         if (!class_exists($class)) {
-            throw new NotFoundException($request, $response);
+            throw new NotFoundException(
+                $this->container['request'], $this->container['response']);
         }
 
         // controller 类型检测
@@ -113,7 +114,12 @@ class Dispatcher
             $method = $parameters['action'] . 'Action';
 
             // 移除不需要用到的值，以便 action 调用
-            unset($args['namespace'], $args['module'], $args['controller'], $args['action']);
+            unset(
+                $args['namespace'],
+                $args['module'],
+                $args['controller'],
+                $args['action']
+            );
 
             // call action
             $return = $handler->$method(...$args);
@@ -135,6 +141,6 @@ class Dispatcher
             return $response->write((string) $return);
         }
 
-        return $response;
+        return $return;
     }
 }

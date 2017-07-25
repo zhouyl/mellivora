@@ -29,10 +29,6 @@ class Controller
     {
         $this->container  = $container;
         $this->parameters = $parameters;
-
-        if (method_exists($this, 'initialize')) {
-            $this->initialize();
-        }
     }
 
     /**

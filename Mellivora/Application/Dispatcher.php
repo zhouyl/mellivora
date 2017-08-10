@@ -122,7 +122,7 @@ class Dispatcher
             );
 
             // call action
-            $return = $handler->$method(...$args);
+            $return = $handler->$method(...array_values($args));
         } catch (\Exception $e) {
             // 当 controller 中存在 exceptionHandler 方法时
             // 调用该方法来对异常进行统一处理
@@ -130,6 +130,10 @@ class Dispatcher
                 $return = $handler->exceptionHandler($e);
             } else {
                 throw $e;
+            }
+        } finally {
+            if (method_exists($handler, 'finalize')) {
+                $handler->finalize();
             }
         }
 

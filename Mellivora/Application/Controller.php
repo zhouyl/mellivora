@@ -62,17 +62,6 @@ class Controller
     }
 
     /**
-     * 获取 Container 容器中注入的对象
-     *
-     * @param  string  $id
-     * @return mixed
-     */
-    public function __get($id)
-    {
-        return $this->container->{$id};
-    }
-
-    /**
      * 当调用不存在的方法时，会调用该方法
      *
      * @param  string                                                      $method

@@ -466,6 +466,29 @@ if (!function_exists('app_path')) {
     }
 }
 
+if (!function_exists('config_path')) {
+    /**
+     * 获取 config 目录下的路径
+     *
+     * @param  string   $path
+     * @return string
+     */
+    function config_path($path = '', $environment = null)
+    {
+        if ($environment === null) {
+            $environment = env();
+        }
+
+        $filepath = root_path('config/' . $path);
+
+        if (file_exists($filepath)) {
+            return $filepath;
+        }
+
+        return root_path('config/' . $environment . '/' . $path);
+    }
+}
+
 if (!function_exists('storage_path')) {
     /**
      * 获取 storage 存储目录下的路径

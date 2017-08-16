@@ -10,6 +10,7 @@ use Mellivora\Support\ServiceProvider;
 use Mellivora\Support\Traits\Singleton;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Output\OutputInterface;
 use UnexpectedValueException;
 
 /**
@@ -31,6 +32,11 @@ class App extends Application
      * @var \Mellivora\Application\Container
      */
     protected $container;
+
+    /**
+     * @var callable
+     */
+    protected $exceptionHandler;
 
     /**
      * {@inheritdoc}
@@ -115,7 +121,9 @@ class App extends Application
                 $command = new $command($this->getContainer());
             }
 
-            $this->add($command);
+            if ($command instanceof Command) {
+                $this->add($command);
+            }
         }
     }
 
@@ -162,5 +170,37 @@ class App extends Application
     public function environment()
     {
         return $this->container['settings']['environment'];
+    }
+
+    /**
+     * 设置异常处理 handler
+     *
+     * @param  callable                 $exceptionHandler
+     * @return \Mellivora\Console\App
+     */
+    public function setExceptionHandler(callable $exceptionHandler)
+    {
+        $this->exceptionHandler = $exceptionHandler;
+
+        return $this;
+    }
+
+    /**
+     * Renders a caught exception.
+     *
+     * @param \Exception      $e      An exception instance
+     * @param OutputInterface $output An OutputInterface instance
+     */
+    public function renderException(\Exception $e, OutputInterface $output)
+    {
+        if (is_callable($this->exceptionHandler)) {
+            if (method_exists($this->exceptionHandler, '__invoke')) {
+                $this->exceptionHandler->__invoke($e);
+            } else {
+                call_user_func($this->exceptionHandler, $e);
+            }
+        }
+
+        parent::renderException($e, $output);
     }
 }

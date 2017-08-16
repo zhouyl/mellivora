@@ -42,10 +42,10 @@ if (!function_exists('env')) {
     function env($environment = null)
     {
         if (is_null($environment)) {
-            return App::environment();
+            return strtolower(App::environment());
         }
 
-        return strtolower($environment) === App::environment();
+        return strtolower($environment) === strtolower(App::environment());
     }
 }
 
@@ -437,6 +437,40 @@ if (!function_exists('factory')) {
         } else {
             return $factory->of($arguments[0]);
         }
+    }
+}
+
+if (!function_exists('normalize_path')) {
+    /**
+     * 格式路径字符串
+     *
+     * @param  string   $path
+     * @return string
+     */
+    function normalize_path($path)
+    {
+        return preg_replace('/[\\\\\/]+/', DIRECTORY_SEPARATOR, (string) $path);
+    }
+}
+
+if (!function_exists('root_path')) {
+    /**
+     * 对字符或数组中涉及到路径的值，进行包裹以避免泄露服务器路径
+     *
+     * @param  string|array $path
+     * @return string
+     */
+    function mask_path($path)
+    {
+        if (Arr::accessible($path) || $path instanceof Traversable) {
+            foreach ($path as &$value) {
+                $value = mask_path($value);
+            }
+        } else {
+            $path = str_replace(root_path(), '~/', normalize_path($path));
+        }
+
+        return $path;
     }
 }
 
@@ -866,19 +900,6 @@ if (!function_exists('class_basename')) {
         $class = is_object($class) ? get_class($class) : $class;
 
         return basename(str_replace('\\', '/', $class));
-    }
-}
-
-if (!function_exists('normalize_path')) {
-    /**
-     * Normalized the path string.
-     *
-     * @param  string   $path
-     * @return string
-     */
-    function normalize_path($path)
-    {
-        return preg_replace('/[\\\\\/]+/', DIRECTORY_SEPARATOR, (string) $path);
     }
 }
 

@@ -194,10 +194,13 @@ class App extends Application
     public function renderException(\Exception $e, OutputInterface $output)
     {
         if (is_callable($this->exceptionHandler)) {
-            if (method_exists($this->exceptionHandler, '__invoke')) {
-                $this->exceptionHandler->__invoke($e);
-            } else {
-                call_user_func($this->exceptionHandler, $e);
+            try {
+                if (method_exists($this->exceptionHandler, '__invoke')) {
+                    $this->exceptionHandler->__invoke($e);
+                } else {
+                    call_user_func($this->exceptionHandler, $e);
+                }
+            } catch (\Exception $e) {
             }
         }
 

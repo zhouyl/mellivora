@@ -106,7 +106,10 @@ class Dispatcher
         $handler = new $class($this->container, $parameters);
 
         try {
-            // 调用初始化方法，当初始化为 false 时，中断 action 的执行，并返回 response 实例
+            /**
+             * 调用初始化方法，当初始化为 false 时
+             * 中断 action 的执行，并返回 response 实例
+             */
             if (method_exists($handler, 'initialize') && $handler->initialize() === false) {
                 return $response;
             }
@@ -124,27 +127,41 @@ class Dispatcher
             // call action
             $return = $handler->$method(...array_values($args));
         } catch (\Exception $e) {
-            // 当 controller 中存在 exceptionHandler 方法时
-            // 调用该方法来对异常进行统一处理
+            /**
+             * 当 controller 中存在 exceptionHandler 方法时
+             * 调用该方法来对异常进行统一处理
+             */
             if (method_exists($handler, 'exceptionHandler')) {
                 $return = $handler->exceptionHandler($e);
             } else {
                 throw $e;
             }
-        } finally {
-            if (method_exists($handler, 'finalize')) {
-                $handler->finalize();
+        }
+
+        /**
+         * 根据 return 的结果进行 response 格式化处理
+         */
+        if (is_array($return)) {
+            $response = $response->withJson($return);
+        } elseif (!$return instanceof ResponseInterface) {
+            $response = $response->write((string) $return);
+        } else {
+            $response = $return;
+        }
+
+        /**
+         * 当 controller 中存在 finalize 方法时
+         * 调用该方法，对响应结果进行再处理
+         * 如果该方法 return 返回一个 response 的结果
+         * 则使用 response 做为最终响应结果
+         */
+        if (method_exists($handler, 'finalize')) {
+            $finalize = $handler->finalize($response);
+            if ($finalize instanceof ResponseInterface) {
+                $response = $finalize;
             }
         }
 
-        if (is_array($return)) {
-            return $response->withJson($return);
-        }
-
-        if (!$return instanceof ResponseInterface) {
-            return $response->write((string) $return);
-        }
-
-        return $return;
+        return $response;
     }
 }

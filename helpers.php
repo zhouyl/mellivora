@@ -1075,9 +1075,7 @@ if (!function_exists('if_get')) {
     function if_get(...$args)
     {
         foreach ($args as $cond) {
-            if ($cond instanceof \Closure) {
-                $cond = $cond();
-            }
+            $cond = value($cond);
 
             if (!empty($cond)) {
                 return $cond;

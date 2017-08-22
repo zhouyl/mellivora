@@ -18,13 +18,13 @@ class Valid
     {
         if ($value instanceof \Traversable) {
             $value = iterator_to_array($value);
+        } elseif (method_exists($value, 'getArrayCopy')) {
+            $value = $value->toArray();
         } elseif (method_exists($value, 'toArray')) {
             $value = $value->toArray();
         } elseif (method_exists($value, 'asArray')) {
             $value = $value->toArray();
         } elseif (method_exists($value, 'as_array')) {
-            $value = $value->toArray();
-        } elseif (method_exists($value, 'getArrayCopy')) {
             $value = $value->toArray();
         } elseif (is_object($value)) {
             $value = get_object_vars($value);

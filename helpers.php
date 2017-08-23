@@ -8,6 +8,9 @@ use Mellivora\Support\Facades\App;
 use Mellivora\Support\HigherOrderTapProxy;
 use Mellivora\Support\HtmlString;
 use Mellivora\Support\Str;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Slim\Http\Uri;
 
 if (!defined('__ROOT__')) {
@@ -1560,5 +1563,138 @@ if (!function_exists('windows_os')) {
     function windows_os()
     {
         return strtolower(substr(PHP_OS, 0, 3)) === 'win';
+    }
+}
+
+if (!function_exists('http_stream_contents')) {
+    /**
+     * 获取 http 请求的内容数据
+     *
+     * @param  \Psr\Http\Message\MessageInterface|\Psr\Http\Message\StreamInterface $httpEntity
+     * @return string|null
+     */
+    function http_stream_contents($httpEntity)
+    {
+        if (is_object($httpEntity) && method_exists($httpEntity, 'getBody')) {
+            $stream = $httpEntity->getBody();
+        } else {
+            $stream = $httpEntity;
+        }
+
+        if (!$stream instanceof StreamInterface) {
+            return null;
+        }
+
+        $stream->rewind();
+
+        return $stream->getContents();
+    }
+}
+
+if (!function_exists('request_as_curl')) {
+    /**
+     * 将 request 请求轮换为 curl 命令
+     *
+     * @param  \Psr\Http\Message\RequestInterface|null $request
+     * @return string
+     */
+    function request_as_curl(RequestInterface $request = null)
+    {
+        if ($request === null) {
+            $request = request();
+        }
+
+        $str  = 'curl -X ' . $request->getMethod();
+        $data = http_stream_contents($request);
+
+        // 尝试使用 json_encode 来探测数据是否有效字符
+        json_encode($data);
+        if ($data && json_last_error() === JSON_ERROR_NONE) {
+            $str .= " -d '" . str_replace("'", "\'", $data) . "'";
+        }
+
+        $str .= " '" . $request->getUri() . "'";
+
+        return $str;
+    }
+}
+
+if (!function_exists('request_brief')) {
+    /**
+     * 获取 http 请求头摘要信息
+     *
+     * @param  \Psr\Http\Message\RequestInterface|null $request
+     * @param  array                                   $extras
+     * @return array
+     */
+    function request_brief(RequestInterface $request = null, array $extras = [])
+    {
+        if ($request === null) {
+            $request = request();
+        }
+
+        $brief = [];
+        if ($request instanceof ServerRequestInterface) {
+            $servers = $request->getServerParams();
+
+            $brief = Arr::only($servers, array_merge([
+                'HTTP_USER_AGENT',
+                'HTTP_HOST',
+                'SERVER_PROTOCOL',
+                'CONTENT_LENGTH',
+                'REQUEST_URI',
+                'REQUEST_METHOD',
+                'QUERY_STRING',
+            ], array_change_key_case($extras, CASE_UPPER))) + [
+                'CLIENT-ADDRESS' => Arr::get($servers, 'HTTP_CLIENT_IP',
+                    Arr::get($servers, 'REMOTE_ADDR')),
+                'REQUEST-TIME'   => date('Y-m-d H:i:s'),
+            ];
+
+            if (!empty($servers['HTTP_X_FORWARDED_FOR'])) {
+                foreach (explode(',', $servers['HTTP_X_FORWARDED_FOR']) as $address) {
+                    $address = trim($address);
+                    if (!preg_match('/^(?:10|172\.(?:1[6-9]|2\d|3[01])|192\.168)\./', $address)) {
+                        if (ip2long($address) != false) {
+                            $brief['CLIENT-ADDRESS'] = $address;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return array_change_key_case($brief);
+    }
+}
+
+if (!function_exists('exception_as_string')) {
+    /**
+     * 将异常转化为详细的错误信息
+     *
+     * @param  \Exception $e
+     * @return string
+     */
+    function exception_as_string(Exception $e)
+    {
+        return sprintf('%s: [%d] %s',
+            get_class($e), $e->getCode(), mask_path($e->getMessage()));
+    }
+}
+
+if (!function_exists('exception_brief')) {
+    /**
+     * 获取异常的摘要信息（包括了错误所在的文件、行、代码）
+     *
+     * @param  \Exception $e
+     * @return array
+     */
+    function exception_brief(Exception $e)
+    {
+        $firstTrace = array_first($e->getTrace());
+
+        unset($firstTrace['args'], $firstTrace['type']);
+
+        return mask_path($firstTrace);
     }
 }

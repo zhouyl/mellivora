@@ -60,7 +60,7 @@ class ConsoleMakeCommand extends GeneratorCommand
      */
     protected function getNameSuffix()
     {
-        return '';
+        return 'Command';
     }
 
     /**

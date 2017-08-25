@@ -1637,19 +1637,21 @@ if (!function_exists('request_brief')) {
         if ($request instanceof ServerRequestInterface) {
             $servers = $request->getServerParams();
 
-            $brief = Arr::only($servers, array_merge([
-                'HTTP_USER_AGENT',
-                'HTTP_HOST',
-                'SERVER_PROTOCOL',
-                'CONTENT_LENGTH',
-                'REQUEST_URI',
-                'REQUEST_METHOD',
-                'QUERY_STRING',
-            ], array_change_key_case($extras, CASE_UPPER))) + [
-                'CLIENT-ADDRESS' => Arr::get($servers, 'HTTP_CLIENT_IP',
-                    Arr::get($servers, 'REMOTE_ADDR')),
-                'REQUEST-TIME'   => date('Y-m-d H:i:s'),
-            ];
+            $brief = array_merge(
+                Arr::only($servers, [
+                    'HTTP_USER_AGENT',
+                    'HTTP_HOST',
+                    'SERVER_PROTOCOL',
+                    'CONTENT_LENGTH',
+                    'REQUEST_URI',
+                    'REQUEST_METHOD',
+                ]),
+                array_change_key_case($extras, CASE_UPPER),
+                [
+                    'CLIENT-ADDRESS' => Arr::get($servers, 'HTTP_CLIENT_IP',
+                        Arr::get($servers, 'REMOTE_ADDR')),
+                ]
+            );
 
             if (!empty($servers['HTTP_X_FORWARDED_FOR'])) {
                 foreach (explode(',', $servers['HTTP_X_FORWARDED_FOR']) as $address) {

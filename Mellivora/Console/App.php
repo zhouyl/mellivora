@@ -9,6 +9,7 @@ use Mellivora\Support\Facades\Facade;
 use Mellivora\Support\ServiceProvider;
 use Mellivora\Support\Traits\Singleton;
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use UnexpectedValueException;
@@ -57,6 +58,7 @@ class App extends Application
 
         // Facade 初始化设
         Facade::setFacadeApplication($this);
+
         $this->registerSingleton();
         $this->registerFacades();
         $this->registerProviders();
@@ -92,13 +94,13 @@ class App extends Application
     protected function registerProviders()
     {
         if (isset($this->container['providers'])) {
-            foreach ($this->container['providers'] as $class) {
-                if (!is_subclass_of($class, ServiceProvider::class)) {
-                    throw new UnexpectedValueException(
-                        $class . ' must return instance of ' . ServiceProvider::class);
+            foreach ($this->container['providers'] as $provider) {
+                if (!is_subclass_of($provider, ServiceProvider::class)) {
+                    throw new UnexpectedValueException($provider .
+                        ' must return instance of ' . ServiceProvider::class);
                 }
 
-                (new $class($this))->register();
+                (new $provider($this))->register();
             }
         }
     }
@@ -117,12 +119,13 @@ class App extends Application
     public function addCommands(array $commands)
     {
         foreach ($commands as $command) {
-            if (is_string($command) && is_subclass_of($command, Command::class)) {
-                $command = new $command($this->getContainer());
-            }
-
             if ($command instanceof Command) {
                 $this->add($command);
+            } else {
+                $ref = new ReflectionClass($command);
+                if ($ref->isInstantiable() && $ref->isSubclassOf(Command::class)) {
+                    $this->add($ref->newInstance($this->getContainer()));
+                }
             }
         }
     }

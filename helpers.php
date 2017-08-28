@@ -456,7 +456,7 @@ if (!function_exists('normalize_path')) {
     }
 }
 
-if (!function_exists('root_path')) {
+if (!function_exists('mask_path')) {
     /**
      * 对字符或数组中涉及到路径的值，进行包裹以避免泄露服务器路径
      *

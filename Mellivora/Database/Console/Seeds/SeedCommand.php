@@ -6,7 +6,7 @@ use Mellivora\Application\Container;
 use Mellivora\Console\Command;
 use Mellivora\Console\ConfirmableTrait;
 use Mellivora\Database\Eloquent\Model;
-use Mellivora\Database\Seeder\NullSeeder;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class SeedCommand extends Command
@@ -52,7 +52,7 @@ class SeedCommand extends Command
      */
     protected function getSeeder()
     {
-        $class = $this->input->getOption('class');
+        $class = $this->input->getArgument('class');
 
         if (!class_exists($class)) {
             $file = database_path('/seeds/' . $class . '.php');
@@ -78,6 +78,18 @@ class SeedCommand extends Command
     }
 
     /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['class', InputArgument::REQUIRED, 'The class name of the root seeder'],
+        ];
+    }
+
+    /**
      * Get the console command options.
      *
      * @return array
@@ -85,8 +97,6 @@ class SeedCommand extends Command
     protected function getOptions()
     {
         return [
-            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', NullSeeder::class],
-
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to seed'],
 
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'],

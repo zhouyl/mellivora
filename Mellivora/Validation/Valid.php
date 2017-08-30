@@ -1,7 +1,8 @@
 <?php
 
-namespace Mellivora\Support;
+namespace Mellivora\Validation;
 
+use Mellivora\Support\Arr;
 use Mellivora\Support\Traits\Macroable;
 
 class Valid
@@ -14,20 +15,10 @@ class Valid
      * @param  mixed     $value
      * @return boolean
      */
-    public static function notEmpty($value)
+    public static function required($value)
     {
-        if ($value instanceof \Traversable) {
-            $value = iterator_to_array($value);
-        } elseif (method_exists($value, 'getArrayCopy')) {
-            $value = $value->toArray();
-        } elseif (method_exists($value, 'toArray')) {
-            $value = $value->toArray();
-        } elseif (method_exists($value, 'asArray')) {
-            $value = $value->toArray();
-        } elseif (method_exists($value, 'as_array')) {
-            $value = $value->toArray();
-        } elseif (is_object($value)) {
-            $value = get_object_vars($value);
+        if (is_object($value)) {
+            $value = Arr::convert($value);
         }
 
         return !in_array($value, [null, false, '', []], true);
@@ -70,27 +61,26 @@ class Valid
     }
 
     /**
-     * 检测字符串是否符合最小长度
+     * 检测字符串是否符合长度范围
      *
      * @param  string    $value
-     * @param  integer   $length
+     * @param  integer   $min
+     * @param  integer   $max
      * @return boolean
      */
-    public static function minLength($value, $length)
+    public static function length($value, $min = null, $max = null)
     {
-        return mb_strlen($value) >= $length;
-    }
+        $length = mb_strlen($value);
 
-    /**
-     * 检测字符串是否符合最大长度
-     *
-     * @param  string    $value
-     * @param  integer   $length
-     * @return boolean
-     */
-    public static function maxLength($value, $length)
-    {
-        return mb_strlen($value) <= $length;
+        if (is_numeric($min) && $min > 0 && $length < $min) {
+            return false;
+        }
+
+        if (is_numeric($max) && $max > 0 && $length > $max) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -103,7 +93,7 @@ class Valid
      * @param  integer|array $length
      * @return boolean
      */
-    public static function exactLength($value, $length)
+    public static function lengthIn($value, $length)
     {
         if (is_array($length)) {
             foreach ($length as $strlen) {
@@ -124,8 +114,18 @@ class Valid
      * @param  string    $target
      * @return boolean
      */
-    public static function equals($value, $target)
+    public static function equal($value, $target, $ignoreCase = false)
     {
+        if ($ignoreCase) {
+            if (is_string($value)) {
+                $value = strtolower($value);
+            }
+
+            if (is_string($target)) {
+                $target = strtolower($target);
+            }
+        }
+
         return ($value === $target);
     }
 
@@ -136,21 +136,9 @@ class Valid
      * @param  mixed     $target
      * @return boolean
      */
-    public static function notEquals($value, $target)
+    public static function notEqual($value, $target, $ignoreCase = false)
     {
-        return !static::equals($value, $target);
-    }
-
-    /**
-     * 忽略大小写，检测两个值是否完全相等
-     *
-     * @param  mixed     $value
-     * @param  mixed     $target
-     * @return boolean
-     */
-    public static function caseEquals($value, $target)
-    {
-        return static::equals(strtolower($value), strtolower($target));
+        return !static::equal($value, $target);
     }
 
     /**
@@ -383,21 +371,9 @@ class Valid
      * @param  integer   $min
      * @return boolean
      */
-    public static function greaterThan($value, $min = 0)
+    public static function min($value, $min = 0)
     {
         return $value > $min;
-    }
-
-    /**
-     * 检测是否大于等于指定的值
-     *
-     * @param  integer   $value
-     * @param  integer   $min
-     * @return boolean
-     */
-    public static function greaterEqualThan($value, $min = 0)
-    {
-        return $value >= $min;
     }
 
     /**
@@ -407,21 +383,9 @@ class Valid
      * @param  integer   $max
      * @return boolean
      */
-    public static function lessThan($value, $max = 0)
+    public static function max($value, $max = 0)
     {
         return $value < $max;
-    }
-
-    /**
-     * 检测是否小于等于指定的值
-     *
-     * @param  integer   $value
-     * @param  integer   $max
-     * @return boolean
-     */
-    public static function lessEqualThan($value, $max = 0)
-    {
-        return $value <= $max;
     }
 
     /**

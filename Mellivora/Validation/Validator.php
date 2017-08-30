@@ -145,7 +145,6 @@ class Validator
     {
         if (is_array($params)) {
             if (is_array($rule)) {
-                var_dump($rule);
                 $ref = new ReflectionMethod(...$rule);
             } elseif (is_string($rule) && strpos($rule, '::') !== false) {
                 $ref = new ReflectionMethod($rule);

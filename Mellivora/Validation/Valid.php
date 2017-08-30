@@ -112,6 +112,7 @@ class Valid
      *
      * @param  string    $value
      * @param  string    $target
+     * @param  boolean   $ignoreCase
      * @return boolean
      */
     public static function equal($value, $target, $ignoreCase = false)
@@ -134,6 +135,7 @@ class Valid
      *
      * @param  mixed     $value
      * @param  mixed     $target
+     * @param  boolean   $ignoreCase
      * @return boolean
      */
     public static function notEqual($value, $target, $ignoreCase = false)
@@ -369,11 +371,12 @@ class Valid
      *
      * @param  integer   $value
      * @param  integer   $min
+     * @param  boolean   $equalMin
      * @return boolean
      */
-    public static function min($value, $min = 0)
+    public static function min($value, $min = 0, $equalMin = true)
     {
-        return $value > $min;
+        return $equalMin ? $value >= $min : $value > $min;
     }
 
     /**
@@ -381,11 +384,12 @@ class Valid
      *
      * @param  integer   $value
      * @param  integer   $max
+     * @param  boolean   $equalMax
      * @return boolean
      */
-    public static function max($value, $max = 0)
+    public static function max($value, $max = 0, $equalMax = true)
     {
-        return $value < $max;
+        return $equalMax ? $value <= $max : $value < $max;
     }
 
     /**

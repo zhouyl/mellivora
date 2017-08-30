@@ -93,7 +93,7 @@ class Valid
      * @param  integer|array $length
      * @return boolean
      */
-    public static function lengthIn($value, $length)
+    public static function lengths($value, $length)
     {
         if (is_array($length)) {
             foreach ($length as $strlen) {

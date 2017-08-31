@@ -4,6 +4,7 @@ namespace Mellivora\Cache;
 
 use Mellivora\Cache\Manager;
 use Mellivora\Support\ServiceProvider;
+use Psr\Log\LoggerInterface;
 
 class CacheServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,10 @@ class CacheServiceProvider extends ServiceProvider
             $manager->setDefault($config->default);
 
             // 设置日志处理器
-            $manager->setLogger(value($config->logger));
+            $logger = value($config->logger);
+            if ($logger instanceof LoggerInterface) {
+                $manager->setLogger();
+            }
 
             return $manager;
         };

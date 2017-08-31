@@ -4,6 +4,7 @@ namespace Mellivora\Cache;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Exception\CacheException;
 use Symfony\Component\Cache\Exception\InvalidArgumentException;
 
 /**
@@ -82,6 +83,11 @@ class Manager
      */
     public function getDefault()
     {
+        if (!$this->default) {
+            throw new CacheException(
+                'The default cache driver is not specified');
+        }
+
         return $this->default;
     }
 

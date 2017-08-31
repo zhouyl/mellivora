@@ -1,31 +1,19 @@
 {
     "name": "mellivora/mellivora",
     "type": "library",
-    "description": "Mellivora Framework of SlimPHP",
+    "description": "Mellivora PHP Framework",
     "homepage": "http://git.eformax.com/mellivora/framework",
+    "license": "MIT",
     "authors": [
         {
             "name": "zhouyl",
             "email": "81438567@qq.com"
         }
     ],
-    "repositories": [
-        {
-            "packagist": false
-        },
-        {
-            "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
-        },
-        {
-            "url": "git@git.eformax.com:vendor/carbon.git",
-            "type": "git"
-        }
-    ],
     "require": {
         "php": ">=5.6.0",
         "slim/slim": "^3.8",
-        "nesbot/carbon": "~1.23",
+        "zhouyl/carbon": "~1.23",
         "symfony/cache": "~3.3",
         "symfony/console": "~3.3",
         "symfony/debug": "~3.3",

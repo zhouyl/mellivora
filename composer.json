@@ -2,7 +2,7 @@
     "name": "mellivora/mellivora",
     "type": "library",
     "description": "Mellivora PHP Framework",
-    "homepage": "http://git.eformax.com/mellivora/framework",
+    "homepage": "https://github.com/mellivora-php-framework/mellivora",
     "license": "MIT",
     "authors": [
         {

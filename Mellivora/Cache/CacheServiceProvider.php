@@ -27,7 +27,7 @@ class CacheServiceProvider extends ServiceProvider
             // 设置日志处理器
             $logger = value($config->logger);
             if ($logger instanceof LoggerInterface) {
-                $manager->setLogger();
+                $manager->setLogger($logger);
             }
 
             return $manager;

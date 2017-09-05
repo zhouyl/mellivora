@@ -196,6 +196,8 @@ class App extends Application
      */
     public function renderException(\Exception $e, OutputInterface $output)
     {
+        parent::renderException($e, $output);
+
         if (is_callable($this->exceptionHandler)) {
             try {
                 if (method_exists($this->exceptionHandler, '__invoke')) {
@@ -206,7 +208,5 @@ class App extends Application
             } catch (\Exception $e) {
             }
         }
-
-        parent::renderException($e, $output);
     }
 }

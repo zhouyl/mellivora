@@ -2,7 +2,7 @@
     "name": "mellivora/mellivora",
     "type": "library",
     "description": "Mellivora PHP Framework",
-    "homepage": "https://github.com/mellivora-php-framework/mellivora",
+    "homepage": "https://github.com/zhouyl/mellivora",
     "license": "MIT",
     "authors": [
         {

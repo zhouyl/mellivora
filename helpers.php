@@ -1606,10 +1606,12 @@ if (!function_exists('request_as_curl')) {
 
         $str = sprintf("curl -X %s '%s'", $request->getMethod(), $request->getUri());
 
+        $content = http_stream_contents($request);
+
         // 尝试使用 json_encode 来探测数据是否有效字符
-        $data = http_stream_contents($request);
-        if ($data = json_encode($data) && json_last_error() === JSON_ERROR_NONE) {
-            return sprintf("%s '%s'", $str, str_replace("'", "\'", $data));
+        json_encode($content);
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return sprintf("%s -d '%s'", $str, str_replace("'", "\'", $content));
         }
 
         return $str;

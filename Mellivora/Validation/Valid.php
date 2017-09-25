@@ -86,8 +86,8 @@ class Valid
     /**
      * 检测字符串是否符合指定的长度
      *
-     *     Valid::exactLength($value, [10, 20]);
-     *     Valid::exactLength($value, 10);
+     *     Valid::lengths($value, [10, 20]);
+     *     Valid::lengths($value, 10);
      *
      * @param  string        $value
      * @param  integer|array $length
@@ -371,12 +371,12 @@ class Valid
      *
      * @param  integer   $value
      * @param  integer   $min
-     * @param  boolean   $equalMin
+     * @param  boolean   $equal
      * @return boolean
      */
-    public static function min($value, $min = 0, $equalMin = true)
+    public static function min($value, $min = 0, $equal = true)
     {
-        return $equalMin ? $value >= $min : $value > $min;
+        return $equal ? $value >= $min : $value > $min;
     }
 
     /**
@@ -384,12 +384,12 @@ class Valid
      *
      * @param  integer   $value
      * @param  integer   $max
-     * @param  boolean   $equalMax
+     * @param  boolean   $equal
      * @return boolean
      */
-    public static function max($value, $max = 0, $equalMax = true)
+    public static function max($value, $max = 0, $equal = true)
     {
-        return $equalMax ? $value <= $max : $value < $max;
+        return $equal ? $value <= $max : $value < $max;
     }
 
     /**
@@ -437,7 +437,7 @@ class Valid
             return false;
         }
 
-        json_decode($value);
+        json_decode((string) $value);
 
         return json_last_error() === JSON_ERROR_NONE;
     }

@@ -2,6 +2,7 @@
     "name": "mellivora/mellivora",
     "type": "library",
     "description": "Mellivora PHP Framework",
+    "keywords": ["framework", "micro", "slim", "laravel", "symfony", "mellivora", "claw"],
     "homepage": "https://github.com/zhouyl/mellivora",
     "license": "MIT",
     "authors": [

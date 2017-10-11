@@ -9,6 +9,7 @@ use Mellivora\Support\HigherOrderTapProxy;
 use Mellivora\Support\HtmlString;
 use Mellivora\Support\Str;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Slim\Http\Uri;
@@ -1610,7 +1611,7 @@ if (!function_exists('request_as_curl')) {
 
         // 尝试使用 json_encode 来探测数据是否有效字符
         json_encode($content);
-        if (json_last_error() === JSON_ERROR_NONE) {
+        if ($content && json_last_error() === JSON_ERROR_NONE) {
             return sprintf("%s -d '%s'", $str, str_replace("'", "\'", $content));
         }
 
@@ -1623,49 +1624,86 @@ if (!function_exists('request_brief')) {
      * 获取 http 请求头摘要信息
      *
      * @param  \Psr\Http\Message\RequestInterface|null $request
-     * @param  array                                   $extras
+     * @param  array                                   $filterKeys
      * @return array
      */
-    function request_brief(RequestInterface $request = null, array $extras = [])
+    function request_brief(RequestInterface $request = null, array $filterKeys = null)
     {
         if ($request === null) {
             $request = request();
         }
 
-        $brief = [];
         if ($request instanceof ServerRequestInterface) {
-            $servers = $request->getServerParams();
+            $headers = $request->getServerParams();
+        } else {
+            $headers = [];
+            foreach ($request->getHeaders() as $key => $value) {
+                $headers[strtoupper($key)] = implode(', ', $value);
+            }
 
-            $brief = array_merge(
-                Arr::only($servers, [
-                    'HTTP_USER_AGENT',
-                    'HTTP_HOST',
-                    'SERVER_PROTOCOL',
-                    'CONTENT_LENGTH',
-                    'REQUEST_URI',
-                    'REQUEST_METHOD',
-                ]),
-                array_change_key_case($extras, CASE_UPPER),
-                [
-                    'CLIENT-ADDRESS' => Arr::get($servers, 'HTTP_CLIENT_IP',
-                        Arr::get($servers, 'REMOTE_ADDR')),
-                ]
-            );
-
-            if (!empty($servers['HTTP_X_FORWARDED_FOR'])) {
-                foreach (explode(',', $servers['HTTP_X_FORWARDED_FOR']) as $address) {
-                    $address = trim($address);
-                    if (!preg_match('/^(?:10|172\.(?:1[6-9]|2\d|3[01])|192\.168)\./', $address)) {
-                        if (ip2long($address) != false) {
-                            $brief['CLIENT-ADDRESS'] = $address;
-                            break;
-                        }
-                    }
-                }
+            if (isset($headers['HOST']) && !isset($headers['HTTP_HOST'])) {
+                $headers['HTTP_HOST'] = $headers['HOST'];
             }
         }
 
-        return array_change_key_case($brief);
+        if (isset($headers['HTTP_CLIENT_IP'])) {
+            $headers['CLIENT_ADDRESS'] = $headers['HTTP_CLIENT_IP'];
+        } elseif (isset($headers['REMOTE_ADDR'])) {
+            $headers['CLIENT_ADDRESS'] = $headers['REMOTE_ADDR'];
+        } elseif (isset($headers['HTTP_X_FORWARDED_FOR'])) {
+            $headers['CLIENT_ADDRESS'] = $headers['HTTP_X_FORWARDED_FOR'];
+        }
+
+        if ($filterKeys === null) {
+            $filterKeys = [
+                'HTTP_USER_AGENT',
+                'HTTP_HOST',
+                'SERVER_PROTOCOL',
+                'CONTENT_LENGTH',
+                'REQUEST_URI',
+                'REQUEST_METHOD',
+            ];
+        }
+
+        return Arr::only($headers, array_change_key_case($filterKeys, CASE_UPPER));
+    }
+}
+
+if (!function_exists('response_brief')) {
+    /**
+     * 获取 http 响应头摘要信息
+     *
+     * @param  \Psr\Http\Message\ResponseInterface|null $response
+     * @param  array                                    $filterKeys
+     * @return array
+     */
+    function response_brief(ResponseInterface $response = null, array $filterKeys = null)
+    {
+        if ($response === null) {
+            $response = response();
+        }
+
+        $headers = [
+            'STATUS_CODE'       => $response->getStatusCode(),
+            'REASON_PHRASE'     => $response->getReasonPhrase(),
+            'PROTOCOL'          => 'HTTP/' . $response->getProtocolVersion(),
+            'SERVER'            => $response->getHeaderLine('SERVER'),
+            'CONTENT_LENGTH'    => $response->getHeaderLine('CONTENT-LENGTH') ?: mb_strlen($response->getBody()),
+            'CONTENT_TYPE'      => $response->getHeaderLine('CONTENT-TYPE'),
+            'TRANSFER_ENCODING' => $response->getHeaderLine('TRANSFER-ENCODING'),
+        ];
+
+        if ($filterKeys === null) {
+            $filterKeys = [
+                'STATUS_CODE',
+                'REASON_PHRASE',
+                'PROTOCOL',
+                'CONTENT_LENGTH',
+                'CONTENT_TYPE',
+            ];
+        }
+
+        return Arr::only($headers, array_change_key_case($filterKeys, CASE_UPPER));
     }
 }
 

@@ -11,7 +11,7 @@ class ProtobufHelper extends AbstractHelper
 {
 
     /**
-     * 对 Message 类进行包裹，并返回包裹类
+     * 对 Protobuf Message 进行包裹，并返回包裹类
      *
      * @param  string|object                               $message
      * @param  string|array|null                           $data
@@ -23,7 +23,7 @@ class ProtobufHelper extends AbstractHelper
     }
 
     /**
-     * 对 Message 类进行包裹，并返回源 Message 类
+     * 对 Protobuf Message 进行包裹，并返回原 Message 类
      *
      * @param  string|object                       $message
      * @param  string|array|null                   $data
@@ -35,7 +35,7 @@ class ProtobufHelper extends AbstractHelper
     }
 
     /**
-     * 对 repeated 数据进行包裹，并返回数组
+     * 对 Protobuf repeated 数据进行包裹，并返回数组
      *
      * @param  string|object $message
      * @param  array         $multiples

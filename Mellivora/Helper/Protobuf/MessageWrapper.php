@@ -4,7 +4,8 @@ namespace Mellivora\Helper\Protobuf;
 
 use ArrayAccess;
 use BadMethodCallException;
-use Google\Protobuf\Internal\Message as ProtobufMessage;
+use Google\Protobuf\Internal\Message;
+use Google\Protobuf\Internal\RepeatedField;
 use InvalidArgumentException;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
@@ -35,9 +36,9 @@ class MessageWrapper implements ArrayAccess
     protected $message;
 
     /**
-     * @var array
+     * @var \ReflectionClass
      */
-    protected $properties = [];
+    protected $ref;
 
     /**
      * Constructor
@@ -48,21 +49,16 @@ class MessageWrapper implements ArrayAccess
      */
     public function __construct($message, $data = null)
     {
-        if (!$message instanceof ProtobufMessage) {
-            if (is_string($message) && is_subclass_of($message, ProtobufMessage::class)) {
+        if (!$message instanceof Message) {
+            if (is_string($message) && is_subclass_of($message, Message::class)) {
                 $message = new $message;
             } else {
                 throw new InvalidArgumentException("Invalid message argument [$message]");
             }
         }
 
-        // 获取可用的属性值
-        $ref = new ReflectionClass($message);
-        foreach ($ref->getProperties() as $property) {
-            $this->properties[] = $property->getName();
-        }
-
         $this->message = $message;
+        $this->ref     = new ReflectionClass($message);
 
         is_null($data) || $this->from($data);
     }
@@ -117,25 +113,25 @@ class MessageWrapper implements ArrayAccess
     /**
      * 为 Message 设定数据
      *
-     * @param  mixed                                       $key
-     * @param  mixed                                       $value
+     * @param  mixed                                       $property
+     * @param  mixed                                       $data
      * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
-    public function set($key, $value = null)
+    public function set($property, $value = null)
     {
-        if (is_array($key)) {
-            foreach ($key as $k => $v) {
+        if (is_array($property)) {
+            foreach ($property as $k => $v) {
                 $this->set($k, $v);
             }
-        } elseif ($this->has($key)) {
-            $method = 'set' . Str::studly($key);
-            if (method_exists($this->message, $method)) {
-                if ($value instanceof self) {
-                    $value = $value->raw();
-                }
 
-                $this->message->$method($value);
-            }
+            return $this;
+        }
+
+        if ($this->has($property)) {
+            $method = 'set' . Str::studly($property);
+            $value  = $this->sanitizeSetterValue($method, $value);
+
+            $this->message->$method($value);
         }
 
         return $this;
@@ -144,19 +140,17 @@ class MessageWrapper implements ArrayAccess
     /**
      * 从 Message 中获取数据
      *
-     * @param  string  $key
+     * @param  string  $property
      * @param  mixed   $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get($property, $default = null)
     {
-        if ($this->has($key)) {
-            $method = 'get' . Str::studly($key);
-            if (method_exists($this->message, $method)) {
-                $data = $this->message->$method();
+        if ($this->has($property)) {
+            $method = 'get' . Str::studly($property);
+            $return = $this->message->$method();
 
-                return is_null($data) ? $default : $data;
-            }
+            return is_null($return) ? $default : $return;
         }
 
         return $default;
@@ -170,7 +164,7 @@ class MessageWrapper implements ArrayAccess
      */
     public function has($key)
     {
-        return in_array(Str::snake($key), $this->properties);
+        return $this->ref->hasProperty($key) || $this->ref->hasProperty(Str::snake($key));
     }
 
     /**
@@ -192,14 +186,10 @@ class MessageWrapper implements ArrayAccess
     public function toArray()
     {
         $data = [];
-        foreach ($this->properties as $key) {
-            $result = $this->get($key);
 
-            if ($result instanceof ProtobufMessage) {
-                $data[$key] = (new self($result))->toArray();
-            } else {
-                $data[$key] = $result;
-            }
+        foreach ($this->ref->getProperties() as $property) {
+            $name        = $property->getName();
+            $data[$name] = $this->sanitizeToArrayValue($this->get($name));
         }
 
         return $data;
@@ -215,21 +205,111 @@ class MessageWrapper implements ArrayAccess
      */
     public function __call($method, $args)
     {
-        if (method_exists($this->message, $method)) {
-            $return = $this->message->$method(...$args);
-
-            // 当使用 set 时，返回当前类，以便连贯式的写法
-            // $order = app('helper.protobuf')->wrapper(Order::class)
-            //      ->setOrderId(123)
-            //      ->setBusinessId(456);
-            if (substr($method, 0, 3) === 'set') {
-                return $this;
-            }
-
-            return $return;
+        if (!method_exists($this->message, $method)) {
+            throw new BadMethodCallException(
+                sprintf('Call to undefined method %s::%s()', get_class($this->message), $method));
         }
 
-        throw new BadMethodCallException(
-            sprintf('Call to undefined method %s::%s()', get_class($this->message), $method));
+        if (substr($method, 0, 3) === 'set') {
+            $this->set(substr($method, 3), $args[0]);
+
+            return $this;
+        }
+
+        if (substr($method, 0, 3) === 'get') {
+            return $this->get(substr($method, 3));
+        }
+
+        return $this->message->$method(...$args);
+    }
+
+    /**
+     * 根据 protobuf 生成的代码，尝试从注释中匹配参数的约束类
+     *
+     * 例如
+     *     <code>.Proto.PayCenter.StatusInfo status_info = 1;</code>
+     *     <code>repeated .Proto.PayCenter.PayPaymentItem payment_list = 3;</code>
+     *
+     * @param  string        $method
+     * @return array|false
+     */
+    protected function getSetterRestrict($method)
+    {
+        $namespace = $this->ref->getNamespaceName();
+        $document  = $this->ref->getMethod($method)->getDocComment();
+
+        $regex = sprintf('~<code>(repeated\s*)?\.?(%s\.[\w\-]+).*<\/code>~',
+            preg_quote(str_replace('\\', '.', $namespace)));
+
+        preg_match($regex, $document, $matches);
+
+        if (isset($matches[2])) {
+            $class = str_replace('.', '\\', $matches[2]);
+            if (class_exists($class) && is_subclass_of($class, Message::class)) {
+                return [!empty($matches[1]), $class];
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 应用于 setter 方法的 value 转换
+     *
+     * @param  string  $setter
+     * @param  mixed   $value
+     * @return mixed
+     */
+    protected function sanitizeSetterValue($setter, $value)
+    {
+        if ($value instanceof self) {
+            return $value->raw();
+        }
+
+        // 获取 setter 方法的约束条件
+        if (!(is_array($value) && $restrict = $this->getSetterRestrict($setter))) {
+            return $value;
+        }
+
+        list($repeated, $class) = $restrict;
+
+        if ($repeated) {
+            $values = [];
+            foreach ($value as $val) {
+                $values[] = (new self($class, $val))->raw();
+            }
+
+            return $values;
+        }
+
+        return (new self($class, $value))->raw();
+    }
+
+    /**
+     * 应用于 toArray 方法的 value 转换
+     *
+     * @param  mixed   $value
+     * @return mixed
+     */
+    protected function sanitizeToArrayValue($value)
+    {
+        if ($value instanceof Message) {
+            return (new self($value))->toArray();
+        }
+
+        if ($value instanceof RepeatedField) {
+            $values = [];
+            foreach ($value as $k => $v) {
+                $values[] = $this->sanitizeToArrayValue($v);
+            }
+
+            return $values;
+        }
+
+        if ($value instanceof self) {
+            return $value->toArray();
+        }
+
+        return $value;
     }
 }

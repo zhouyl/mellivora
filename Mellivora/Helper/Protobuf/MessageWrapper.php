@@ -276,7 +276,15 @@ class MessageWrapper implements ArrayAccess
         if ($repeated) {
             $values = [];
             foreach ($value as $val) {
-                $values[] = (new self($class, $val))->raw();
+                if (is_array($val)) {
+                    $val = new self($class, $val);
+                }
+
+                if ($val instanceof self) {
+                    $val = $val->raw();
+                }
+
+                $values[] = $val;
             }
 
             return $values;

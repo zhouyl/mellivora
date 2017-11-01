@@ -184,11 +184,17 @@ class Valid
      * 检测是否有效的 url 地址
      *
      * @param  string    $value
+     * @param  boolean   $onlyHttp
      * @return boolean
      */
-    public static function url($value)
+    public static function url($value, $onlyHttp = false)
     {
         if (!is_string($value)) {
+            return false;
+        }
+
+        // 限制仅允许 http url
+        if ($onlyHttp && !preg_match('~^https?://.*~i', $value)) {
             return false;
         }
 

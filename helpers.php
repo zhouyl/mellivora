@@ -1662,6 +1662,7 @@ if (!function_exists('request_brief')) {
                 'CONTENT_LENGTH',
                 'REQUEST_URI',
                 'REQUEST_METHOD',
+                'CLIENT_ADDRESS',
             ];
         }
 

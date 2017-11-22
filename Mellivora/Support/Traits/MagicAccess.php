@@ -25,7 +25,11 @@ trait MagicAccess
             return $this->exists($key);
         }
 
-        return $this->has($key);
+        if (method_exists($this, 'has')) {
+            return $this->has($key);
+        }
+
+        return $this->get($key) !== null;
     }
 
     public function offsetUnset($key)
@@ -43,21 +47,21 @@ trait MagicAccess
 
     public function __set($key, $value)
     {
-        return $this->set($key, $value);
+        return $this->offsetSet($key, $value);
     }
 
     public function __get($key)
     {
-        return $this->get($key);
+        return $this->offsetGet($key);
     }
 
     public function __isset($key)
     {
-        return $this->has($key);
+        return $this->offsetExists($key);
     }
 
     public function __unset($key)
     {
-        return $this->delete($key);
+        return $this->offsetUnset($key);
     }
 }

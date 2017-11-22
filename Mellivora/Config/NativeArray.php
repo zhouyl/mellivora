@@ -3,13 +3,15 @@
 namespace Mellivora\Config;
 
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Traits\MagicAccess;
 
 /**
  * 使用原生数组构建的配置基础类
  */
-class NativeArray implements ArrayAccess
+class NativeArray implements ArrayAccess, IteratorAggregate
 {
 
     use MagicAccess;
@@ -58,7 +60,13 @@ class NativeArray implements ArrayAccess
      */
     public function get($key, $default = null)
     {
-        return Arr::get($this->config, $key, $default);
+        $data = Arr::get($this->config, $key);
+
+        if ($data === null) {
+            $data = is_array($default) ? new self($default) : $default;
+        }
+
+        return $data;
     }
 
     /**
@@ -83,6 +91,16 @@ class NativeArray implements ArrayAccess
         Arr::forget($this->config, $key);
 
         return $this;
+    }
+
+    /**
+     * 获取一个外部迭代器，以便 foreach 输出 config
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->config);
     }
 
     /**

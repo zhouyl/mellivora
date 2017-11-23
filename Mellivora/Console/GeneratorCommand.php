@@ -62,7 +62,7 @@ abstract class GeneratorCommand extends Command
     {
         $rootNamespace = $this->rootNamespace();
 
-        if (Str::startsWith($name, $rootNamespace)) {
+        if (Str::startsWith($name, $rootNamespace . '\\')) {
             return $name;
         }
 

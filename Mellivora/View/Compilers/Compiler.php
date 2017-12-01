@@ -3,6 +3,7 @@
 namespace Mellivora\View\Compilers;
 
 use InvalidArgumentException;
+use RuntimeException;
 
 abstract class Compiler
 {
@@ -27,7 +28,11 @@ abstract class Compiler
         }
 
         if (!is_dir($cachePath)) {
-            @mkdir($cachePath, true);
+            set_error_handler(function ($n, $s, $f, $l) use ($cachePath) {
+                throw new RuntimeException('Failed to create cache directory: ' . mask_path($cachePath));
+            });
+            mkdir($cachePath, true);
+            restore_error_handler();
         }
 
         $this->cachePath = $cachePath;

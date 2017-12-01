@@ -18,14 +18,18 @@ class TranslatorServiceProvider extends ServiceProvider
         $this->container['translator'] = function ($container) {
             $config = $container['config']->get('translator');
 
-            $translator = new Translator(Arr::convert($config->paths));
+            $translator = new Translator($config->get('paths', [])->toArray());
 
-            foreach (Arr::convert($config->aliases) as $key => $value) {
-                $translator->setAlias($key, $value);
+            // 别名设置
+            foreach ($config->aliases as $key => $value) {
+                $translator->alias($key, $value->toArray());
             }
 
-            $translator->import(Arr::convert($config->required));
-            $translator->setDefault(value($config->default));
+            // 默认语言类型
+            $translator->default(value($config->default));
+
+            // 导入必须的语言包
+            $translator->import($config->get('required', [])->toArray());
 
             return $translator;
         };

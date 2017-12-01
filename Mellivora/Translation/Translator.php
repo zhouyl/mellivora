@@ -4,6 +4,7 @@ namespace Mellivora\Translation;
 
 use DirectoryIterator;
 use Mellivora\Support\Arr;
+use Mellivora\Support\Str;
 
 /**
  * 多语言翻译处理
@@ -54,17 +55,17 @@ class Translator
     public function __construct($paths = [])
     {
         foreach (is_array($paths) ? $paths : [$paths] as $path) {
-            $this->addBaseath($path);
+            $this->addPath($path);
         }
     }
 
     /**
-     * 设定语言包加载路径
+     * 新增语言包加载路径
      *
      * @param  string                              $basepath
      * @return \Mellivora\Translation\Translator
      */
-    public function addBaseath($basepath)
+    public function addPath($basepath)
     {
         foreach (new DirectoryIterator($basepath) as $dir) {
             if ($dir->isDir() && !$dir->isDot()) {
@@ -94,13 +95,14 @@ class Translator
      * @param  string|array                        $aliases
      * @return \Mellivora\Translation\Translator
      */
-    public function setAlias($lang, $aliases)
+    public function alias($lang, $aliases)
     {
         $lang = strtolower($lang);
 
         if (!is_array($aliases)) {
             $aliases = [$aliases];
         }
+
         $aliases = array_map('strtolower', $aliases);
 
         $this->aliases[$lang] = array_unique(
@@ -110,16 +112,18 @@ class Translator
     }
 
     /**
-     * 设定默认的语言包
+     * 设定|获取默认的语言类型
      *
-     * @param  string                              $default
-     * @return \Mellivora\Translation\Translator
+     * @param  string|null $default
+     * @return string
      */
-    public function setDefault($default)
-    {
-        $this->default = $this->aliasToLang($default);
+    public function default($default = null) {
 
-        return $this;
+        if ($default != null) {
+            $this->default = $this->lang($default);
+        }
+
+        return $this->default;
     }
 
     /**
@@ -128,9 +132,9 @@ class Translator
      * @param  string   $alias
      * @return string
      */
-    public function aliasToLang($alias)
+    public function lang($alias)
     {
-        $alias = strtolower($alias);
+        $alias = Str::slug($alias);
 
         foreach ($this->aliases as $lang => $aliases) {
             if (in_array($alias, $aliases)) {
@@ -175,7 +179,7 @@ class Translator
      */
     public function export($lang = null)
     {
-        $lang = $lang ? $this->aliasToLang($lang) : $this->default;
+        $lang = $lang ? $this->lang($lang) : $this->default;
 
         if (!isset($this->imported[$lang])) {
             return [];
@@ -194,7 +198,7 @@ class Translator
      */
     public function trans($text, array $replace = null, $lang = null)
     {
-        $lang = $lang ? $this->aliasToLang($lang) : $this->default;
+        $lang = $lang ? $this->lang($lang) : $this->default;
 
         if (isset($this->imported[$lang])) {
             $text = Arr::get($this->imported[$lang], $text, $text);
@@ -213,8 +217,8 @@ class Translator
      */
     public function reverse($text, $from = null, $to = null)
     {
-        $from = $from ? $this->aliasToLang($from) : $this->default;
-        $to   = $to ? $this->aliasToLang($to) : null;
+        $from = $from ? $this->lang($from) : $this->default;
+        $to   = $to ? $this->lang($to) : null;
 
         if ($from === $to) {
             return $text;

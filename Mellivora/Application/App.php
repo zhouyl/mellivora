@@ -40,11 +40,12 @@ class App extends SlimApp
         }
 
         parent::__construct($container);
-
         Facade::setFacadeApplication($this);
+
         $this->registerSingleton();
         $this->registerFacades();
         $this->registerProviders();
+        $this->registerRouteArguments();
     }
 
     /**
@@ -78,6 +79,24 @@ class App extends SlimApp
                 (new $class($this))->register();
             }
         }
+    }
+
+    /**
+     * 注册默认路由参数
+     */
+    protected function registerRouteArguments()
+    {
+        $this->add(function ($request, $response, $next) {
+            $request->getAttribute('route')
+                ->setArguments([
+                    'namespace'  => 'App\Controllers',
+                    'module'     => '',
+                    'controller' => 'index',
+                    'action'     => 'index',
+                ]);
+
+            return $next($request, $response);
+        });
     }
 
     /**

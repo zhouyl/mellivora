@@ -50,17 +50,17 @@ class Dispatcher
     /**
      * 检测 controller 的 class 类型
      *
-     * @param  array                                                         $parameters
+     * @param  array                                                         $args
      * @throws \Slim\Exception\NotFoundException|\UnexpectedValueException
      * @return string
      */
-    protected function detectControllerClass(array $parameters)
+    protected function detectControllerClass(array $args)
     {
         $class = str_replace('\\\\', '\\', sprintf(
-            '%s\\%s\\%sController',
-            $parameters['namespace'],
-            $parameters['module'],
-            $parameters['controller']
+            '\%s\%s\%sController',
+            $args['namespace'],
+            Str::studly($args['module']),
+            Str::studly($args['controller'])
         ));
 
         if (!class_exists($class)) {
@@ -93,17 +93,9 @@ class Dispatcher
     ) {
         $this->refreshContainer($request, $response);
 
-        // 格式化获取到的参数
-        $parameters = [
-            'namespace'  => Arr::get($args, 'namespace', '\\App\\Controllers'),
-            'module'     => Str::studly(Arr::get($args, 'module', '')),
-            'controller' => Str::studly(Arr::get($args, 'controller', 'index')),
-            'action'     => Str::camel(Arr::get($args, 'action', 'index')),
-        ] + $args;
-
         // 检测，并实例化 controller
-        $class   = $this->detectControllerClass($parameters);
-        $handler = new $class($this->container, $parameters);
+        $class   = $this->detectControllerClass($args);
+        $handler = new $class($this->container);
 
         try {
             /**
@@ -114,7 +106,7 @@ class Dispatcher
                 return $response;
             }
 
-            $method = $parameters['action'] . 'Action';
+            $method = Str::camel($args['action']) . 'Action';
 
             // 移除不需要用到的值，以便 action 调用
             unset(

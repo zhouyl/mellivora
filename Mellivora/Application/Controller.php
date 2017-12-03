@@ -18,17 +18,11 @@ class Controller
     protected $container;
 
     /**
-     * @var array
-     */
-    protected $parameters = [];
-
-    /**
      * @param \Mellivora\Application\Container $container
      */
-    public function __construct(Container $container, array $parameters)
+    public function __construct(Container $container)
     {
-        $this->container  = $container;
-        $this->parameters = $parameters;
+        $this->container = $container;
     }
 
     /**
@@ -38,7 +32,9 @@ class Controller
      */
     public function getModuleName()
     {
-        return Arr::get($this->parameters, 'module');
+        return $this->container['request']
+            ->getAttribute('route')
+            ->getArgument('module');
     }
 
     /**
@@ -48,7 +44,9 @@ class Controller
      */
     public function getControllerName()
     {
-        return Arr::get($this->parameters, 'controller');
+        return $this->container['request']
+            ->getAttribute('route')
+            ->getArgument('controller');
     }
 
     /**
@@ -58,7 +56,9 @@ class Controller
      */
     public function getActionName()
     {
-        return Arr::get($this->parameters, 'action');
+        return $this->container['request']
+            ->getAttribute('route')
+            ->getArgument('action');
     }
 
     /**

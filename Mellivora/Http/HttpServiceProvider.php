@@ -25,7 +25,6 @@ class HttpServiceProvider extends ServiceProvider
      */
     public function registerCookiesProvider()
     {
-
         $this->container['cookies'] = function ($container) {
             $config = $container['config']->get('session.cookies');
 
@@ -46,7 +45,9 @@ class HttpServiceProvider extends ServiceProvider
     public function registerRequestProvider()
     {
         $this->container['request'] = function ($container) {
-            return Request::createFromEnvironment($container['environment']);
+            $request = Request::createFromEnvironment($container['environment']);
+
+            return $request;
         };
     }
 

@@ -186,13 +186,17 @@ if (!function_exists('redirect')) {
     /**
      * 重定向当前页面，response http 302 header
      *
-     * @param  string                     $to
+     * @param  string                     $url
      * @param  int                        $status
      * @return \Mellivora\Http\Response
      */
-    function redirect($to, $status = null)
+    function redirect($url, $status = null)
     {
-        return app('response')->redirect($to, $status);
+        if (!preg_match('~^https?://~', $url) && $url[0] != '/') {
+            $url = "/$url";
+        }
+
+        return app('response')->redirect($url, $status);
     }
 }
 

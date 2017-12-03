@@ -131,6 +131,11 @@ class Container extends SlimContainer
 
     public function offsetSet($id, $value)
     {
+        // Pimple/Container 不允许重写，这里重新处理
+        if (parent::offsetExists($id)) {
+            parent::offsetUnset($id);
+        }
+
         parent::offsetSet($id, $value);
 
         if (is_object($id)) {

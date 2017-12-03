@@ -47,6 +47,7 @@ class App extends SlimApp
         $this->registerFacades();
         $this->registerProviders();
         $this->registerDefaultArguments();
+        $this->refreshContainer();
     }
 
     /**
@@ -83,11 +84,28 @@ class App extends SlimApp
     }
 
     /**
+     * 刷新 container 中注册的 request/response 组件
+     */
+    protected function refreshContainer()
+    {
+        $container = $this->getContainer();
+
+        $this->add(function ($request, $response, $next) use ($container) {
+            $container['request']  = $request;
+            $container['response'] = $response;
+
+            return $next($request, $response);
+        });
+    }
+
+    /**
      * 注册默认路由参数
      */
     protected function registerDefaultArguments()
     {
-        $this->add(function ($request, $response, $next) {
+        $container = $this->getContainer();
+
+        $this->add(function ($request, $response, $next) use ($container) {
             $route = $request->getAttribute('route');
 
             $route

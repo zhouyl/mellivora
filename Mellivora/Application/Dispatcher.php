@@ -2,10 +2,10 @@
 
 namespace Mellivora\Application;
 
+use Mellivora\Http\Request;
+use Mellivora\Http\Response;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\NotFoundException;
 
 /**
@@ -27,24 +27,6 @@ class Dispatcher
     public function __construct(Container $container)
     {
         $this->container = $container;
-    }
-
-    /**
-     * 刷新 container 中注册的 request/response 组件
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     */
-    protected function refreshContainer(
-        ServerRequestInterface $request,
-        ResponseInterface $response
-    ) {
-        // 需要在 container 中删除 request/response
-        unset($this->container['request'], $this->container['response']);
-
-        // 重新指定 request/response
-        $this->container['request']  = $request;
-        $this->container['response'] = $response;
     }
 
     /**
@@ -78,32 +60,36 @@ class Dispatcher
     }
 
     /**
-     * Invoke a route callable with request, response, and all route parameters
-     * as an array of arguments.
+     * 执行 route 请求，分发到 controller/action 执行
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request
-     * @param  \Psr\Http\Message\ResponseInterface      $response
-     * @param  array                                    $args
+     * @param  \Mellivora\Http\Request  $request
+     * @param  \Mellivora\Http\Response $response
+     * @param  array                    $args
      * @return mixed
      */
-    public function __invoke(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        array $args
-    ) {
-        $this->refreshContainer($request, $response);
-
+    public function __invoke(Request $request, Response $response, array $args)
+    {
         // 检测，并实例化 controller
         $class   = $this->detectControllerClass($args);
-        $handler = new $class($this->container);
+        $handler = new $class($this->container, $request, $response, $args);
 
         try {
             /**
-             * 调用初始化方法，当初始化为 false 时
-             * 中断 action 的执行，并返回 response 实例
+             * 调用初始化方法
+             *
+             * 当返回 false 时，中断 action 执行并返回 $response
+             * 当返回 Response 时，中断 action 执行并返回其结果
              */
-            if (method_exists($handler, 'initialize') && $handler->initialize() === false) {
-                return $response;
+            if (method_exists($handler, 'initialize')) {
+                $initialize = $handler->initialize();
+
+                if ($initialize === false) {
+                    return $response;
+                }
+
+                if ($initialize instanceof Response) {
+                    return $initialize;
+                }
             }
 
             $method = $args['action'] . 'Action';
@@ -135,7 +121,7 @@ class Dispatcher
          */
         if (is_array($return)) {
             $response = $response->withJson($return);
-        } elseif (!$return instanceof ResponseInterface) {
+        } elseif (!$return instanceof Response) {
             $response = $response->write((string) $return);
         } else {
             $response = $return;
@@ -149,8 +135,8 @@ class Dispatcher
          */
         if (method_exists($handler, 'finalize')) {
             $finalize = $handler->finalize($response);
-            if ($finalize instanceof ResponseInterface) {
-                $response = $finalize;
+            if ($finalize instanceof Response) {
+                return $finalize;
             }
         }
 

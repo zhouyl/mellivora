@@ -3,6 +3,8 @@
 namespace Mellivora\Application;
 
 use BadMethodCallException;
+use Mellivora\Http\Request;
+use Mellivora\Http\Response;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
 use Slim\Exception\NotFoundException;
@@ -18,47 +20,71 @@ class Controller
     protected $container;
 
     /**
+     * @var \Mellivora\Http\Request
+     */
+    protected $request;
+
+    /**
+     * @var \Mellivora\Http\Response
+     */
+    protected $response;
+
+    /**
+     * @var array
+     */
+    protected $arguments = [];
+
+    /**
+     * 构造方法
+     *
      * @param \Mellivora\Application\Container $container
+     * @param \Mellivora\Http\Request          $request
+     * @param \Mellivora\Http\Response         $response
+     * @param array                            $arguments
      */
-    public function __construct(Container $container)
-    {
+    public function __construct(Container $container, Request $request,
+        Response $response, array $arguments
+    ) {
         $this->container = $container;
+        $this->request   = $request;
+        $this->response  = $response;
+        $this->arguments = $request->getAttribute('route')->getArguments();
     }
 
     /**
-     * 获取 module 名称
+     * 获取当前路由参数
      *
-     * @return string
+     * @param  string  $name
+     * @param  mixed   $default
+     * @return mixed
      */
-    public function getModuleName()
+    public function getArgument($name, $default = null)
     {
-        return $this->container['request']
-            ->getAttribute('route')
-            ->getArgument('module');
+        return Arr::get($this->arguments, $name, $default);
     }
 
     /**
-     * 获取 controller 名称
+     * 设置当前路由参数，该参数仅在当前控制器内生效
      *
-     * @return string
+     * @param  string                              $name
+     * @param  mixed                               $value
+     * @return \Mellivora\Application\Controller
      */
-    public function getControllerName()
+    public function setArgument($name, $value)
     {
-        return $this->container['request']
-            ->getAttribute('route')
-            ->getArgument('controller');
+        $this->arguments[$name] = $value;
+
+        return $this;
     }
 
     /**
-     * 获取 action 名称
+     * 获取所有的路由参数
      *
-     * @return string
+     * @return array
      */
-    public function getActionName()
+    public function getArguments()
     {
-        return $this->container['request']
-            ->getAttribute('route')
-            ->getArgument('action');
+        return $this->arguments;
     }
 
     /**
@@ -77,7 +103,7 @@ class Controller
 
         // action 不存在，返回 http not found
         if (Str::endsWith($method, 'Action')) {
-            throw new NotFoundException($this->container['request'], $this->container['response']);
+            throw new NotFoundException($this->request, $this->response);
         }
 
         throw new BadMethodCallException("Method {$method} does not exist.");

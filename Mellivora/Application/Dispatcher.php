@@ -106,7 +106,7 @@ class Dispatcher
                 return $response;
             }
 
-            $method = Str::camel($args['action']) . 'Action';
+            $method = $args['action'] . 'Action';
 
             // 移除不需要用到的值，以便 action 调用
             unset(

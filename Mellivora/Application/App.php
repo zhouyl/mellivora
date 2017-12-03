@@ -4,6 +4,7 @@ namespace Mellivora\Application;
 
 use Mellivora\Support\Facades\Facade;
 use Mellivora\Support\ServiceProvider;
+use Mellivora\Support\Str;
 use Mellivora\Support\Traits\Singleton;
 use Slim\App as SlimApp;
 use UnexpectedValueException;
@@ -45,7 +46,7 @@ class App extends SlimApp
         $this->registerSingleton();
         $this->registerFacades();
         $this->registerProviders();
-        $this->registerRouteArguments();
+        $this->registerDefaultArguments();
     }
 
     /**
@@ -84,16 +85,27 @@ class App extends SlimApp
     /**
      * 注册默认路由参数
      */
-    protected function registerRouteArguments()
+    protected function registerDefaultArguments()
     {
         $this->add(function ($request, $response, $next) {
-            $request->getAttribute('route')
-                ->setArguments([
-                    'namespace'  => 'App\Controllers',
-                    'module'     => '',
-                    'controller' => 'index',
-                    'action'     => 'index',
-                ]);
+            $route = $request->getAttribute('route');
+
+            $route
+                ->setArgument(
+                    'namespace',
+                    $route->getArgument('namespace', 'App\Controllers')
+                )
+                ->setArgument(
+                    'module',
+                    Str::camel($route->getArgument('module', ''))
+                )
+                ->setArgument(
+                    'controller',
+                    Str::camel($route->getArgument('controller', 'index'))
+                )
+                ->setArgument(
+                    'action', Str::camel($route->getArgument('action', 'index'))
+                );
 
             return $next($request, $response);
         });

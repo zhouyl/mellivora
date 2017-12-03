@@ -92,16 +92,6 @@ class ModelMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Get the name suffix
-     *
-     * @return string|false
-     */
-    protected function getNameSuffix()
-    {
-        return 'Model';
-    }
-
-    /**
      * Get the default namespace for the class.
      *
      * @param  string   $rootNamespace

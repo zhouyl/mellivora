@@ -48,6 +48,16 @@ class SeederMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Get the name suffix
+     *
+     * @return string|false
+     */
+    protected function getNameSuffix()
+    {
+        return 'Seeder';
+    }
+
+    /**
      * Get the destination class path.
      *
      * @param  string   $name

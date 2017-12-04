@@ -2,7 +2,6 @@
 
 namespace Mellivora\Translation;
 
-use Mellivora\Support\Arr;
 use Mellivora\Support\ServiceProvider;
 
 class TranslatorServiceProvider extends ServiceProvider

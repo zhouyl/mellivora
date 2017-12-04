@@ -1094,6 +1094,21 @@ if (!function_exists('if_get')) {
     }
 }
 
+if (!function_exists('on')) {
+    /**
+     * 简化三元表达式
+     *
+     * @param  $boolean $bool
+     * @param  mixed    $onTrue
+     * @param  mixed    $onFalse
+     * @return mixed
+     */
+    function on($bool, $onTrue, $onFalse = null)
+    {
+        return value($bool) ? value($onTrue) : value($onFalse);
+    }
+}
+
 if (!function_exists('dd')) {
     /**
      * Dump the passed variables and end the script.

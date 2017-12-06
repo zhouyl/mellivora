@@ -18,7 +18,7 @@ class DummyClass extends Model
      *
      * @var boolean
      */
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.
@@ -26,4 +26,11 @@ class DummyClass extends Model
      * @var array
      */
     protected $fillable = [];
+
+    /**
+     * Indicates if all mass assignment is enabled.
+     *
+     * @var bool
+     */
+    protected static $unguarded = false;
 }

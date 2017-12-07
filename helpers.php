@@ -1750,10 +1750,12 @@ if (!function_exists('exception_brief')) {
      */
     function exception_brief(Exception $e)
     {
-        $firstTrace = array_first($e->getTrace());
-
-        unset($firstTrace['args'], $firstTrace['type']);
-
-        return mask_path($firstTrace);
+        return [
+            'exception' => get_class($e),
+            'code'      => $e->getCode(),
+            'message'   => $e->getMessage(),
+            'file'      => mask_path($e->getFile()),
+            'line'      => $e->getLine(),
+        ];
     }
 }

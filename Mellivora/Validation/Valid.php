@@ -17,11 +17,7 @@ class Valid
      */
     public static function required($value)
     {
-        if (is_object($value)) {
-            $value = Arr::convert($value);
-        }
-
-        return !in_array($value, [null, false, '', []], true);
+        return !empty($value);
     }
 
     /**

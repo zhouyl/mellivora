@@ -696,6 +696,17 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     }
 
     /**
+     * Apply a callback function to each element of the items.
+     *
+     * @param  callable $callback
+     * @return static
+     */
+    public function call(callable $callback)
+    {
+        return new static(array_map($callback, $this->items));
+    }
+
+    /**
      * Run a map over each of the items.
      *
      * @param  callable $callback

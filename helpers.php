@@ -279,8 +279,10 @@ if (!function_exists('url')) {
      * @param  array    $queryParams
      * @return string
      */
-    function url($path = null, array $queryParams = [])
+    function url($path = null, $queryParams = [])
     {
+        $queryParams = array_convert($queryParams);
+
         if (is_null($path)) {
             return app('request')->fullUrlWithQuery($queryParams);
         }

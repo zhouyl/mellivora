@@ -52,7 +52,7 @@ class SeedCommand extends Command
      */
     protected function getSeeder()
     {
-        $class = $this->input->getArgument('class');
+        $class = $this->getClassName();
 
         if (!class_exists($class)) {
             $file = database_path('/seeds/' . $class . '.php');
@@ -63,6 +63,22 @@ class SeedCommand extends Command
         }
 
         return new $class($this->container, $this);
+    }
+
+    /**
+     * Get class name of the seeder
+     *
+     * @return string
+     */
+    protected function getClassName()
+    {
+        $class = studly_case($this->input->getArgument('class'));
+
+        if (strpos($class, 'Seeder') == false) {
+            $class .= 'Seeder';
+        }
+
+        return $class;
     }
 
     /**

@@ -1565,14 +1565,19 @@ if (!function_exists('unjson')) {
     /**
      * JSON 数据的解码
      *
-     * @param  mixed   $value
-     * @return array
+     * @param  mixed                 $value
+     * @param  boolean               $assoc
+     * @return array|stdClass|null
      */
-    function unjson($value)
+    function unjson($value, $assoc = true)
     {
-        $data = json_decode($value, true);
+        $data = json_decode($value, $assoc);
 
-        return is_array($data) ? $data : [];
+        if ($data === false) {
+            return $assoc ? [] : null;
+        }
+
+        return $data;
     }
 }
 

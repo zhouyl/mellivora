@@ -477,7 +477,7 @@ if (!function_exists('mask_path')) {
                 $value = mask_path($value);
             }
         } else {
-            $path = str_replace(root_path(), '~/', normalize_path($path));
+            $path = str_replace(root_path(), '~/', $path);
         }
 
         return $path;
@@ -1738,10 +1738,10 @@ if (!function_exists('exception_as_string')) {
     /**
      * 将异常转化为详细的错误信息
      *
-     * @param  \Exception $e
+     * @param  \Throwable $e
      * @return string
      */
-    function exception_as_string(Exception $e)
+    function exception_as_string(Throwable $e)
     {
         return sprintf('%s: [%d] %s',
             get_class($e), $e->getCode(), mask_path($e->getMessage()));
@@ -1752,10 +1752,10 @@ if (!function_exists('exception_brief')) {
     /**
      * 获取异常的摘要信息（包括了错误所在的文件、行、代码）
      *
-     * @param  \Exception $e
+     * @param  \Throwable $e
      * @return array
      */
-    function exception_brief(Exception $e)
+    function exception_brief(Throwable $e)
     {
         return [
             'exception' => get_class($e),

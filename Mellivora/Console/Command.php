@@ -425,6 +425,16 @@ class Command extends SymfonyCommand
     }
 
     /**
+     * Add newline(s).
+     *
+     * @param int $count The number of newlines
+     */
+    public function newLine($count = 1)
+    {
+        $this->output->newLine($count);
+    }
+
+    /**
      * Write a string as comment output.
      *
      * @param  string          $string

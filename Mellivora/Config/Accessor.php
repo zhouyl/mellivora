@@ -51,7 +51,7 @@ class Accessor implements ArrayAccess
      *
      * @var array
      */
-    protected static $cached = [];
+    protected $cached = [];
 
     /**
      * 配置文件将按照扩展名的先后顺序查找并载入
@@ -122,8 +122,8 @@ class Accessor implements ArrayAccess
     /**
      * 设定配置文件解释器
      *
-     * @param array                         $parsers
-     * @param \Mellivora\Config\NativeArray $parser
+     * @param  array                        $parsers
+     * @return \Mellivora\Config\Accessor
      */
     public function setParsers(array $parsers)
     {
@@ -135,8 +135,8 @@ class Accessor implements ArrayAccess
     /**
      * 新增配置解释器
      *
-     * @param string                        $ext
-     * @param \Mellivora\Config\NativeArray $parser
+     * @param  string                       $ext
+     * @return \Mellivora\Config\Accessor
      */
     public function addParser($ext, NativeArray $parser)
     {
@@ -157,23 +157,23 @@ class Accessor implements ArrayAccess
      */
     public function load($name)
     {
-        if (!array_key_exists($name, self::$cached)) {
+        if (!array_key_exists($name, $this->cached)) {
             foreach (array_reverse($this->paths) as $path) {
                 foreach ($this->parsers as $ext => $parser) {
                     $file = "$path/$name.$ext";
                     if (is_file($file)) {
-                        self::$cached[$name] = new $parser($file);
+                        $this->cached[$name] = new $parser($file);
                         break 2;
                     }
                 }
             }
         }
 
-        if (!isset(self::$cached[$name])) {
-            self::$cached[$name] = new NativeArray;
+        if (!isset($this->cached[$name])) {
+            $this->cached[$name] = new NativeArray;
         }
 
-        return self::$cached[$name];
+        return $this->cached[$name];
     }
 
     /**
@@ -230,6 +230,18 @@ class Accessor implements ArrayAccess
         }
 
         return $this->load($name)->remove($path);
+    }
+
+    /**
+     * 清空已加载的缓存数据
+     *
+     * @return \Mellivora\Config\Accessor
+     */
+    public function refresh()
+    {
+        $this->cached = [];
+
+        return $this;
     }
 
     /**

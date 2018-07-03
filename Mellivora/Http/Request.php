@@ -6,6 +6,7 @@ use Mellivora\Application\App;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
 use Slim\Http\Request as SlimHttpRequest;
+use Slim\Http\UploadedFile;
 
 /**
  * 继承 Slim\Http\Request 并对其进行扩展
@@ -323,7 +324,7 @@ class Request extends SlimHttpRequest
         }
 
         foreach ($files as $file) {
-            if ($this->isValidFile($file)) {
+            if ($file instanceof UploadedFile) {
                 return true;
             }
         }

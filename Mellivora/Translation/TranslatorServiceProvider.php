@@ -20,7 +20,7 @@ class TranslatorServiceProvider extends ServiceProvider
             $translator = new Translator($config->get('paths', [])->toArray());
 
             // 别名设置
-            foreach ($config->aliases as $key => $value) {
+            foreach ($config->get('aliases', []) as $key => $value) {
                 $translator->alias($key, $value->toArray());
             }
 

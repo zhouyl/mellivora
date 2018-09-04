@@ -10,7 +10,6 @@ use Symfony\Component\Cache\Simple\NullCache;
  */
 class NullConnector extends Connector
 {
-
     /**
      * {@inheritdoc}
      */
@@ -26,5 +25,4 @@ class NullConnector extends Connector
     {
         return new NullCache;
     }
-
 }

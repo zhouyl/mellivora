@@ -12,18 +12,22 @@ trait HasGlobalScopes
     /**
      * Register a new global scope on the model.
      *
-     * @param  \Mellivora\Database\Eloquent\Scope|\Closure|string $scope
-     * @param  \Closure|null                                      $implementation
+     * @param \Closure|\Mellivora\Database\Eloquent\Scope|string $scope
+     * @param null|\Closure                                      $implementation
+     *
      * @throws \InvalidArgumentException
+     *
      * @return mixed
      */
     public static function addGlobalScope($scope, Closure $implementation = null)
     {
         if (is_string($scope) && !is_null($implementation)) {
             return static::$globalScopes[static::class][$scope] = $implementation;
-        } elseif ($scope instanceof Closure) {
+        }
+        if ($scope instanceof Closure) {
             return static::$globalScopes[static::class][spl_object_hash($scope)] = $scope;
-        } elseif ($scope instanceof Scope) {
+        }
+        if ($scope instanceof Scope) {
             return static::$globalScopes[static::class][get_class($scope)] = $scope;
         }
 
@@ -33,7 +37,8 @@ trait HasGlobalScopes
     /**
      * Determine if a model has a global scope.
      *
-     * @param  \Mellivora\Database\Eloquent\Scope|string $scope
+     * @param \Mellivora\Database\Eloquent\Scope|string $scope
+     *
      * @return bool
      */
     public static function hasGlobalScope($scope)
@@ -44,8 +49,9 @@ trait HasGlobalScopes
     /**
      * Get a global scope registered with the model.
      *
-     * @param  \Mellivora\Database\Eloquent\Scope|string          $scope
-     * @return \Mellivora\Database\Eloquent\Scope|\Closure|null
+     * @param \Mellivora\Database\Eloquent\Scope|string $scope
+     *
+     * @return null|\Closure|\Mellivora\Database\Eloquent\Scope
      */
     public static function getGlobalScope($scope)
     {
@@ -54,7 +60,8 @@ trait HasGlobalScopes
         }
 
         return Arr::get(
-            static::$globalScopes, static::class . '.' . get_class($scope)
+            static::$globalScopes,
+            static::class . '.' . get_class($scope)
         );
     }
 

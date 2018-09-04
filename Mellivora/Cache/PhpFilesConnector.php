@@ -12,7 +12,6 @@ use Symfony\Component\Cache\Simple\PhpFilesCache;
  */
 class PhpFilesConnector extends Connector
 {
-
     /**
      * 配置参数
      *
@@ -46,5 +45,4 @@ class PhpFilesConnector extends Connector
             $this->config['directory']
         );
     }
-
 }

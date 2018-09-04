@@ -11,7 +11,6 @@ use Mellivora\Support\Str;
  */
 class Translator
 {
-
     /**
      * 默认语言包
      *
@@ -50,7 +49,7 @@ class Translator
     /**
      * Constructor
      *
-     * @param string|array $paths
+     * @param array|string $paths
      */
     public function __construct($paths = [])
     {
@@ -62,7 +61,8 @@ class Translator
     /**
      * 新增语言包加载路径
      *
-     * @param  string                              $basepath
+     * @param string $basepath
+     *
      * @return \Mellivora\Translation\Translator
      */
     public function addPath($basepath)
@@ -91,8 +91,9 @@ class Translator
     /**
      * 设定语言包别名
      *
-     * @param  string                              $lang
-     * @param  string|array                        $aliases
+     * @param string       $lang
+     * @param array|string $aliases
+     *
      * @return \Mellivora\Translation\Translator
      */
     public function alias($lang, $aliases)
@@ -106,7 +107,8 @@ class Translator
         $aliases = array_map('strtolower', $aliases);
 
         $this->aliases[$lang] = array_unique(
-            array_merge(Arr::get($this->aliases, $lang, []), $aliases));
+            array_merge(Arr::get($this->aliases, $lang, []), $aliases)
+        );
 
         return $this;
     }
@@ -114,12 +116,13 @@ class Translator
     /**
      * 设定|获取默认的语言类型
      *
-     * @param  string|null $default
+     * @param null|string $default
+     *
      * @return string
      */
-    public function default($default = null) {
-
-        if ($default != null) {
+    public function default($default = null)
+    {
+        if ($default !== null) {
             $this->default = $this->lang($default);
         }
 
@@ -129,7 +132,8 @@ class Translator
     /**
      * 将别名转换为语言包名
      *
-     * @param  string   $alias
+     * @param string $alias
+     *
      * @return string
      */
     public function lang($alias)
@@ -148,7 +152,8 @@ class Translator
     /**
      * 加载语言包
      *
-     * @param  string|array                        $packages
+     * @param array|string $packages
+     *
      * @return \Mellivora\Translation\Translator
      */
     public function import($packages)
@@ -174,7 +179,8 @@ class Translator
     /**
      * 导出已加载的语言包数据
      *
-     * @param  string  $lang
+     * @param string $lang
+     *
      * @return array
      */
     public function export($lang = null)
@@ -191,9 +197,10 @@ class Translator
     /**
      * 执行翻译
      *
-     * @param  string   $text
-     * @param  array    $replace
-     * @param  string   $lang
+     * @param string $text
+     * @param array  $replace
+     * @param string $lang
+     *
      * @return string
      */
     public function trans($text, array $replace = null, $lang = null)
@@ -210,9 +217,10 @@ class Translator
     /**
      * 反向翻译
      *
-     * @param  string   $text
-     * @param  string   $from
-     * @param  string   $to
+     * @param string $text
+     * @param string $from
+     * @param string $to
+     *
      * @return string
      */
     public function reverse($text, $from = null, $to = null)

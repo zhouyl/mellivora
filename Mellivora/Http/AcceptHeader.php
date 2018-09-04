@@ -37,7 +37,8 @@ class AcceptHeader
     /**
      * Builds an AcceptHeader instance from a string.
      *
-     * @param  string $headerValue
+     * @param string $headerValue
+     *
      * @return self
      */
     public static function fromString($headerValue)
@@ -65,7 +66,8 @@ class AcceptHeader
     /**
      * Tests if header has given value.
      *
-     * @param  string $value
+     * @param string $value
+     *
      * @return bool
      */
     public function has($value)
@@ -76,8 +78,9 @@ class AcceptHeader
     /**
      * Returns given value's item, if exists.
      *
-     * @param  string                  $value
-     * @return AcceptHeaderItem|null
+     * @param string $value
+     *
+     * @return null|AcceptHeaderItem
      */
     public function get($value)
     {
@@ -87,7 +90,8 @@ class AcceptHeader
     /**
      * Adds an item.
      *
-     * @param  AcceptHeaderItem $item
+     * @param AcceptHeaderItem $item
+     *
      * @return $this
      */
     public function add(AcceptHeaderItem $item)
@@ -113,7 +117,8 @@ class AcceptHeader
     /**
      * Filters items on their value using given regex.
      *
-     * @param  string $pattern
+     * @param string $pattern
+     *
      * @return self
      */
     public function filter($pattern)
@@ -126,7 +131,7 @@ class AcceptHeader
     /**
      * Returns first item.
      *
-     * @return AcceptHeaderItem|null
+     * @return null|AcceptHeaderItem
      */
     public function first()
     {

@@ -3,7 +3,6 @@
 namespace Mellivora\Console\Commands;
 
 use Mellivora\Console\GeneratorCommand;
-use Mellivora\Support\Str;
 
 class MiddlewareMakeCommand extends GeneratorCommand
 {
@@ -41,7 +40,7 @@ class MiddlewareMakeCommand extends GeneratorCommand
     /**
      * Get the name suffix
      *
-     * @return string|false
+     * @return false|string
      */
     protected function getNameSuffix()
     {
@@ -51,7 +50,8 @@ class MiddlewareMakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param  string   $rootNamespace
+     * @param string $rootNamespace
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)

@@ -31,7 +31,8 @@ trait HidesAttributes
     /**
      * Set the hidden attributes for the model.
      *
-     * @param  array   $hidden
+     * @param array $hidden
+     *
      * @return $this
      */
     public function setHidden(array $hidden)
@@ -44,13 +45,15 @@ trait HidesAttributes
     /**
      * Add hidden attributes for the model.
      *
-     * @param  array|string|null $attributes
+     * @param null|array|string $attributes
+     *
      * @return void
      */
     public function addHidden($attributes = null)
     {
         $this->hidden = array_merge(
-            $this->hidden, is_array($attributes) ? $attributes : func_get_args()
+            $this->hidden,
+            is_array($attributes) ? $attributes : func_get_args()
         );
     }
 
@@ -67,7 +70,8 @@ trait HidesAttributes
     /**
      * Set the visible attributes for the model.
      *
-     * @param  array   $visible
+     * @param array $visible
+     *
      * @return $this
      */
     public function setVisible(array $visible)
@@ -80,20 +84,23 @@ trait HidesAttributes
     /**
      * Add visible attributes for the model.
      *
-     * @param  array|string|null $attributes
+     * @param null|array|string $attributes
+     *
      * @return void
      */
     public function addVisible($attributes = null)
     {
         $this->visible = array_merge(
-            $this->visible, is_array($attributes) ? $attributes : func_get_args()
+            $this->visible,
+            is_array($attributes) ? $attributes : func_get_args()
         );
     }
 
     /**
      * Make the given, typically hidden, attributes visible.
      *
-     * @param  array|string $attributes
+     * @param array|string $attributes
+     *
      * @return $this
      */
     public function makeVisible($attributes)
@@ -110,7 +117,8 @@ trait HidesAttributes
     /**
      * Make the given, typically visible, attributes hidden.
      *
-     * @param  array|string $attributes
+     * @param array|string $attributes
+     *
      * @return $this
      */
     public function makeHidden($attributes)

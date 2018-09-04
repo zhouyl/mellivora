@@ -10,9 +10,11 @@ class QueueEntityResolver implements EntityResolverContract
     /**
      * Resolve the entity for the given ID.
      *
-     * @param  string                                                       $type
-     * @param  mixed                                                        $id
+     * @param string $type
+     * @param mixed  $id
+     *
      * @throws \Mellivora\Support\Contracts\Queue\EntityNotFoundException
+     *
      * @return mixed
      */
     public function resolve($type, $id)

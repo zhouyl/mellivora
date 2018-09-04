@@ -44,11 +44,12 @@ class BelongsTo extends Relation
     /**
      * Create a new belongs to relationship instance.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder $query
-     * @param  \Mellivora\Database\Eloquent\Model   $child
-     * @param  string                               $foreignKey
-     * @param  string                               $ownerKey
-     * @param  string                               $relation
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     * @param \Mellivora\Database\Eloquent\Model   $child
+     * @param string                               $foreignKey
+     * @param string                               $ownerKey
+     * @param string                               $relation
+     *
      * @return void
      */
     public function __construct(Builder $query, Model $child, $foreignKey, $ownerKey, $relation)
@@ -95,7 +96,8 @@ class BelongsTo extends Relation
     /**
      * Set the constraints for an eager load of the relation.
      *
-     * @param  array  $models
+     * @param array $models
+     *
      * @return void
      */
     public function addEagerConstraints(array $models)
@@ -111,7 +113,8 @@ class BelongsTo extends Relation
     /**
      * Gather the keys from an array of related models.
      *
-     * @param  array   $models
+     * @param array $models
+     *
      * @return array
      */
     protected function getEagerModelKeys(array $models)
@@ -136,8 +139,9 @@ class BelongsTo extends Relation
     /**
      * Initialize the relation on a set of models.
      *
-     * @param  array   $models
-     * @param  string  $relation
+     * @param array  $models
+     * @param string $relation
+     *
      * @return array
      */
     public function initRelation(array $models, $relation)
@@ -152,9 +156,10 @@ class BelongsTo extends Relation
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array                                   $models
-     * @param  \Mellivora\Database\Eloquent\Collection $results
-     * @param  string                                  $relation
+     * @param array                                   $models
+     * @param \Mellivora\Database\Eloquent\Collection $results
+     * @param string                                  $relation
+     *
      * @return array
      */
     public function match(array $models, Collection $results, $relation)
@@ -187,7 +192,8 @@ class BelongsTo extends Relation
     /**
      * Update the parent model on the relationship.
      *
-     * @param  array   $attributes
+     * @param array $attributes
+     *
      * @return mixed
      */
     public function update(array $attributes)
@@ -198,7 +204,8 @@ class BelongsTo extends Relation
     /**
      * Associate the model instance to the given parent.
      *
-     * @param  \Mellivora\Database\Eloquent\Model|int $model
+     * @param int|\Mellivora\Database\Eloquent\Model $model
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function associate($model)
@@ -229,28 +236,32 @@ class BelongsTo extends Relation
     /**
      * Add the constraints for a relationship query.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder   $query
-     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
-     * @param  array|mixed                            $columns
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     * @param \Mellivora\Database\Eloquent\Builder $parentQuery
+     * @param array|mixed                          $columns
+     *
      * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
-        if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
+        if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
             return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
         }
 
         return $query->select($columns)->whereColumn(
-            $this->getQualifiedForeignKey(), '=', $query->getModel()->getTable() . '.' . $this->ownerKey
+            $this->getQualifiedForeignKey(),
+            '=',
+            $query->getModel()->getTable() . '.' . $this->ownerKey
         );
     }
 
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder   $query
-     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
-     * @param  array|mixed                            $columns
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     * @param \Mellivora\Database\Eloquent\Builder $parentQuery
+     * @param array|mixed                          $columns
+     *
      * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])
@@ -262,7 +273,9 @@ class BelongsTo extends Relation
         $query->getModel()->setTable($hash);
 
         return $query->whereColumn(
-            $hash . '.' . $query->getModel()->getKeyName(), '=', $this->getQualifiedForeignKey()
+            $hash . '.' . $query->getModel()->getKeyName(),
+            '=',
+            $this->getQualifiedForeignKey()
         );
     }
 

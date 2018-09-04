@@ -15,11 +15,12 @@ trait QueriesRelationships
     /**
      * Add a relationship count / exists condition to the query.
      *
-     * @param  string                                        $relation
-     * @param  string                                        $operator
-     * @param  int                                           $count
-     * @param  string                                        $boolean
-     * @param  \Closure|null                                 $callback
+     * @param string        $relation
+     * @param string        $operator
+     * @param int           $count
+     * @param string        $boolean
+     * @param null|\Closure $callback
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function has($relation, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null)
@@ -38,7 +39,8 @@ trait QueriesRelationships
             : 'getRelationExistenceCountQuery';
 
         $hasQuery = $relation->{$method}(
-            $relation->getRelated()->newQuery(), $this
+            $relation->getRelated()->newQuery(),
+            $this
         );
 
         // Next we will call any given callback as an "anonymous" scope so they can get the
@@ -49,7 +51,11 @@ trait QueriesRelationships
         }
 
         return $this->addHasWhere(
-            $hasQuery, $relation, $operator, $count, $boolean
+            $hasQuery,
+            $relation,
+            $operator,
+            $count,
+            $boolean
         );
     }
 
@@ -58,11 +64,12 @@ trait QueriesRelationships
      *
      * Sets up recursive call to whereHas until we finish the nested relation.
      *
-     * @param  string                                        $relations
-     * @param  string                                        $operator
-     * @param  int                                           $count
-     * @param  string                                        $boolean
-     * @param  \Closure|null                                 $callback
+     * @param string        $relations
+     * @param string        $operator
+     * @param int           $count
+     * @param string        $boolean
+     * @param null|\Closure $callback
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     protected function hasNested($relations, $operator = '>=', $count = 1, $boolean = 'and', $callback = null)
@@ -84,9 +91,10 @@ trait QueriesRelationships
     /**
      * Add a relationship count / exists condition to the query with an "or".
      *
-     * @param  string                                        $relation
-     * @param  string                                        $operator
-     * @param  int                                           $count
+     * @param string $relation
+     * @param string $operator
+     * @param int    $count
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function orHas($relation, $operator = '>=', $count = 1)
@@ -97,9 +105,10 @@ trait QueriesRelationships
     /**
      * Add a relationship count / exists condition to the query.
      *
-     * @param  string                                        $relation
-     * @param  string                                        $boolean
-     * @param  \Closure|null                                 $callback
+     * @param string        $relation
+     * @param string        $boolean
+     * @param null|\Closure $callback
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function doesntHave($relation, $boolean = 'and', Closure $callback = null)
@@ -110,10 +119,11 @@ trait QueriesRelationships
     /**
      * Add a relationship count / exists condition to the query with where clauses.
      *
-     * @param  string                                        $relation
-     * @param  \Closure|null                                 $callback
-     * @param  string                                        $operator
-     * @param  int                                           $count
+     * @param string        $relation
+     * @param null|\Closure $callback
+     * @param string        $operator
+     * @param int           $count
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function whereHas($relation, Closure $callback = null, $operator = '>=', $count = 1)
@@ -124,10 +134,11 @@ trait QueriesRelationships
     /**
      * Add a relationship count / exists condition to the query with where clauses and an "or".
      *
-     * @param  string                                        $relation
-     * @param  \Closure                                      $callback
-     * @param  string                                        $operator
-     * @param  int                                           $count
+     * @param string   $relation
+     * @param \Closure $callback
+     * @param string   $operator
+     * @param int      $count
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function orWhereHas($relation, Closure $callback, $operator = '>=', $count = 1)
@@ -138,8 +149,9 @@ trait QueriesRelationships
     /**
      * Add a relationship count / exists condition to the query with where clauses.
      *
-     * @param  string                                        $relation
-     * @param  \Closure|null                                 $callback
+     * @param string        $relation
+     * @param null|\Closure $callback
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function whereDoesntHave($relation, Closure $callback = null)
@@ -150,7 +162,8 @@ trait QueriesRelationships
     /**
      * Add subselect queries to count the relations.
      *
-     * @param  mixed   $relations
+     * @param mixed $relations
+     *
      * @return $this
      */
     public function withCount($relations)
@@ -169,7 +182,7 @@ trait QueriesRelationships
 
             unset($alias);
 
-            if (count($segments) == 3 && Str::lower($segments[1]) == 'as') {
+            if (count($segments) === 3 && Str::lower($segments[1]) === 'as') {
                 list($name, $alias) = [$segments[0], $segments[2]];
             }
 
@@ -179,7 +192,8 @@ trait QueriesRelationships
             // as a sub-select. First, we'll get the "has" query and use that to get the relation
             // count query. We will normalize the relation name then append _count as the name.
             $query = $relation->getRelationExistenceCountQuery(
-                $relation->getRelated()->newQuery(), $this
+                $relation->getRelated()->newQuery(),
+                $this
             );
 
             $query->callScope($constraints);
@@ -200,11 +214,12 @@ trait QueriesRelationships
     /**
      * Add the "has" condition where clause to the query.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder            $hasQuery
-     * @param  \Mellivora\Database\Eloquent\Relations\Relation $relation
-     * @param  string                                          $operator
-     * @param  int                                             $count
-     * @param  string                                          $boolean
+     * @param \Mellivora\Database\Eloquent\Builder            $hasQuery
+     * @param \Mellivora\Database\Eloquent\Relations\Relation $relation
+     * @param string                                          $operator
+     * @param int                                             $count
+     * @param string                                          $boolean
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     protected function addHasWhere(Builder $hasQuery, Relation $relation, $operator, $count, $boolean)
@@ -219,13 +234,16 @@ trait QueriesRelationships
     /**
      * Merge the where constraints from another query to the current query.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder          $from
+     * @param \Mellivora\Database\Eloquent\Builder $from
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function mergeConstraintsFrom(Builder $from)
     {
         $whereBindings = Arr::get(
-            $from->getQuery()->getRawBindings(), 'where', []
+            $from->getQuery()->getRawBindings(),
+            'where',
+            []
         );
 
         // Here we have some other query that we want to merge the where constraints from. We will
@@ -234,17 +252,19 @@ trait QueriesRelationships
         return $this->withoutGlobalScopes(
             $from->removedScopes()
         )->mergeWheres(
-            $from->getQuery()->wheres, $whereBindings
+            $from->getQuery()->wheres,
+            $whereBindings
         );
     }
 
     /**
      * Add a sub-query count clause to this query.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  string                            $operator
-     * @param  int                               $count
-     * @param  string                            $boolean
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param string                            $operator
+     * @param int                               $count
+     * @param string                            $boolean
+     *
      * @return $this
      */
     protected function addWhereCountQuery(QueryBuilder $query, $operator = '>=', $count = 1, $boolean = 'and')
@@ -262,7 +282,8 @@ trait QueriesRelationships
     /**
      * Get the "has relation" base query instance.
      *
-     * @param  string                                            $relation
+     * @param string $relation
+     *
      * @return \Mellivora\Database\Eloquent\Relations\Relation
      */
     protected function getRelationWithoutConstraints($relation)
@@ -275,8 +296,9 @@ trait QueriesRelationships
     /**
      * Check if we can run an "exists" query to optimize performance.
      *
-     * @param  string $operator
-     * @param  int    $count
+     * @param string $operator
+     * @param int    $count
+     *
      * @return bool
      */
     protected function canUseExistsForExistenceCheck($operator, $count)

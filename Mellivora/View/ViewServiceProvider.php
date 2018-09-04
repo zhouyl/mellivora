@@ -58,7 +58,8 @@ class ViewServiceProvider extends ServiceProvider
     {
         $this->container['view.finder'] = function ($container) {
             return new FileViewFinder(
-                $container['config']->get('view.paths')->toArray());
+                $container['config']->get('view.paths')->toArray()
+            );
         };
     }
 
@@ -86,7 +87,8 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register the file engine implementation.
      *
-     * @param  \Mellivora\View\Engines\EngineResolver $resolver
+     * @param \Mellivora\View\Engines\EngineResolver $resolver
+     *
      * @return void
      */
     public function registerFileEngine($resolver)
@@ -99,7 +101,8 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register the PHP engine implementation.
      *
-     * @param  \Mellivora\View\Engines\EngineResolver $resolver
+     * @param \Mellivora\View\Engines\EngineResolver $resolver
+     *
      * @return void
      */
     public function registerPhpEngine($resolver)
@@ -112,7 +115,8 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register the Blade engine implementation.
      *
-     * @param  \Mellivora\View\Engines\EngineResolver $resolver
+     * @param \Mellivora\View\Engines\EngineResolver $resolver
+     *
      * @return void
      */
     public function registerBladeEngine($resolver)

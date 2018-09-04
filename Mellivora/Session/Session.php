@@ -16,7 +16,7 @@ class Session implements ArrayAccess
     use MagicAccess;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $started = false;
 
@@ -35,7 +35,7 @@ class Session implements ArrayAccess
     /**
      * 启动 session
      *
-     * @return boolean
+     * @return bool
      */
     public function start()
     {
@@ -54,7 +54,8 @@ class Session implements ArrayAccess
     /**
      * 设置 session name
      *
-     * @param  string                       $name
+     * @param string $name
+     *
      * @return \Mellivora\Session\Session
      */
     public function setName($name)
@@ -77,7 +78,8 @@ class Session implements ArrayAccess
     /**
      * 重新生成 session id
      *
-     * @param  boolean                      $deleteOldSession
+     * @param bool $deleteOldSession
+     *
      * @return \Mellivora\Session\Session
      */
     public function regenerateId($deleteOldSession = true)
@@ -95,8 +97,9 @@ class Session implements ArrayAccess
      * $session->has("foo.bar", 1);
      * </code>
      *
-     * @param  string                       $key
-     * @param  mixed                        $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return \Mellivora\Session\Session
      */
     public function set($key, $value = null)
@@ -118,9 +121,10 @@ class Session implements ArrayAccess
      * $session->get("foo.bar");
      * </code>
      *
-     * @param  string   $key
-     * @param  mixed    $default
-     * @param  boolean  $remove
+     * @param string $key
+     * @param mixed  $default
+     * @param bool   $remove
+     *
      * @return mixed
      */
     public function get($key, $default = null, $remove = false)
@@ -142,8 +146,9 @@ class Session implements ArrayAccess
      * $session->has("foo.*");
      * </code>
      *
-     * @param  string    $key
-     * @return boolean
+     * @param string $key
+     *
+     * @return bool
      */
     public function has($key)
     {
@@ -158,7 +163,8 @@ class Session implements ArrayAccess
      * $session->delete("foo.*");
      * </code>
      *
-     * @param  string                       $key
+     * @param string $key
+     *
      * @return \Mellivora\Session\Session
      */
     public function delete($key)
@@ -203,7 +209,8 @@ class Session implements ArrayAccess
     /**
      * 设置 session id
      *
-     * @param  string                       $id
+     * @param string $id
+     *
      * @return \Mellivora\Session\Session
      */
     public function setId($id)
@@ -216,7 +223,7 @@ class Session implements ArrayAccess
     /**
      * 检测 session 是否已启动
      *
-     * @return boolean
+     * @return bool
      */
     public function isStarted()
     {
@@ -226,7 +233,8 @@ class Session implements ArrayAccess
     /**
      * 销毁 session
      *
-     * @param  boolean                      $removeData
+     * @param bool $removeData
+     *
      * @return \Mellivora\Session\Session
      */
     public function destroy($removeData = false)
@@ -245,7 +253,7 @@ class Session implements ArrayAccess
     /**
      * 获取当前 session 状态
      *
-     * @return integer
+     * @return int
      */
     public function status()
     {
@@ -255,7 +263,8 @@ class Session implements ArrayAccess
     /**
      * 获取一个 token，如果不存在则自动生成
      *
-     * @param  boolean  $regenerate
+     * @param bool $regenerate
+     *
      * @return string
      */
     public function token($regenerate = false)
@@ -271,9 +280,10 @@ class Session implements ArrayAccess
     /**
      * 校验 token
      *
-     * @param  string    $token
-     * @param  boolean   $once
-     * @return boolean
+     * @param string $token
+     * @param bool   $once
+     *
+     * @return bool
      */
     public function checkToken($token, $once = true)
     {

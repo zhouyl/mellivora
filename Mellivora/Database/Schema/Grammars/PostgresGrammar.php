@@ -41,7 +41,8 @@ class PostgresGrammar extends Grammar
     /**
      * Compile the query to determine the list of columns.
      *
-     * @param  string   $table
+     * @param string $table
+     *
      * @return string
      */
     public function compileColumnListing($table)
@@ -52,13 +53,15 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a create table command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileCreate(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('%s table %s (%s)',
+        return sprintf(
+            '%s table %s (%s)',
             $blueprint->temporary ? 'create temporary' : 'create',
             $this->wrapTable($blueprint),
             implode(', ', $this->getColumns($blueprint))
@@ -68,13 +71,15 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a column addition command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileAdd(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('alter table %s %s',
+        return sprintf(
+            'alter table %s %s',
             $this->wrapTable($blueprint),
             implode(', ', $this->prefixArray('add column', $this->getColumns($blueprint)))
         );
@@ -83,8 +88,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a primary key command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compilePrimary(Blueprint $blueprint, Fluent $command)
@@ -97,13 +103,15 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a unique key command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileUnique(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('alter table %s add constraint %s unique (%s)',
+        return sprintf(
+            'alter table %s add constraint %s unique (%s)',
             $this->wrapTable($blueprint),
             $this->wrap($command->index),
             $this->columnize($command->columns)
@@ -113,13 +121,15 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a plain index key command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileIndex(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('create index %s on %s%s (%s)',
+        return sprintf(
+            'create index %s on %s%s (%s)',
             $this->wrap($command->index),
             $this->wrapTable($blueprint),
             $command->algorithm ? ' using ' . $command->algorithm : '',
@@ -130,8 +140,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a drop table command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileDrop(Blueprint $blueprint, Fluent $command)
@@ -142,8 +153,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a drop table (if exists) command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileDropIfExists(Blueprint $blueprint, Fluent $command)
@@ -154,8 +166,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a drop column command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileDropColumn(Blueprint $blueprint, Fluent $command)
@@ -168,8 +181,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a drop primary key command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileDropPrimary(Blueprint $blueprint, Fluent $command)
@@ -182,8 +196,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a drop unique key command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileDropUnique(Blueprint $blueprint, Fluent $command)
@@ -196,8 +211,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a drop index command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileDropIndex(Blueprint $blueprint, Fluent $command)
@@ -208,8 +224,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a drop foreign key command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileDropForeign(Blueprint $blueprint, Fluent $command)
@@ -222,8 +239,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a rename table command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileRename(Blueprint $blueprint, Fluent $command)
@@ -256,7 +274,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a char type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeChar(Fluent $column)
@@ -267,7 +286,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a string type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeString(Fluent $column)
@@ -278,7 +298,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a text type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeText(Fluent $column)
@@ -289,7 +310,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a medium text type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeMediumText(Fluent $column)
@@ -300,7 +322,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a long text type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeLongText(Fluent $column)
@@ -311,7 +334,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for an integer type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeInteger(Fluent $column)
@@ -322,7 +346,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a big integer type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeBigInteger(Fluent $column)
@@ -333,7 +358,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a medium integer type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeMediumInteger(Fluent $column)
@@ -344,7 +370,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a tiny integer type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeTinyInteger(Fluent $column)
@@ -355,7 +382,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a small integer type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeSmallInteger(Fluent $column)
@@ -366,7 +394,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a float type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeFloat(Fluent $column)
@@ -377,7 +406,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a double type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeDouble(Fluent $column)
@@ -388,7 +418,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a decimal type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeDecimal(Fluent $column)
@@ -399,7 +430,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a boolean type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeBoolean(Fluent $column)
@@ -410,7 +442,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for an enum type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeEnum(Fluent $column)
@@ -425,7 +458,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a json type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeJson(Fluent $column)
@@ -436,7 +470,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a jsonb type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeJsonb(Fluent $column)
@@ -447,7 +482,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a date type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeDate(Fluent $column)
@@ -458,7 +494,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a date-time type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeDateTime(Fluent $column)
@@ -469,7 +506,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a date-time type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeDateTimeTz(Fluent $column)
@@ -480,7 +518,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a time type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeTime(Fluent $column)
@@ -491,7 +530,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a time type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeTimeTz(Fluent $column)
@@ -502,7 +542,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a timestamp type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeTimestamp(Fluent $column)
@@ -517,7 +558,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a timestamp type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeTimestampTz(Fluent $column)
@@ -532,7 +574,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a binary type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeBinary(Fluent $column)
@@ -543,7 +586,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a uuid type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeUuid(Fluent $column)
@@ -554,7 +598,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for an IP address type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeIpAddress(Fluent $column)
@@ -565,7 +610,8 @@ class PostgresGrammar extends Grammar
     /**
      * Create the column definition for a MAC address type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function typeMacAddress(Fluent $column)
@@ -576,9 +622,10 @@ class PostgresGrammar extends Grammar
     /**
      * Get the SQL for a nullable column modifier.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $column
-     * @return string|null
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $column
+     *
+     * @return null|string
      */
     protected function modifyNullable(Blueprint $blueprint, Fluent $column)
     {
@@ -588,9 +635,10 @@ class PostgresGrammar extends Grammar
     /**
      * Get the SQL for a default column modifier.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $column
-     * @return string|null
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $column
+     *
+     * @return null|string
      */
     protected function modifyDefault(Blueprint $blueprint, Fluent $column)
     {
@@ -602,9 +650,10 @@ class PostgresGrammar extends Grammar
     /**
      * Get the SQL for an auto-increment column modifier.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $column
-     * @return string|null
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $column
+     *
+     * @return null|string
      */
     protected function modifyIncrement(Blueprint $blueprint, Fluent $column)
     {

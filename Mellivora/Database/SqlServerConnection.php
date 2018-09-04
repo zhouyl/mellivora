@@ -15,15 +15,17 @@ class SqlServerConnection extends Connection
     /**
      * Execute a Closure within a transaction.
      *
-     * @param  \Closure                $callback
-     * @param  int                     $attempts
+     * @param \Closure $callback
+     * @param int      $attempts
+     *
      * @throws \Exception|\Throwable
+     *
      * @return mixed
      */
     public function transaction(Closure $callback, $attempts = 1)
     {
-        for ($a = 1; $a <= $attempts; $a++) {
-            if ($this->getDriverName() == 'sqlsrv') {
+        for ($a = 1; $a <= $attempts; ++$a) {
+            if ($this->getDriverName() === 'sqlsrv') {
                 return parent::transaction($callback);
             }
 
@@ -41,7 +43,7 @@ class SqlServerConnection extends Connection
             // If we catch an exception, we will roll back so nothing gets messed
             // up in the database. Then we'll re-throw the exception so it can
             // be handled how the developer sees fit for their applications.
-             catch (Exception $e) {
+            catch (Exception $e) {
                 $this->getPdo()->exec('ROLLBACK TRAN');
 
                 throw $e;

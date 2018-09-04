@@ -41,8 +41,9 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Create a new database manager instance.
      *
-     * @param  \Mellivora\Application\Container                 $container
-     * @param  \Mellivora\Database\Connectors\ConnectionFactory $factory
+     * @param \Mellivora\Application\Container                 $container
+     * @param \Mellivora\Database\Connectors\ConnectionFactory $factory
+     *
      * @return void
      */
     public function __construct($container, ConnectionFactory $factory)
@@ -54,7 +55,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Get a database connection instance.
      *
-     * @param  string                           $name
+     * @param string $name
+     *
      * @return \Mellivora\Database\Connection
      */
     public function connection($name = null)
@@ -68,7 +70,8 @@ class DatabaseManager implements ConnectionResolverInterface
         // set the "fetch mode" for PDO which determines the query return types.
         if (!isset($this->connections[$name])) {
             $this->connections[$name] = $this->configure(
-                $connection = $this->makeConnection($database), $type
+                $connection = $this->makeConnection($database),
+                $type
             );
         }
 
@@ -78,7 +81,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Parse the connection into an array of the name and read / write type.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return array
      */
     protected function parseConnectionName($name)
@@ -92,7 +96,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Make the database connection instance.
      *
-     * @param  string                           $name
+     * @param string $name
+     *
      * @return \Mellivora\Database\Connection
      */
     protected function makeConnection($name)
@@ -119,8 +124,10 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Get the configuration for a connection.
      *
-     * @param  string                      $name
+     * @param string $name
+     *
      * @throws \InvalidArgumentException
+     *
      * @return array
      */
     protected function configuration($name)
@@ -142,8 +149,9 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the database connection instance.
      *
-     * @param  \Mellivora\Database\Connection   $connection
-     * @param  string                           $type
+     * @param \Mellivora\Database\Connection $connection
+     * @param string                         $type
+     *
      * @return \Mellivora\Database\Connection
      */
     protected function configure(Connection $connection, $type)
@@ -170,15 +178,16 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the read / write mode for database connection instance.
      *
-     * @param  \Mellivora\Database\Connection   $connection
-     * @param  string                           $type
+     * @param \Mellivora\Database\Connection $connection
+     * @param string                         $type
+     *
      * @return \Mellivora\Database\Connection
      */
     protected function setPdoForType(Connection $connection, $type = null)
     {
-        if ($type == 'read') {
+        if ($type === 'read') {
             $connection->setPdo($connection->getReadPdo());
-        } elseif ($type == 'write') {
+        } elseif ($type === 'write') {
             $connection->setReadPdo($connection->getPdo());
         }
 
@@ -188,7 +197,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Disconnect from the given database and remove from local cache.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return void
      */
     public function purge($name = null)
@@ -201,7 +211,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Disconnect from the given database.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return void
      */
     public function disconnect($name = null)
@@ -214,7 +225,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Reconnect to the given database.
      *
-     * @param  string                           $name
+     * @param string $name
+     *
      * @return \Mellivora\Database\Connection
      */
     public function reconnect($name = null)
@@ -231,7 +243,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Refresh the PDO connections on a given connection.
      *
-     * @param  string                           $name
+     * @param string $name
+     *
      * @return \Mellivora\Database\Connection
      */
     protected function refreshPdoConnections($name)
@@ -256,7 +269,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Set the default connection name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return void
      */
     public function setDefaultConnection($name)
@@ -290,8 +304,9 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Register an extension connection resolver.
      *
-     * @param  string   $name
-     * @param  callable $resolver
+     * @param string   $name
+     * @param callable $resolver
+     *
      * @return void
      */
     public function extend($name, callable $resolver)
@@ -312,12 +327,13 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Dynamically pass methods to the default connection.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)
     {
-        return $this->connection()->$method(...$parameters);
+        return $this->connection()->{$method}(...$parameters);
     }
 }

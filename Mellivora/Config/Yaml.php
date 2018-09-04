@@ -12,8 +12,9 @@ class Yaml extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string              $file
-     * @param  Closure[]           $callbacks
+     * @param string    $file
+     * @param Closure[] $callbacks
+     *
      * @throws \RuntimeException
      */
     public function __construct($file, array $callbacks = [])
@@ -31,6 +32,7 @@ class Yaml extends NativeArray
 
         if ($data === false) {
             $error = error_get_last();
+
             throw new ParseException($error);
         }
 

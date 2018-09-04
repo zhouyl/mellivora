@@ -7,7 +7,8 @@ trait CompilesConditionals
     /**
      * Compile the has-section statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileHasSection($expression)
@@ -18,7 +19,8 @@ trait CompilesConditionals
     /**
      * Compile the if statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileIf($expression)
@@ -29,7 +31,8 @@ trait CompilesConditionals
     /**
      * Compile the unless statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileUnless($expression)
@@ -40,7 +43,8 @@ trait CompilesConditionals
     /**
      * Compile the else-if statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileElseif($expression)
@@ -81,7 +85,8 @@ trait CompilesConditionals
     /**
      * Compile the if-isset statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileIsset($expression)

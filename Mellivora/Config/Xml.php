@@ -10,7 +10,8 @@ class Xml extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string                             $file
+     * @param string $file
+     *
      * @throws \Mellivora\Config\ParseException
      */
     public function __construct($file)
@@ -28,6 +29,7 @@ class Xml extends NativeArray
                 'file'    => $lastError->file,
                 'line'    => $lastError->line,
             ];
+
             throw new ParseException($error);
         }
 

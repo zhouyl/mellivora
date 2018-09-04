@@ -9,7 +9,6 @@ use Slim\Http\Response as SlimHttpResponse;
  */
 class Response extends SlimHttpResponse
 {
-
     /**
      * 默认使用定义的全局 json 格式化选项输出
      *
@@ -23,7 +22,8 @@ class Response extends SlimHttpResponse
     /**
      * 指定 headers 头部信息
      *
-     * @param  array    $headers
+     * @param array $headers
+     *
      * @return static
      */
     public function withHeaders(array $headers)
@@ -40,8 +40,9 @@ class Response extends SlimHttpResponse
     /**
      * Create a new redirect response.
      *
-     * @param  string|UriInterface $url
-     * @param  int|null            $status
+     * @param string|UriInterface $url
+     * @param null|int            $status
+     *
      * @return static
      */
     public function redirect($url, $status = null)

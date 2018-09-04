@@ -20,8 +20,9 @@ class SQLiteGrammar extends Grammar
     /**
      * Compile a "where date" clause.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function whereDate(Builder $query, $where)
@@ -32,8 +33,9 @@ class SQLiteGrammar extends Grammar
     /**
      * Compile a "where day" clause.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function whereDay(Builder $query, $where)
@@ -44,8 +46,9 @@ class SQLiteGrammar extends Grammar
     /**
      * Compile a "where month" clause.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function whereMonth(Builder $query, $where)
@@ -56,8 +59,9 @@ class SQLiteGrammar extends Grammar
     /**
      * Compile a "where year" clause.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function whereYear(Builder $query, $where)
@@ -68,9 +72,10 @@ class SQLiteGrammar extends Grammar
     /**
      * Compile a date based where clause.
      *
-     * @param  string                            $type
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param string                            $type
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function dateBasedWhere($type, Builder $query, $where)
@@ -85,8 +90,9 @@ class SQLiteGrammar extends Grammar
     /**
      * Compile an insert statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $values
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $values
+     *
      * @return string
      */
     public function compileInsert(Builder $query, array $values)
@@ -103,7 +109,7 @@ class SQLiteGrammar extends Grammar
         // If there is only one record being inserted, we will just use the usual query
         // grammar insert builder because no special syntax is needed for the single
         // row inserts in SQLite. However, if there are multiples, we'll continue.
-        if (count($values) == 1) {
+        if (count($values) === 1) {
             return parent::compileInsert($query, reset($values));
         }
 
@@ -126,7 +132,8 @@ class SQLiteGrammar extends Grammar
     /**
      * Compile a truncate table statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return array
      */
     public function compileTruncate(Builder $query)

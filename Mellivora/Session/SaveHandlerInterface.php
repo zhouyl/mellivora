@@ -14,7 +14,6 @@ interface SaveHandlerInterface
 
     /**
      * Close Session - free resources
-     *
      */
     public function close();
 
@@ -48,5 +47,4 @@ interface SaveHandlerInterface
      * @param int $lifetime
      */
     public function gc($lifetime);
-
 }

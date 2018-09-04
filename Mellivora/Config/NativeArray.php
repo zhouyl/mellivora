@@ -13,7 +13,6 @@ use Mellivora\Support\Traits\MagicAccess;
  */
 class NativeArray implements ArrayAccess, IteratorAggregate
 {
-
     use MagicAccess;
 
     /**
@@ -36,8 +35,9 @@ class NativeArray implements ArrayAccess, IteratorAggregate
     /**
      * 设定配置数据
      *
-     * @param  string                          $key
-     * @param  mixed                           $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return \Mellivora\Config\NativeArray
      */
     public function set($key, $value = null)
@@ -54,8 +54,9 @@ class NativeArray implements ArrayAccess, IteratorAggregate
     /**
      * 获取配置数据
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param string $key
+     * @param mixed  $default
+     *
      * @return mixed
      */
     public function get($key, $default = null)
@@ -72,8 +73,9 @@ class NativeArray implements ArrayAccess, IteratorAggregate
     /**
      * 判断 key 是否存在
      *
-     * @param  string    $key
-     * @return boolean
+     * @param string $key
+     *
+     * @return bool
      */
     public function exists($key)
     {
@@ -83,7 +85,8 @@ class NativeArray implements ArrayAccess, IteratorAggregate
     /**
      * 删除配置数据
      *
-     * @param  string                          $key
+     * @param string $key
+     *
      * @return \Mellivora\Config\NativeArray
      */
     public function remove($key)

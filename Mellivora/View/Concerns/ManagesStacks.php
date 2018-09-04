@@ -30,8 +30,9 @@ trait ManagesStacks
     /**
      * Start injecting content into a push section.
      *
-     * @param  string $section
-     * @param  string $content
+     * @param string $section
+     * @param string $content
+     *
      * @return void
      */
     public function startPush($section, $content = '')
@@ -49,6 +50,7 @@ trait ManagesStacks
      * Stop injecting content into a push section.
      *
      * @throws \InvalidArgumentException
+     *
      * @return string
      */
     public function stopPush()
@@ -65,8 +67,9 @@ trait ManagesStacks
     /**
      * Append content to a given push section.
      *
-     * @param  string $section
-     * @param  string $content
+     * @param string $section
+     * @param string $content
+     *
      * @return void
      */
     protected function extendPush($section, $content)
@@ -85,8 +88,9 @@ trait ManagesStacks
     /**
      * Start prepending content into a push section.
      *
-     * @param  string $section
-     * @param  string $content
+     * @param string $section
+     * @param string $content
+     *
      * @return void
      */
     public function startPrepend($section, $content = '')
@@ -104,6 +108,7 @@ trait ManagesStacks
      * Stop prepending content into a push section.
      *
      * @throws \InvalidArgumentException
+     *
      * @return string
      */
     public function stopPrepend()
@@ -120,8 +125,9 @@ trait ManagesStacks
     /**
      * Prepend content to a given stack.
      *
-     * @param  string $section
-     * @param  string $content
+     * @param string $section
+     * @param string $content
+     *
      * @return void
      */
     protected function extendPrepend($section, $content)
@@ -140,8 +146,9 @@ trait ManagesStacks
     /**
      * Get the string contents of a push section.
      *
-     * @param  string   $section
-     * @param  string   $default
+     * @param string $section
+     * @param string $default
+     *
      * @return string
      */
     public function yieldPushContent($section, $default = '')

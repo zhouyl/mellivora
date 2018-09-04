@@ -34,14 +34,15 @@ class MorphToMany extends BelongsToMany
     /**
      * Create a new morph to many relationship instance.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder $query
-     * @param  \Mellivora\Database\Eloquent\Model   $parent
-     * @param  string                               $name
-     * @param  string                               $table
-     * @param  string                               $foreignKey
-     * @param  string                               $relatedKey
-     * @param  string                               $relationName
-     * @param  bool                                 $inverse
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     * @param \Mellivora\Database\Eloquent\Model   $parent
+     * @param string                               $name
+     * @param string                               $table
+     * @param string                               $foreignKey
+     * @param string                               $relatedKey
+     * @param string                               $relationName
+     * @param bool                                 $inverse
+     *
      * @return void
      */
     public function __construct(Builder $query, Model $parent, $name, $table, $foreignKey, $relatedKey, $relationName = null, $inverse = false)
@@ -70,7 +71,8 @@ class MorphToMany extends BelongsToMany
     /**
      * Set the constraints for an eager load of the relation.
      *
-     * @param  array  $models
+     * @param array $models
+     *
      * @return void
      */
     public function addEagerConstraints(array $models)
@@ -83,29 +85,34 @@ class MorphToMany extends BelongsToMany
     /**
      * Create a new pivot attachment record.
      *
-     * @param  int     $id
-     * @param  bool    $timed
+     * @param int  $id
+     * @param bool $timed
+     *
      * @return array
      */
     protected function baseAttachRecord($id, $timed)
     {
         return Arr::add(
-            parent::baseAttachRecord($id, $timed), $this->morphType, $this->morphClass
+            parent::baseAttachRecord($id, $timed),
+            $this->morphType,
+            $this->morphClass
         );
     }
 
     /**
      * Add the constraints for a relationship count query.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder   $query
-     * @param  \Mellivora\Database\Eloquent\Builder   $parentQuery
-     * @param  array|mixed                            $columns
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     * @param \Mellivora\Database\Eloquent\Builder $parentQuery
+     * @param array|mixed                          $columns
+     *
      * @return \Mellivora\Database\Eloquent\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
     {
         return parent::getRelationExistenceQuery($query, $parentQuery, $columns)->where(
-            $this->table . '.' . $this->morphType, $this->morphClass
+            $this->table . '.' . $this->morphType,
+            $this->morphClass
         );
     }
 
@@ -122,8 +129,9 @@ class MorphToMany extends BelongsToMany
     /**
      * Create a new pivot model instance.
      *
-     * @param  array                                          $attributes
-     * @param  bool                                           $exists
+     * @param array $attributes
+     * @param bool  $exists
+     *
      * @return \Mellivora\Database\Eloquent\Relations\Pivot
      */
     public function newPivot(array $attributes = [], $exists = false)

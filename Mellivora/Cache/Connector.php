@@ -7,7 +7,6 @@ namespace Mellivora\Cache;
  */
 abstract class Connector
 {
-
     /**
      * 配置参数
      *
@@ -41,5 +40,4 @@ abstract class Connector
      * @return \Symfony\Component\Cache\Simple\AbstractCache
      */
     abstract public function getSimpleCacheAdapter();
-
 }

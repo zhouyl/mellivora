@@ -11,8 +11,9 @@ trait ConfirmableTrait
      *
      * This method only asks for confirmation in production.
      *
-     * @param  string             $warning
-     * @param  \Closure|bool|null $callback
+     * @param string             $warning
+     * @param null|bool|\Closure $callback
+     *
      * @return bool
      */
     public function confirmToProceed($warning = 'Application In Production!', $callback = null)
@@ -48,7 +49,7 @@ trait ConfirmableTrait
     protected function getDefaultConfirmCallback()
     {
         return function () {
-            return $this->container['settings']['environment'] == 'production';
+            return $this->container['settings']['environment'] === 'production';
         };
     }
 }

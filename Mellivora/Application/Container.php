@@ -14,7 +14,6 @@ use Slim\Container as SlimContainer;
  */
 class Container extends SlimContainer
 {
-
     /**
      * @var array
      */
@@ -57,8 +56,9 @@ class Container extends SlimContainer
     /**
      * 为兼容 laravel 组件而编写的方法
      *
-     * @param  string    $abstract
-     * @return boolean
+     * @param string $abstract
+     *
+     * @return bool
      */
     public function bound($abstract)
     {
@@ -68,9 +68,11 @@ class Container extends SlimContainer
     /**
      * 为兼容 laravel 组件而编写的方法
      *
-     * @param  string              $abstract
-     * @param  array               $parameters
+     * @param string $abstract
+     * @param array  $parameters
+     *
      * @throws \RuntimeException
+     *
      * @return mixed
      */
     public function make($abstract, array $parameters = [])
@@ -102,7 +104,8 @@ class Container extends SlimContainer
      *
      * 使得 $container->viewFinder 相当于 $container->get('view.finder')
      *
-     * @param  string   $id
+     * @param string $id
+     *
      * @return string
      */
     protected function formatId($id)
@@ -113,7 +116,8 @@ class Container extends SlimContainer
     /**
      * 将 class name 转换为 id
      *
-     * @param  string   $id
+     * @param string $id
+     *
      * @return string
      */
     protected function getAbstractId($id)
@@ -125,9 +129,7 @@ class Container extends SlimContainer
         return $id;
     }
 
-    /********************************************************************
-     * 魔术方法重写或补充
-     ********************************************************************/
+    // 魔术方法重写或补充
 
     public function offsetSet($id, $value)
     {

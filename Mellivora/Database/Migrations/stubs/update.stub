@@ -1,8 +1,8 @@
 <?php
 
-use Mellivora\Support\Facades\Schema;
-use Mellivora\Database\Schema\Blueprint;
 use Mellivora\Database\Migrations\Migration;
+use Mellivora\Database\Schema\Blueprint;
+use Mellivora\Support\Facades\Schema;
 
 class DummyClass extends Migration
 {

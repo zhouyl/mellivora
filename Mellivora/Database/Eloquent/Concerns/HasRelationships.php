@@ -46,9 +46,10 @@ trait HasRelationships
     /**
      * Define a one-to-one relationship.
      *
-     * @param  string                                          $related
-     * @param  string                                          $foreignKey
-     * @param  string                                          $localKey
+     * @param string $related
+     * @param string $foreignKey
+     * @param string $localKey
+     *
      * @return \Mellivora\Database\Eloquent\Relations\HasOne
      */
     public function hasOne($related, $foreignKey = null, $localKey = null)
@@ -65,11 +66,12 @@ trait HasRelationships
     /**
      * Define a polymorphic one-to-one relationship.
      *
-     * @param  string                                            $related
-     * @param  string                                            $name
-     * @param  string                                            $type
-     * @param  string                                            $id
-     * @param  string                                            $localKey
+     * @param string $related
+     * @param string $name
+     * @param string $type
+     * @param string $id
+     * @param string $localKey
+     *
      * @return \Mellivora\Database\Eloquent\Relations\MorphOne
      */
     public function morphOne($related, $name, $type = null, $id = null, $localKey = null)
@@ -88,10 +90,11 @@ trait HasRelationships
     /**
      * Define an inverse one-to-one or many relationship.
      *
-     * @param  string                                             $related
-     * @param  string                                             $foreignKey
-     * @param  string                                             $ownerKey
-     * @param  string                                             $relation
+     * @param string $related
+     * @param string $foreignKey
+     * @param string $ownerKey
+     * @param string $relation
+     *
      * @return \Mellivora\Database\Eloquent\Relations\BelongsTo
      */
     public function belongsTo($related, $foreignKey = null, $ownerKey = null, $relation = null)
@@ -118,16 +121,21 @@ trait HasRelationships
         $ownerKey = $ownerKey ?: $instance->getKeyName();
 
         return new BelongsTo(
-            $instance->newQuery(), $this, $foreignKey, $ownerKey, $relation
+            $instance->newQuery(),
+            $this,
+            $foreignKey,
+            $ownerKey,
+            $relation
         );
     }
 
     /**
      * Define a polymorphic, inverse one-to-one or many relationship.
      *
-     * @param  string                                           $name
-     * @param  string                                           $type
-     * @param  string                                           $id
+     * @param string $name
+     * @param string $type
+     * @param string $id
+     *
      * @return \Mellivora\Database\Eloquent\Relations\MorphTo
      */
     public function morphTo($name = null, $type = null, $id = null)
@@ -138,7 +146,9 @@ trait HasRelationships
         $name = $name ?: $this->guessBelongsToRelation();
 
         list($type, $id) = $this->getMorphs(
-            Str::snake($name), $type, $id
+            Str::snake($name),
+            $type,
+            $id
         );
 
         // If the type value is null it is probably safe to assume we're eager loading
@@ -152,25 +162,32 @@ trait HasRelationships
     /**
      * Define a polymorphic, inverse one-to-one or many relationship.
      *
-     * @param  string                                           $name
-     * @param  string                                           $type
-     * @param  string                                           $id
+     * @param string $name
+     * @param string $type
+     * @param string $id
+     *
      * @return \Mellivora\Database\Eloquent\Relations\MorphTo
      */
     protected function morphEagerTo($name, $type, $id)
     {
         return new MorphTo(
-            $this->newQuery()->setEagerLoads([]), $this, $id, null, $type, $name
+            $this->newQuery()->setEagerLoads([]),
+            $this,
+            $id,
+            null,
+            $type,
+            $name
         );
     }
 
     /**
      * Define a polymorphic, inverse one-to-one or many relationship.
      *
-     * @param  string                                           $target
-     * @param  string                                           $name
-     * @param  string                                           $type
-     * @param  string                                           $id
+     * @param string $target
+     * @param string $name
+     * @param string $type
+     * @param string $id
+     *
      * @return \Mellivora\Database\Eloquent\Relations\MorphTo
      */
     protected function morphInstanceTo($target, $name, $type, $id)
@@ -180,14 +197,20 @@ trait HasRelationships
         );
 
         return new MorphTo(
-            $instance->newQuery(), $this, $id, $instance->getKeyName(), $type, $name
+            $instance->newQuery(),
+            $this,
+            $id,
+            $instance->getKeyName(),
+            $type,
+            $name
         );
     }
 
     /**
      * Retrieve the actual class name for a given morph class.
      *
-     * @param  string   $class
+     * @param string $class
+     *
      * @return string
      */
     public static function getActualClassNameForMorph($class)
@@ -210,9 +233,10 @@ trait HasRelationships
     /**
      * Define a one-to-many relationship.
      *
-     * @param  string                                           $related
-     * @param  string                                           $foreignKey
-     * @param  string                                           $localKey
+     * @param string $related
+     * @param string $foreignKey
+     * @param string $localKey
+     *
      * @return \Mellivora\Database\Eloquent\Relations\HasMany
      */
     public function hasMany($related, $foreignKey = null, $localKey = null)
@@ -224,18 +248,22 @@ trait HasRelationships
         $localKey = $localKey ?: $this->getKeyName();
 
         return new HasMany(
-            $instance->newQuery(), $this, $instance->getTable() . '.' . $foreignKey, $localKey
+            $instance->newQuery(),
+            $this,
+            $instance->getTable() . '.' . $foreignKey,
+            $localKey
         );
     }
 
     /**
      * Define a has-many-through relationship.
      *
-     * @param  string                                                  $related
-     * @param  string                                                  $through
-     * @param  string|null                                             $firstKey
-     * @param  string|null                                             $secondKey
-     * @param  string|null                                             $localKey
+     * @param string      $related
+     * @param string      $through
+     * @param null|string $firstKey
+     * @param null|string $secondKey
+     * @param null|string $localKey
+     *
      * @return \Mellivora\Database\Eloquent\Relations\HasManyThrough
      */
     public function hasManyThrough($related, $through, $firstKey = null, $secondKey = null, $localKey = null)
@@ -256,11 +284,12 @@ trait HasRelationships
     /**
      * Define a polymorphic one-to-many relationship.
      *
-     * @param  string                                             $related
-     * @param  string                                             $name
-     * @param  string                                             $type
-     * @param  string                                             $id
-     * @param  string                                             $localKey
+     * @param string $related
+     * @param string $name
+     * @param string $type
+     * @param string $id
+     * @param string $localKey
+     *
      * @return \Mellivora\Database\Eloquent\Relations\MorphMany
      */
     public function morphMany($related, $name, $type = null, $id = null, $localKey = null)
@@ -282,11 +311,12 @@ trait HasRelationships
     /**
      * Define a many-to-many relationship.
      *
-     * @param  string                                                 $related
-     * @param  string                                                 $table
-     * @param  string                                                 $foreignKey
-     * @param  string                                                 $relatedKey
-     * @param  string                                                 $relation
+     * @param string $related
+     * @param string $table
+     * @param string $foreignKey
+     * @param string $relatedKey
+     * @param string $relation
+     *
      * @return \Mellivora\Database\Eloquent\Relations\BelongsToMany
      */
     public function belongsToMany($related, $table = null, $foreignKey = null, $relatedKey = null, $relation = null)
@@ -315,19 +345,25 @@ trait HasRelationships
         }
 
         return new BelongsToMany(
-            $instance->newQuery(), $this, $table, $foreignKey, $relatedKey, $relation
+            $instance->newQuery(),
+            $this,
+            $table,
+            $foreignKey,
+            $relatedKey,
+            $relation
         );
     }
 
     /**
      * Define a polymorphic many-to-many relationship.
      *
-     * @param  string                                               $related
-     * @param  string                                               $name
-     * @param  string                                               $table
-     * @param  string                                               $foreignKey
-     * @param  string                                               $relatedKey
-     * @param  bool                                                 $inverse
+     * @param string $related
+     * @param string $name
+     * @param string $table
+     * @param string $foreignKey
+     * @param string $relatedKey
+     * @param bool   $inverse
+     *
      * @return \Mellivora\Database\Eloquent\Relations\MorphToMany
      */
     public function morphToMany($related, $name, $table = null, $foreignKey = null, $relatedKey = null, $inverse = false)
@@ -349,19 +385,26 @@ trait HasRelationships
         $table = $table ?: Str::plural($name);
 
         return new MorphToMany(
-            $instance->newQuery(), $this, $name, $table,
-            $foreignKey, $relatedKey, $caller, $inverse
+            $instance->newQuery(),
+            $this,
+            $name,
+            $table,
+            $foreignKey,
+            $relatedKey,
+            $caller,
+            $inverse
         );
     }
 
     /**
      * Define a polymorphic, inverse many-to-many relationship.
      *
-     * @param  string                                               $related
-     * @param  string                                               $name
-     * @param  string                                               $table
-     * @param  string                                               $foreignKey
-     * @param  string                                               $relatedKey
+     * @param string $related
+     * @param string $name
+     * @param string $table
+     * @param string $foreignKey
+     * @param string $relatedKey
+     *
      * @return \Mellivora\Database\Eloquent\Relations\MorphToMany
      */
     public function morphedByMany($related, $name, $table = null, $foreignKey = null, $relatedKey = null)
@@ -393,7 +436,8 @@ trait HasRelationships
     /**
      * Get the joining table name for a many-to-many relation.
      *
-     * @param  string   $related
+     * @param string $related
+     *
      * @return string
      */
     public function joiningTable($related)
@@ -417,7 +461,8 @@ trait HasRelationships
     /**
      * Determine if the model touches a given relation.
      *
-     * @param  string $relation
+     * @param string $relation
+     *
      * @return bool
      */
     public function touches($relation)
@@ -433,14 +478,14 @@ trait HasRelationships
     public function touchOwners()
     {
         foreach ($this->touches as $relation) {
-            $this->$relation()->touch();
+            $this->{$relation}()->touch();
 
-            if ($this->$relation instanceof self) {
-                $this->$relation->fireModelEvent('saved', false);
+            if ($this->{$relation} instanceof self) {
+                $this->{$relation}->fireModelEvent('saved', false);
 
-                $this->$relation->touchOwners();
-            } elseif ($this->$relation instanceof Collection) {
-                $this->$relation->each(function (Model $relation) {
+                $this->{$relation}->touchOwners();
+            } elseif ($this->{$relation} instanceof Collection) {
+                $this->{$relation}->each(function (Model $relation) {
                     $relation->touchOwners();
                 });
             }
@@ -450,9 +495,10 @@ trait HasRelationships
     /**
      * Get the polymorphic relationship columns.
      *
-     * @param  string  $name
-     * @param  string  $type
-     * @param  string  $id
+     * @param string $name
+     * @param string $type
+     * @param string $id
+     *
      * @return array
      */
     protected function getMorphs($name, $type, $id)
@@ -479,7 +525,8 @@ trait HasRelationships
     /**
      * Create a new model instance for a related model.
      *
-     * @param  string  $class
+     * @param string $class
+     *
      * @return mixed
      */
     protected function newRelatedInstance($class)
@@ -504,7 +551,8 @@ trait HasRelationships
     /**
      * Get a specified relationship.
      *
-     * @param  string  $relation
+     * @param string $relation
+     *
      * @return mixed
      */
     public function getRelation($relation)
@@ -515,7 +563,8 @@ trait HasRelationships
     /**
      * Determine if the given relation is loaded.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     public function relationLoaded($key)
@@ -526,8 +575,9 @@ trait HasRelationships
     /**
      * Set the specific relationship in the model.
      *
-     * @param  string  $relation
-     * @param  mixed   $value
+     * @param string $relation
+     * @param mixed  $value
+     *
      * @return $this
      */
     public function setRelation($relation, $value)
@@ -540,7 +590,8 @@ trait HasRelationships
     /**
      * Set the entire relations array on the model.
      *
-     * @param  array   $relations
+     * @param array $relations
+     *
      * @return $this
      */
     public function setRelations(array $relations)
@@ -563,7 +614,8 @@ trait HasRelationships
     /**
      * Set the relationships that are touched on save.
      *
-     * @param  array   $touches
+     * @param array $touches
+     *
      * @return $this
      */
     public function setTouchedRelations(array $touches)

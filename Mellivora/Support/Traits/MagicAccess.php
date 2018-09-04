@@ -4,10 +4,7 @@ namespace Mellivora\Support\Traits;
 
 trait MagicAccess
 {
-
-    /********************************************************************
-     * ArrayAccess 接口实现
-     ********************************************************************/
+    // ArrayAccess 接口实现
 
     public function offsetSet($key, $value)
     {
@@ -41,9 +38,7 @@ trait MagicAccess
         return $this->delete($key);
     }
 
-    /********************************************************************
-     * 魔术方法实现
-     ********************************************************************/
+    // 魔术方法实现
 
     public function __set($key, $value)
     {

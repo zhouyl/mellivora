@@ -42,8 +42,11 @@ class Controller
      * @param \Mellivora\Http\Response         $response
      * @param array                            $arguments
      */
-    public function __construct(Container $container, Request $request,
-        Response $response, array $arguments
+    public function __construct(
+        Container $container,
+        Request $request,
+        Response $response,
+        array $arguments
     ) {
         $this->container = $container;
         $this->request   = $request;
@@ -54,8 +57,9 @@ class Controller
     /**
      * 获取当前路由参数
      *
-     * @param  string  $name
-     * @param  mixed   $default
+     * @param string $name
+     * @param mixed  $default
+     *
      * @return mixed
      */
     public function getArgument($name, $default = null)
@@ -66,8 +70,9 @@ class Controller
     /**
      * 设置当前路由参数，该参数仅在当前控制器内生效
      *
-     * @param  string                              $name
-     * @param  mixed                               $value
+     * @param string $name
+     * @param mixed  $value
+     *
      * @return \Mellivora\Application\Controller
      */
     public function setArgument($name, $value)
@@ -90,9 +95,10 @@ class Controller
     /**
      * 当调用不存在的方法时，会调用该方法
      *
-     * @param  string                                                      $method
-     * @param  array                                                       $args
-     * @throws \Slim\Exception\NotFoundException|\BadMethodCallException
+     * @param string $method
+     * @param array  $args
+     *
+     * @throws \BadMethodCallException|\Slim\Exception\NotFoundException
      */
     public function __call($method, array $args)
     {

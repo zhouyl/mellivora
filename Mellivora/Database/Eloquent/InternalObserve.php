@@ -2,8 +2,6 @@
 
 namespace Mellivora\Database\Eloquent;
 
-use Mellivora\Database\Eloquent\Model;
-
 /**
  * 扩展 laravel/eloquent 的 model 事件管理机制
  *
@@ -20,7 +18,6 @@ use Mellivora\Database\Eloquent\Model;
  */
 class InternalObserve
 {
-
     //-------------------------------------------------------------------------
     // 以下事件仅触发
     //-------------------------------------------------------------------------

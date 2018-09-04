@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ShareErrorsFromSession
 {
-
     /**
      * @param \Mellivora\Application\Container $container
      */
@@ -26,15 +25,17 @@ class ShareErrorsFromSession
     /**
      * Invoke middleware
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request
-     * @param  \Psr\Http\Message\ResponseInterface      $response
-     * @param  \Closure                                 $next
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Closure                                 $next
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         $this->container['view']->share(
-            'errors', $this->container['session']->get('errors') ?: new ViewErrorBag
+            'errors',
+            $this->container['session']->get('errors') ?: new ViewErrorBag
         );
 
         return $next($request, $response);

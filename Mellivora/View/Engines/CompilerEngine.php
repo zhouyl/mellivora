@@ -25,7 +25,8 @@ class CompilerEngine extends PhpEngine
     /**
      * Create a new Blade view engine instance.
      *
-     * @param  \Mellivora\View\Compilers\CompilerInterface $compiler
+     * @param \Mellivora\View\Compilers\CompilerInterface $compiler
+     *
      * @return void
      */
     public function __construct(CompilerInterface $compiler)
@@ -36,8 +37,9 @@ class CompilerEngine extends PhpEngine
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string   $path
-     * @param  array    $data
+     * @param string $path
+     * @param array  $data
+     *
      * @return string
      */
     public function get($path, array $data = [])
@@ -66,9 +68,11 @@ class CompilerEngine extends PhpEngine
     /**
      * Handle a view exception.
      *
-     * @param  \Exception $e
-     * @param  int        $obLevel
+     * @param \Exception $e
+     * @param int        $obLevel
+     *
      * @throws $e
+     *
      * @return void
      */
     protected function handleViewException(Exception $e, $obLevel)
@@ -81,7 +85,8 @@ class CompilerEngine extends PhpEngine
     /**
      * Get the exception message for an exception.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
+     *
      * @return string
      */
     protected function getMessage(Exception $e)

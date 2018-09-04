@@ -24,7 +24,7 @@ trait SoftDeletes
     /**
      * Force a hard delete on a soft deleted model.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function forceDelete()
     {
@@ -68,7 +68,7 @@ trait SoftDeletes
     /**
      * Restore a soft-deleted model instance.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function restore()
     {
@@ -106,7 +106,8 @@ trait SoftDeletes
     /**
      * Register a restoring model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function restoring($callback)
@@ -117,7 +118,8 @@ trait SoftDeletes
     /**
      * Register a restored model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function restored($callback)

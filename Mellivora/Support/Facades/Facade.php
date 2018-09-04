@@ -37,6 +37,7 @@ class Facade
      * Get the registered name of the component.
      *
      * @throws \RuntimeException
+     *
      * @return string
      */
     protected static function getFacadeAccessor()
@@ -47,7 +48,8 @@ class Facade
     /**
      * Resolve the facade root instance from the container.
      *
-     * @param  string|object $name
+     * @param object|string $name
+     *
      * @return mixed
      */
     protected static function resolveFacadeInstance($name)
@@ -104,9 +106,11 @@ class Facade
     /**
      * Handle dynamic, static calls to the object.
      *
-     * @param  string              $method
-     * @param  array               $args
+     * @param string $method
+     * @param array  $args
+     *
      * @throws \RuntimeException
+     *
      * @return mixed
      */
     public static function __callStatic($method, $args)
@@ -117,6 +121,6 @@ class Facade
             throw new RuntimeException('A facade root has not been set.');
         }
 
-        return $instance->$method(...$args);
+        return $instance->{$method}(...$args);
     }
 }

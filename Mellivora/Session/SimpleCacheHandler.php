@@ -12,7 +12,6 @@ use SessionHandlerInterface;
  */
 class SimpleCacheHandler implements SessionHandlerInterface
 {
-
     /**
      * simple cache 适配器
      *
@@ -44,7 +43,8 @@ class SimpleCacheHandler implements SessionHandlerInterface
 
         if (!is_subclass_of($connector, Connector::class)) {
             throw new InvalidArgumentException(
-                $connector . ' must implement of ' . Connector::class);
+                $connector . ' must implement of ' . Connector::class
+            );
         }
 
         $this->simpleCache = (new $connector($this->options))->getSimpleCacheAdapter();

@@ -22,9 +22,10 @@ abstract class Grammar extends BaseGrammar
     /**
      * Compile a rename column command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
-     * @param  \Mellivora\Database\Connection       $connection
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Connection       $connection
+     *
      * @return array
      */
     public function compileRenameColumn(Blueprint $blueprint, Fluent $command, Connection $connection)
@@ -35,10 +36,12 @@ abstract class Grammar extends BaseGrammar
     /**
      * Compile a change column command into a series of SQL statements.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
-     * @param  \Mellivora\Database\Connection       $connection
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Connection       $connection
+     *
      * @throws \RuntimeException
+     *
      * @return array
      */
     public function compileChange(Blueprint $blueprint, Fluent $command, Connection $connection)
@@ -49,8 +52,9 @@ abstract class Grammar extends BaseGrammar
     /**
      * Compile a foreign key command.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $command
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $command
+     *
      * @return string
      */
     public function compileForeign(Blueprint $blueprint, Fluent $command)
@@ -58,7 +62,8 @@ abstract class Grammar extends BaseGrammar
         // We need to prepare several of the elements of the foreign key definition
         // before we can create the SQL, such as wrapping the tables and convert
         // an array of columns to comma-delimited strings for the SQL queries.
-        $sql = sprintf('alter table %s add constraint %s ',
+        $sql = sprintf(
+            'alter table %s add constraint %s ',
             $this->wrapTable($blueprint),
             $this->wrap($command->index)
         );
@@ -66,7 +71,8 @@ abstract class Grammar extends BaseGrammar
         // Once we have the initial portion of the SQL statement we will add on the
         // key name, table name, and referenced columns. These will complete the
         // main portion of the SQL statement and this SQL will almost be done.
-        $sql .= sprintf('foreign key (%s) references %s (%s)',
+        $sql .= sprintf(
+            'foreign key (%s) references %s (%s)',
             $this->columnize($command->columns),
             $this->wrapTable($command->on),
             $this->columnize((array) $command->references)
@@ -89,7 +95,8 @@ abstract class Grammar extends BaseGrammar
     /**
      * Compile the blueprint's column definitions.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     *
      * @return array
      */
     protected function getColumns(Blueprint $blueprint)
@@ -111,7 +118,8 @@ abstract class Grammar extends BaseGrammar
     /**
      * Get the SQL for the column data type.
      *
-     * @param  \Mellivora\Support\Fluent $column
+     * @param \Mellivora\Support\Fluent $column
+     *
      * @return string
      */
     protected function getType(Fluent $column)
@@ -122,9 +130,10 @@ abstract class Grammar extends BaseGrammar
     /**
      * Add the column modifiers to the definition.
      *
-     * @param  string                               $sql
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Mellivora\Support\Fluent            $column
+     * @param string                               $sql
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Mellivora\Support\Fluent            $column
+     *
      * @return string
      */
     protected function addModifiers($sql, Blueprint $blueprint, Fluent $column)
@@ -141,9 +150,10 @@ abstract class Grammar extends BaseGrammar
     /**
      * Get the primary key command if it exists on the blueprint.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  string                               $name
-     * @return \Mellivora\Support\Fluent|null
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param string                               $name
+     *
+     * @return null|\Mellivora\Support\Fluent
      */
     protected function getCommandByName(Blueprint $blueprint, $name)
     {
@@ -157,22 +167,24 @@ abstract class Grammar extends BaseGrammar
     /**
      * Get all of the commands with a given name.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  string                               $name
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param string                               $name
+     *
      * @return array
      */
     protected function getCommandsByName(Blueprint $blueprint, $name)
     {
         return array_filter($blueprint->getCommands(), function ($value) use ($name) {
-            return $value->name == $name;
+            return $value->name === $name;
         });
     }
 
     /**
      * Add a prefix to an array of values.
      *
-     * @param  string  $prefix
-     * @param  array   $values
+     * @param string $prefix
+     * @param array  $values
+     *
      * @return array
      */
     public function prefixArray($prefix, array $values)
@@ -185,7 +197,8 @@ abstract class Grammar extends BaseGrammar
     /**
      * Wrap a table in keyword identifiers.
      *
-     * @param  mixed    $table
+     * @param mixed $table
+     *
      * @return string
      */
     public function wrapTable($table)
@@ -198,21 +211,24 @@ abstract class Grammar extends BaseGrammar
     /**
      * Wrap a value in keyword identifiers.
      *
-     * @param  \Mellivora\Database\Query\Expression|string $value
-     * @param  bool                                        $prefixAlias
+     * @param \Mellivora\Database\Query\Expression|string $value
+     * @param bool                                        $prefixAlias
+     *
      * @return string
      */
     public function wrap($value, $prefixAlias = false)
     {
         return parent::wrap(
-            $value instanceof Fluent ? $value->name : $value, $prefixAlias
+            $value instanceof Fluent ? $value->name : $value,
+            $prefixAlias
         );
     }
 
     /**
      * Format a value so that it can be used in "default" clauses.
      *
-     * @param  mixed    $value
+     * @param mixed $value
+     *
      * @return string
      */
     protected function getDefaultValue($value)
@@ -229,8 +245,9 @@ abstract class Grammar extends BaseGrammar
     /**
      * Create an empty Doctrine DBAL TableDiff from the Blueprint.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint        $blueprint
-     * @param  \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
+     * @param \Mellivora\Database\Schema\Blueprint        $blueprint
+     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
+     *
      * @return \Doctrine\DBAL\Schema\TableDiff
      */
     public function getDoctrineTableDiff(Blueprint $blueprint, SchemaManager $schema)

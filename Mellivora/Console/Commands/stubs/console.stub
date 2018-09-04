@@ -3,12 +3,9 @@
 namespace DummyNamespace;
 
 use Mellivora\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 class DummyClass extends Command
 {
-
     /**
      * The name and signature of the console command.
      *

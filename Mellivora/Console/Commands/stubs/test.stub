@@ -4,6 +4,9 @@ namespace DummyNamespace;
 
 use Tests\TestCase;
 
+/**
+ * @internal
+ */
 class DummyClass extends TestCase
 {
     /**

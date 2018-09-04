@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 abstract class GeneratorCommand extends Command
 {
-
     /**
      * The type of class being generated.
      *
@@ -25,7 +24,7 @@ abstract class GeneratorCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function fire()
     {
@@ -55,7 +54,8 @@ abstract class GeneratorCommand extends Command
     /**
      * Parse the class name and format according to the root namespace.
      *
-     * @param  string   $name
+     * @param string $name
+     *
      * @return string
      */
     protected function qualifyClass($name)
@@ -76,7 +76,8 @@ abstract class GeneratorCommand extends Command
     /**
      * Get the default namespace for the class.
      *
-     * @param  string   $rootNamespace
+     * @param string $rootNamespace
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
@@ -87,7 +88,8 @@ abstract class GeneratorCommand extends Command
     /**
      * Determine if the class already exists.
      *
-     * @param  string $rawName
+     * @param string $rawName
+     *
      * @return bool
      */
     protected function alreadyExists($rawName)
@@ -98,7 +100,8 @@ abstract class GeneratorCommand extends Command
     /**
      * Get the destination class path.
      *
-     * @param  string   $name
+     * @param string $name
+     *
      * @return string
      */
     protected function getPath($name)
@@ -113,7 +116,8 @@ abstract class GeneratorCommand extends Command
     /**
      * Build the directory for the class if necessary.
      *
-     * @param  string   $path
+     * @param string $path
+     *
      * @return string
      */
     protected function makeDirectory($path)
@@ -128,7 +132,8 @@ abstract class GeneratorCommand extends Command
     /**
      * Build the class with the given name.
      *
-     * @param  string   $name
+     * @param string $name
+     *
      * @return string
      */
     protected function buildClass($name)
@@ -141,8 +146,9 @@ abstract class GeneratorCommand extends Command
     /**
      * Replace the namespace for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
+     *
      * @return $this
      */
     protected function replaceNamespace(&$stub, $name)
@@ -159,7 +165,8 @@ abstract class GeneratorCommand extends Command
     /**
      * Get the full namespace for a given class, without the class name.
      *
-     * @param  string   $name
+     * @param string $name
+     *
      * @return string
      */
     protected function getNamespace($name)
@@ -170,8 +177,9 @@ abstract class GeneratorCommand extends Command
     /**
      * Replace the class name for the given stub.
      *
-     * @param  string   $stub
-     * @param  string   $name
+     * @param string $stub
+     * @param string $name
+     *
      * @return string
      */
     protected function replaceClass($stub, $name)
@@ -201,7 +209,7 @@ abstract class GeneratorCommand extends Command
     /**
      * Get the name suffix
      *
-     * @return string|false
+     * @return false|string
      */
     protected function getNameSuffix()
     {

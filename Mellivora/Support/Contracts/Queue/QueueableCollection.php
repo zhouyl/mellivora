@@ -7,7 +7,7 @@ interface QueueableCollection
     /**
      * Get the type of the entities being queued.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getQueueableClass();
 

@@ -47,8 +47,9 @@ class Migrator
     /**
      * Create a new migrator instance.
      *
-     * @param  \Mellivora\Database\Migrations\MigrationRepositoryInterface $repository
-     * @param  \Mellivora\Database\ConnectionResolverInterface             $resolver
+     * @param \Mellivora\Database\Migrations\MigrationRepositoryInterface $repository
+     * @param \Mellivora\Database\ConnectionResolverInterface             $resolver
+     *
      * @return void
      */
     public function __construct(MigrationRepositoryInterface $repository, Resolver $resolver)
@@ -60,8 +61,9 @@ class Migrator
     /**
      * Run the pending migrations at a given path.
      *
-     * @param  array|string $paths
-     * @param  array        $options
+     * @param array|string $paths
+     * @param array        $options
+     *
      * @return array
      */
     public function run($paths = [], array $options = [])
@@ -74,7 +76,8 @@ class Migrator
         $files = $this->getMigrationFiles($paths);
 
         $this->requireFiles($migrations = $this->pendingMigrations(
-            $files, $this->repository->getRan()
+            $files,
+            $this->repository->getRan()
         ));
 
         // Once we have all these migrations that are outstanding we are ready to run
@@ -88,8 +91,9 @@ class Migrator
     /**
      * Get the migration files that have not yet run.
      *
-     * @param  array   $files
-     * @param  array   $ran
+     * @param array $files
+     * @param array $ran
+     *
      * @return array
      */
     protected function pendingMigrations($files, $ran)
@@ -103,8 +107,9 @@ class Migrator
     /**
      * Run an array of migrations.
      *
-     * @param  array  $migrations
-     * @param  array  $options
+     * @param array $migrations
+     * @param array $options
+     *
      * @return void
      */
     public function runPending(array $migrations, array $options = [])
@@ -112,7 +117,7 @@ class Migrator
         // First we will just make sure that there are any migrations to run. If there
         // aren't, we will just make a note of it to the developer so they're aware
         // that all of the migrations have been run against this database system.
-        if (count($migrations) == 0) {
+        if (count($migrations) === 0) {
             $this->note('<info>Nothing to migrate.</info>');
 
             return;
@@ -134,7 +139,7 @@ class Migrator
             $this->runUp($file, $batch, $pretend);
 
             if ($step) {
-                $batch++;
+                ++$batch;
             }
         }
     }
@@ -142,9 +147,10 @@ class Migrator
     /**
      * Run "up" a migration instance.
      *
-     * @param  string $file
-     * @param  int    $batch
-     * @param  bool   $pretend
+     * @param string $file
+     * @param int    $batch
+     * @param bool   $pretend
+     *
      * @return void
      */
     protected function runUp($file, $batch, $pretend)
@@ -173,8 +179,9 @@ class Migrator
     /**
      * Rollback the last migration operation.
      *
-     * @param  array|string $paths
-     * @param  array        $options
+     * @param array|string $paths
+     * @param array        $options
+     *
      * @return array
      */
     public function rollback($paths = [], array $options = [])
@@ -190,32 +197,34 @@ class Migrator
             $this->note('<info>Nothing to rollback.</info>');
 
             return [];
-        } else {
-            return $this->rollbackMigrations($migrations, $paths, $options);
         }
+
+        return $this->rollbackMigrations($migrations, $paths, $options);
     }
 
     /**
      * Get the migrations for a rollback operation.
      *
-     * @param  array   $options
+     * @param array $options
+     *
      * @return array
      */
     protected function getMigrationsForRollback(array $options)
     {
         if (($steps = Arr::get($options, 'step', 0)) > 0) {
             return $this->repository->getMigrations($steps);
-        } else {
-            return $this->repository->getLast();
         }
+
+        return $this->repository->getLast();
     }
 
     /**
      * Rollback the given migrations.
      *
-     * @param  array   $migrations
-     * @param  array   $paths
-     * @param  array   $options
+     * @param array $migrations
+     * @param array $paths
+     * @param array $options
+     *
      * @return array
      */
     protected function rollbackMigrations(array $migrations, array $paths, array $options)
@@ -234,7 +243,8 @@ class Migrator
 
             $this->runDown(
                 $files[$migration->migration],
-                $migration, Arr::get($options, 'pretend', false)
+                $migration,
+                Arr::get($options, 'pretend', false)
             );
         }
 
@@ -244,8 +254,9 @@ class Migrator
     /**
      * Rolls all of the currently applied migrations back.
      *
-     * @param  array|string $paths
-     * @param  bool         $pretend
+     * @param array|string $paths
+     * @param bool         $pretend
+     *
      * @return array
      */
     public function reset($paths = [], $pretend = false)
@@ -261,17 +272,18 @@ class Migrator
             $this->note('<info>Nothing to rollback.</info>');
 
             return [];
-        } else {
-            return $this->resetMigrations($migrations, $paths, $pretend);
         }
+
+        return $this->resetMigrations($migrations, $paths, $pretend);
     }
 
     /**
      * Reset the given migrations.
      *
-     * @param  array   $migrations
-     * @param  array   $paths
-     * @param  bool    $pretend
+     * @param array $migrations
+     * @param array $paths
+     * @param bool  $pretend
+     *
      * @return array
      */
     protected function resetMigrations(array $migrations, array $paths, $pretend = false)
@@ -284,16 +296,19 @@ class Migrator
         })->all();
 
         return $this->rollbackMigrations(
-            $migrations, $paths, compact('pretend')
+            $migrations,
+            $paths,
+            compact('pretend')
         );
     }
 
     /**
      * Run "down" a migration instance.
      *
-     * @param  string $file
-     * @param  object $migration
-     * @param  bool   $pretend
+     * @param string $file
+     * @param object $migration
+     * @param bool   $pretend
+     *
      * @return void
      */
     protected function runDown($file, $migration, $pretend)
@@ -322,8 +337,9 @@ class Migrator
     /**
      * Run a migration inside a transaction if the database supports it.
      *
-     * @param  object $migration
-     * @param  string $method
+     * @param object $migration
+     * @param string $method
+     *
      * @return void
      */
     protected function runMigration($migration, $method)
@@ -344,8 +360,9 @@ class Migrator
     /**
      * Pretend to run the migrations.
      *
-     * @param  object $migration
-     * @param  string $method
+     * @param object $migration
+     * @param string $method
+     *
      * @return void
      */
     protected function pretendToRun($migration, $method)
@@ -360,8 +377,9 @@ class Migrator
     /**
      * Get all of the queries that would be run for a migration.
      *
-     * @param  object  $migration
-     * @param  string  $method
+     * @param object $migration
+     * @param string $method
+     *
      * @return array
      */
     protected function getQueries($migration, $method)
@@ -374,14 +392,15 @@ class Migrator
         );
 
         return $db->pretend(function () use ($migration, $method) {
-            $migration->$method();
+            $migration->{$method}();
         });
     }
 
     /**
      * Resolve a migration instance from a file.
      *
-     * @param  string   $file
+     * @param string $file
+     *
      * @return object
      */
     public function resolve($file)
@@ -394,7 +413,8 @@ class Migrator
     /**
      * Get all of the migration files in a given path.
      *
-     * @param  string|array $paths
+     * @param array|string $paths
+     *
      * @return array
      */
     public function getMigrationFiles($paths)
@@ -411,7 +431,8 @@ class Migrator
     /**
      * Require in all the migration files in a given path.
      *
-     * @param  array  $files
+     * @param array $files
+     *
      * @return void
      */
     public function requireFiles(array $files)
@@ -424,7 +445,8 @@ class Migrator
     /**
      * Get the name of the migration.
      *
-     * @param  string   $path
+     * @param string $path
+     *
      * @return string
      */
     public function getMigrationName($path)
@@ -435,7 +457,8 @@ class Migrator
     /**
      * Register a custom migration path.
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return void
      */
     public function path($path)
@@ -456,7 +479,8 @@ class Migrator
     /**
      * Set the default connection name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return void
      */
     public function setConnection($name)
@@ -469,7 +493,8 @@ class Migrator
     /**
      * Resolve the database connection instance.
      *
-     * @param  string                           $connection
+     * @param string $connection
+     *
      * @return \Mellivora\Database\Connection
      */
     public function resolveConnection($connection)
@@ -480,7 +505,8 @@ class Migrator
     /**
      * Get the schema grammar out of a migration connection.
      *
-     * @param  \Mellivora\Database\Connection                $connection
+     * @param \Mellivora\Database\Connection $connection
+     *
      * @return \Mellivora\Database\Schema\Grammars\Grammar
      */
     protected function getSchemaGrammar($connection)
@@ -517,7 +543,8 @@ class Migrator
     /**
      * Raise a note event for the migrator.
      *
-     * @param  string $message
+     * @param string $message
+     *
      * @return void
      */
     protected function note($message)

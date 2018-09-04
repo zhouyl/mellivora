@@ -4,7 +4,6 @@ namespace Mellivora\Application;
 
 use Mellivora\Http\Request;
 use Mellivora\Http\Response;
-use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
 use Slim\Exception\NotFoundException;
 
@@ -15,7 +14,6 @@ use Slim\Exception\NotFoundException;
  */
 class Dispatcher
 {
-
     /**
      * @var \Mellivora\Application\Container
      */
@@ -32,8 +30,10 @@ class Dispatcher
     /**
      * 检测 controller 的 class 类型
      *
-     * @param  array                                                         $args
+     * @param array $args
+     *
      * @throws \Slim\Exception\NotFoundException|\UnexpectedValueException
+     *
      * @return string
      */
     protected function detectControllerClass(array $args)
@@ -47,13 +47,16 @@ class Dispatcher
 
         if (!class_exists($class)) {
             throw new NotFoundException(
-                $this->container['request'], $this->container['response']);
+                $this->container['request'],
+                $this->container['response']
+            );
         }
 
         // controller 类型检测
         if (!is_subclass_of($class, Controller::class)) {
             throw new UnexpectedValueException(
-                $class . ' must return instance of ' . Controller::class);
+                $class . ' must return instance of ' . Controller::class
+            );
         }
 
         return $class;
@@ -62,9 +65,10 @@ class Dispatcher
     /**
      * 执行 route 请求，分发到 controller/action 执行
      *
-     * @param  \Mellivora\Http\Request  $request
-     * @param  \Mellivora\Http\Response $response
-     * @param  array                    $args
+     * @param \Mellivora\Http\Request  $request
+     * @param \Mellivora\Http\Response $response
+     * @param array                    $args
+     *
      * @return mixed
      */
     public function __invoke(Request $request, Response $response, array $args)
@@ -74,7 +78,7 @@ class Dispatcher
         $handler = new $class($this->container, $request, $response, $args);
 
         try {
-            /**
+            /*
              * 调用初始化方法
              *
              * 当返回 false 时，中断 action 执行并返回 $response
@@ -103,9 +107,9 @@ class Dispatcher
             );
 
             // call action
-            $return = $handler->$method(...array_values($args));
+            $return = $handler->{$method}(...array_values($args));
         } catch (\Exception $e) {
-            /**
+            /*
              * 当 controller 中存在 exceptionHandler 方法时
              * 调用该方法来对异常进行统一处理
              */
@@ -116,9 +120,7 @@ class Dispatcher
             }
         }
 
-        /**
-         * 根据 return 的结果进行 response 格式化处理
-         */
+        // 根据 return 的结果进行 response 格式化处理
         if (is_array($return)) {
             $response = $response->withJson($return);
         } elseif (!$return instanceof Response) {
@@ -127,7 +129,7 @@ class Dispatcher
             $response = $return;
         }
 
-        /**
+        /*
          * 当 controller 中存在 finalize 方法时
          * 调用该方法，对响应结果进行再处理
          * 如果该方法 return 返回一个 response 的结果

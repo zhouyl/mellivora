@@ -7,18 +7,20 @@ trait CompilesTranslations
     /**
      * Compile the lang statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileLang($expression)
     {
         if (is_null($expression)) {
             return '<?php $__env->startTranslation(); ?>';
-        } elseif ($expression[1] === '[') {
-            return "<?php \$__env->startTranslation{$expression}; ?>";
-        } else {
-            return "<?php echo app('translator')->getFromJson{$expression}; ?>";
         }
+        if ($expression[1] === '[') {
+            return "<?php \$__env->startTranslation{$expression}; ?>";
+        }
+
+        return "<?php echo app('translator')->getFromJson{$expression}; ?>";
     }
 
     /**
@@ -34,7 +36,8 @@ trait CompilesTranslations
     /**
      * Compile the choice statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileChoice($expression)

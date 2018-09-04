@@ -30,7 +30,8 @@ trait HasEvents
     /**
      * Register an observer with the Model.
      *
-     * @param  object|string $class
+     * @param object|string $class
+     *
      * @return void
      */
     public static function observe($class)
@@ -50,8 +51,9 @@ trait HasEvents
     /**
      * Register a model event with the dispatcher.
      *
-     * @param  string          $event
-     * @param  \Closure|string $callback
+     * @param string          $event
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     protected static function registerModelEvent($event, $callback)
@@ -64,8 +66,9 @@ trait HasEvents
     /**
      * Fire the given event for the model.
      *
-     * @param  string  $event
-     * @param  bool    $halt
+     * @param string $event
+     * @param bool   $halt
+     *
      * @return mixed
      */
     protected function fireModelEvent($event, $halt = true)
@@ -82,16 +85,18 @@ trait HasEvents
         $result = $this->fireCustomModelEvent($event, $method);
 
         return !is_null($result) ? $result : static::$dispatcher->{$method}(
-            "eloquent.{$event}", $this
+            "eloquent.{$event}",
+            $this
         );
     }
 
     /**
      * Fire a custom model event for the given event.
      *
-     * @param  string       $event
-     * @param  string       $method
-     * @return mixed|null
+     * @param string $event
+     * @param string $method
+     *
+     * @return null|mixed
      */
     protected function fireCustomModelEvent($event, $method)
     {
@@ -99,7 +104,7 @@ trait HasEvents
             return;
         }
 
-        $result = static::$dispatcher->$method(new $this->events[$event]($this));
+        $result = static::$dispatcher->{$method}(new $this->events[$event]($this));
 
         if (!is_null($result)) {
             return $result;
@@ -109,7 +114,8 @@ trait HasEvents
     /**
      * Register a saving model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function saving($callback)
@@ -120,7 +126,8 @@ trait HasEvents
     /**
      * Register a saved model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function saved($callback)
@@ -131,7 +138,8 @@ trait HasEvents
     /**
      * Register an updating model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function updating($callback)
@@ -142,7 +150,8 @@ trait HasEvents
     /**
      * Register an updated model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function updated($callback)
@@ -153,7 +162,8 @@ trait HasEvents
     /**
      * Register a creating model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function creating($callback)
@@ -164,7 +174,8 @@ trait HasEvents
     /**
      * Register a created model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function created($callback)
@@ -175,7 +186,8 @@ trait HasEvents
     /**
      * Register a deleting model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function deleting($callback)
@@ -186,7 +198,8 @@ trait HasEvents
     /**
      * Register a deleted model event with the dispatcher.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public static function deleted($callback)
@@ -225,7 +238,8 @@ trait HasEvents
     /**
      * Set the event dispatcher instance.
      *
-     * @param  \Mellivora\Support\Contracts\Events\Dispatcher $dispatcher
+     * @param \Mellivora\Support\Contracts\Events\Dispatcher $dispatcher
+     *
      * @return void
      */
     public static function setEventDispatcher(Dispatcher $dispatcher)

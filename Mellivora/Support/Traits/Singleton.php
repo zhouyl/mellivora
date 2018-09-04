@@ -4,7 +4,6 @@ namespace Mellivora\Support\Traits;
 
 trait Singleton
 {
-
     /**
      * 当前使用的单例实例
      *

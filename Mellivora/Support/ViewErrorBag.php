@@ -17,7 +17,8 @@ class ViewErrorBag implements Countable
     /**
      * Checks if a named MessageBag exists in the bags.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     public function hasBag($key = 'default')
@@ -28,7 +29,8 @@ class ViewErrorBag implements Countable
     /**
      * Get a MessageBag instance from the bags.
      *
-     * @param  string                                    $key
+     * @param string $key
+     *
      * @return \Mellivora\Support\Contracts\MessageBag
      */
     public function getBag($key)
@@ -49,8 +51,9 @@ class ViewErrorBag implements Countable
     /**
      * Add a new MessageBag instance to the bags.
      *
-     * @param  string                                  $key
-     * @param  \Mellivora\Support\Contracts\MessageBag $bag
+     * @param string                                  $key
+     * @param \Mellivora\Support\Contracts\MessageBag $bag
+     *
      * @return $this
      */
     public function put($key, MessageBagContract $bag)
@@ -83,19 +86,21 @@ class ViewErrorBag implements Countable
     /**
      * Dynamically call methods on the default bag.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)
     {
-        return $this->getBag('default')->$method(...$parameters);
+        return $this->getBag('default')->{$method}(...$parameters);
     }
 
     /**
      * Dynamically access a view error bag.
      *
-     * @param  string                                    $key
+     * @param string $key
+     *
      * @return \Mellivora\Support\Contracts\MessageBag
      */
     public function __get($key)
@@ -106,8 +111,9 @@ class ViewErrorBag implements Countable
     /**
      * Dynamically set a view error bag.
      *
-     * @param  string                                  $key
-     * @param  \Mellivora\Support\Contracts\MessageBag $value
+     * @param string                                  $key
+     * @param \Mellivora\Support\Contracts\MessageBag $value
+     *
      * @return void
      */
     public function __set($key, $value)

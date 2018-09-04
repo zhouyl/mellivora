@@ -38,10 +38,11 @@ class Pivot extends Model
     /**
      * Create a new pivot model instance.
      *
-     * @param  \Mellivora\Database\Eloquent\Model $parent
-     * @param  array                              $attributes
-     * @param  string                             $table
-     * @param  bool                               $exists
+     * @param \Mellivora\Database\Eloquent\Model $parent
+     * @param array                              $attributes
+     * @param string                             $table
+     * @param bool                               $exists
+     *
      * @return void
      */
     public function __construct(Model $parent, $attributes, $table, $exists = false)
@@ -69,10 +70,11 @@ class Pivot extends Model
     /**
      * Create a new pivot model from raw values returned from a query.
      *
-     * @param  \Mellivora\Database\Eloquent\Model $parent
-     * @param  array                              $attributes
-     * @param  string                             $table
-     * @param  bool                               $exists
+     * @param \Mellivora\Database\Eloquent\Model $parent
+     * @param array                              $attributes
+     * @param string                             $table
+     * @param bool                               $exists
+     *
      * @return static
      */
     public static function fromRawAttributes(Model $parent, $attributes, $table, $exists = false)
@@ -87,7 +89,8 @@ class Pivot extends Model
     /**
      * Set the keys for a save update query.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     *
      * @return \Mellivora\Database\Eloquent\Builder
      */
     protected function setKeysForSaveQuery(Builder $query)
@@ -153,8 +156,9 @@ class Pivot extends Model
     /**
      * Set the key names for the pivot model instance.
      *
-     * @param  string  $foreignKey
-     * @param  string  $relatedKey
+     * @param string $foreignKey
+     * @param string $relatedKey
+     *
      * @return $this
      */
     public function setPivotKeys($foreignKey, $relatedKey)

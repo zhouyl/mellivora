@@ -18,7 +18,8 @@ class CallQueuedHandler
     /**
      * Create a new job instance.
      *
-     * @param  \Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
+     *
      * @return void
      */
     public function __construct(Container $container)
@@ -29,18 +30,21 @@ class CallQueuedHandler
     /**
      * Handle the queued job.
      *
-     * @param  \Mellivora\Support\Contracts\Queue\Job $job
-     * @param  array                                  $data
+     * @param \Mellivora\Support\Contracts\Queue\Job $job
+     * @param array                                  $data
+     *
      * @return void
      */
     public function call(Job $job, array $data)
     {
         $handler = $this->setJobInstanceIfNecessary(
-            $job, $this->container->make($data['class'])
+            $job,
+            $this->container->make($data['class'])
         );
 
         call_user_func_array(
-            [$handler, $data['method']], unserialize($data['data'])
+            [$handler, $data['method']],
+            unserialize($data['data'])
         );
 
         if (!$job->isDeletedOrReleased()) {
@@ -51,8 +55,9 @@ class CallQueuedHandler
     /**
      * Set the job instance of the given class if necessary.
      *
-     * @param  \Mellivora\Support\Contracts\Queue\Job $job
-     * @param  mixed                                  $instance
+     * @param \Mellivora\Support\Contracts\Queue\Job $job
+     * @param mixed                                  $instance
+     *
      * @return mixed
      */
     protected function setJobInstanceIfNecessary(Job $job, $instance)
@@ -69,8 +74,9 @@ class CallQueuedHandler
      *
      * The event instance and the exception will be passed.
      *
-     * @param  array      $data
-     * @param  \Exception $e
+     * @param array      $data
+     * @param \Exception $e
+     *
      * @return void
      */
     public function failed(array $data, $e)

@@ -10,7 +10,8 @@ class Json extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string                             $file
+     * @param string $file
+     *
      * @throws \Mellivora\Config\ParseException
      */
     public function __construct($file)

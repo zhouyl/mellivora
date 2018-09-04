@@ -7,7 +7,6 @@ use Slim\Http\Headers;
 
 class HttpServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider.
      *
@@ -45,9 +44,7 @@ class HttpServiceProvider extends ServiceProvider
     public function registerRequestProvider()
     {
         $this->container['request'] = function ($container) {
-            $request = Request::createFromEnvironment($container['environment']);
-
-            return $request;
+            return Request::createFromEnvironment($container['environment']);
         };
     }
 

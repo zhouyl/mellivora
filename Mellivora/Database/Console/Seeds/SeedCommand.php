@@ -74,7 +74,7 @@ class SeedCommand extends Command
     {
         $class = studly_case($this->input->getArgument('class'));
 
-        if (strpos($class, 'Seeder') == false) {
+        if (strpos($class, 'Seeder') === false) {
             $class .= 'Seeder';
         }
 

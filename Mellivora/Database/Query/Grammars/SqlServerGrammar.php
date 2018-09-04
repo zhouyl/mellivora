@@ -21,7 +21,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile a select query into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     public function compileSelect(Builder $query)
@@ -38,16 +39,18 @@ class SqlServerGrammar extends Grammar
         }
 
         return $this->compileAnsiOffset(
-            $query, $this->compileComponents($query)
+            $query,
+            $this->compileComponents($query)
         );
     }
 
     /**
      * Compile the "select *" portion of the query.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $columns
-     * @return string|null
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $columns
+     *
+     * @return null|string
      */
     protected function compileColumns(Builder $query, $columns)
     {
@@ -70,8 +73,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the "from" portion of the query.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  string                            $table
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param string                            $table
+     *
      * @return string
      */
     protected function compileFrom(Builder $query, $table)
@@ -92,8 +96,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile a "where date" clause.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function whereDate(Builder $query, $where)
@@ -106,8 +111,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Create a full ANSI offset clause for the query.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $components
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $components
+     *
      * @return string
      */
     protected function compileAnsiOffset(Builder $query, $components)
@@ -137,7 +143,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the over statement for a table expression.
      *
-     * @param  string   $orderings
+     * @param string $orderings
+     *
      * @return string
      */
     protected function compileOver($orderings)
@@ -148,8 +155,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile a common table expression for a query.
      *
-     * @param  string                            $sql
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param string                            $sql
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     protected function compileTableExpression($sql, $query)
@@ -162,7 +170,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the limit / offset row constraint for a query.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     protected function compileRowConstraint($query)
@@ -181,7 +190,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the random statement into SQL.
      *
-     * @param  string   $seed
+     * @param string $seed
+     *
      * @return string
      */
     public function compileRandom($seed)
@@ -192,8 +202,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the "limit" portions of the query.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  int                               $limit
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param int                               $limit
+     *
      * @return string
      */
     protected function compileLimit(Builder $query, $limit)
@@ -204,8 +215,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the "offset" portions of the query.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  int                               $offset
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param int                               $offset
+     *
      * @return string
      */
     protected function compileOffset(Builder $query, $offset)
@@ -216,8 +228,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile the lock into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  bool|string                       $value
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param bool|string                       $value
+     *
      * @return string
      */
     protected function compileLock(Builder $query, $value)
@@ -228,7 +241,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile an exists statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     public function compileExists(Builder $query)
@@ -243,7 +257,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile a delete statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     public function compileDelete(Builder $query)
@@ -260,9 +275,10 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile a delete statement with joins into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  string                            $table
-     * @param  string                            $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param string                            $table
+     * @param string                            $where
+     *
      * @return string
      */
     protected function compileDeleteWithJoins(Builder $query, $table, $where)
@@ -275,7 +291,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile a truncate table statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return array
      */
     public function compileTruncate(Builder $query)
@@ -286,8 +303,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Compile an update statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $values
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $values
+     *
      * @return string
      */
     public function compileUpdate(Builder $query, $values)
@@ -325,7 +343,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Get the table and alias for the given table.
      *
-     * @param  string  $table
+     * @param string $table
+     *
      * @return array
      */
     protected function parseUpdateTable($table)
@@ -342,8 +361,9 @@ class SqlServerGrammar extends Grammar
     /**
      * Prepare the bindings for an update statement.
      *
-     * @param  array   $bindings
-     * @param  array   $values
+     * @param array $bindings
+     * @param array $values
+     *
      * @return array
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
@@ -381,7 +401,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Wrap a single string in keyword identifiers.
      *
-     * @param  string   $value
+     * @param string $value
+     *
      * @return string
      */
     protected function wrapValue($value)
@@ -392,7 +413,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Wrap a table in keyword identifiers.
      *
-     * @param  \Mellivora\Database\Query\Expression|string $table
+     * @param \Mellivora\Database\Query\Expression|string $table
+     *
      * @return string
      */
     public function wrapTable($table)
@@ -403,7 +425,8 @@ class SqlServerGrammar extends Grammar
     /**
      * Wrap a table in keyword identifiers.
      *
-     * @param  string   $table
+     * @param string $table
+     *
      * @return string
      */
     protected function wrapTableValuedFunction($table)

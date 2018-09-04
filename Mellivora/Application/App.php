@@ -9,9 +9,7 @@ use Mellivora\Support\Traits\Singleton;
 use Slim\App as SlimApp;
 use UnexpectedValueException;
 
-/**
- * 定义 json_encode 的默认选项
- */
+// 定义 json_encode 的默认选项
 if (!defined('JSON_ENCODE_OPTION')) {
     define('JSON_ENCODE_OPTION', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
@@ -25,9 +23,7 @@ if (!defined('JSON_ENCODE_OPTION')) {
  */
 class App extends SlimApp
 {
-    /**
-     * 使用 Singleton，让 App 支持单例调用
-     */
+    // 使用 Singleton，让 App 支持单例调用
     use Singleton;
 
     /**
@@ -75,7 +71,8 @@ class App extends SlimApp
             foreach ($container->get('providers') as $class) {
                 if (!is_subclass_of($class, ServiceProvider::class)) {
                     throw new UnexpectedValueException(
-                        $class . ' must return instance of ' . ServiceProvider::class);
+                        $class . ' must return instance of ' . ServiceProvider::class
+                    );
                 }
 
                 (new $class($this))->register();
@@ -122,7 +119,8 @@ class App extends SlimApp
                     Str::camel($route->getArgument('controller', 'index'))
                 )
                 ->setArgument(
-                    'action', Str::camel($route->getArgument('action', 'index'))
+                    'action',
+                    Str::camel($route->getArgument('action', 'index'))
                 );
 
             return $next($request, $response);

@@ -46,7 +46,8 @@ class AcceptHeaderItem
     /**
      * Builds an AcceptHeaderInstance instance from a string.
      *
-     * @param  string $itemValue
+     * @param string $itemValue
+     *
      * @return self
      */
     public static function fromString($itemValue)
@@ -91,7 +92,8 @@ class AcceptHeaderItem
     /**
      * Set the item value.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return $this
      */
     public function setValue($value)
@@ -114,7 +116,8 @@ class AcceptHeaderItem
     /**
      * Set the item quality.
      *
-     * @param  float   $quality
+     * @param float $quality
+     *
      * @return $this
      */
     public function setQuality($quality)
@@ -137,7 +140,8 @@ class AcceptHeaderItem
     /**
      * Set the item index.
      *
-     * @param  int     $index
+     * @param int $index
+     *
      * @return $this
      */
     public function setIndex($index)
@@ -160,7 +164,8 @@ class AcceptHeaderItem
     /**
      * Tests if an attribute exists.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return bool
      */
     public function hasAttribute($name)
@@ -171,8 +176,9 @@ class AcceptHeaderItem
     /**
      * Returns an attribute by its name.
      *
-     * @param  string  $name
-     * @param  mixed   $default
+     * @param string $name
+     * @param mixed  $default
+     *
      * @return mixed
      */
     public function getAttribute($name, $default = null)
@@ -193,8 +199,9 @@ class AcceptHeaderItem
     /**
      * Set an attribute.
      *
-     * @param  string  $name
-     * @param  string  $value
+     * @param string $name
+     * @param string $value
+     *
      * @return $this
      */
     public function setAttribute($name, $value)

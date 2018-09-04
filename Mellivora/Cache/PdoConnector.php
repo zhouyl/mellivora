@@ -8,11 +8,10 @@ use Symfony\Component\Cache\Simple\PdoCache;
 /**
  * PDO 数据库缓存连接器
  *
- * @link https://symfony.com/doc/current/components/cache/adapters/phpfiles_adapter.html
+ * @see https://symfony.com/doc/current/components/cache/adapters/phpfiles_adapter.html
  */
 class PdoConnector extends Connector
 {
-
     /**
      * 配置参数
      *
@@ -64,7 +63,8 @@ class PdoConnector extends Connector
     /**
      * 自动创建数据表
      *
-     * @param  object   $cache
+     * @param object $cache
+     *
      * @return object
      */
     protected function autoCreateTable($cache)

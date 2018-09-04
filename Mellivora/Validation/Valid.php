@@ -2,7 +2,6 @@
 
 namespace Mellivora\Validation;
 
-use Mellivora\Support\Arr;
 use Mellivora\Support\Traits\Macroable;
 
 class Valid
@@ -12,8 +11,9 @@ class Valid
     /**
      * 检查结果是否为非空
      *
-     * @param  mixed     $value
-     * @return boolean
+     * @param mixed $value
+     *
+     * @return bool
      */
     public static function required($value)
     {
@@ -23,9 +23,10 @@ class Valid
     /**
      * 判断是否在数组范围内
      *
-     * @param  mixed     $value
-     * @param  array     $array
-     * @return boolean
+     * @param mixed $value
+     * @param array $array
+     *
+     * @return bool
      */
     public static function inArray($value, array $array)
     {
@@ -35,9 +36,10 @@ class Valid
     /**
      * 判断是否不在数组范围内
      *
-     * @param  mixed     $value
-     * @param  array     $array
-     * @return boolean
+     * @param mixed $value
+     * @param array $array
+     *
+     * @return bool
      */
     public static function notInArray($value, array $array)
     {
@@ -47,9 +49,10 @@ class Valid
     /**
      * 正式表达式是否匹配
      *
-     * @param  string    $value
-     * @param  string    $expression
-     * @return boolean
+     * @param string $value
+     * @param string $expression
+     *
+     * @return bool
      */
     public static function regex($value, $expression)
     {
@@ -59,10 +62,11 @@ class Valid
     /**
      * 检测字符串是否符合长度范围
      *
-     * @param  string    $value
-     * @param  integer   $min
-     * @param  integer   $max
-     * @return boolean
+     * @param string $value
+     * @param int    $min
+     * @param int    $max
+     *
+     * @return bool
      */
     public static function length($value, $min = null, $max = null)
     {
@@ -85,9 +89,10 @@ class Valid
      *     Valid::lengths($value, [10, 20]);
      *     Valid::lengths($value, 10);
      *
-     * @param  string        $value
-     * @param  integer|array $length
-     * @return boolean
+     * @param string    $value
+     * @param array|int $length
+     *
+     * @return bool
      */
     public static function lengths($value, $length)
     {
@@ -97,6 +102,7 @@ class Valid
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -106,10 +112,11 @@ class Valid
     /**
      * 检测两个值是否完全相等
      *
-     * @param  string    $value
-     * @param  string    $target
-     * @param  boolean   $ignoreCase
-     * @return boolean
+     * @param string $value
+     * @param string $target
+     * @param bool   $ignoreCase
+     *
+     * @return bool
      */
     public static function equal($value, $target, $ignoreCase = false)
     {
@@ -123,16 +130,17 @@ class Valid
             }
         }
 
-        return ($value === $target);
+        return $value === $target;
     }
 
     /**
      * 检测两个值是否完全不相等
      *
-     * @param  mixed     $value
-     * @param  mixed     $target
-     * @param  boolean   $ignoreCase
-     * @return boolean
+     * @param mixed $value
+     * @param mixed $target
+     * @param bool  $ignoreCase
+     *
+     * @return bool
      */
     public static function notEqual($value, $target, $ignoreCase = false)
     {
@@ -142,12 +150,13 @@ class Valid
     /**
      * 检测是否有效的 email 地址
      *
-     * @link  http://www.iamcal.com/publish/articles/php/parsing_email/
-     * @link  http://www.w3.org/Protocols/rfc822/
+     * @see  http://www.iamcal.com/publish/articles/php/parsing_email/
+     * @see  http://www.w3.org/Protocols/rfc822/
      *
-     * @param  string    $value
-     * @param  boolean   $strict
-     * @return boolean
+     * @param string $value
+     * @param bool   $strict
+     *
+     * @return bool
      */
     public static function email($value, $strict = false)
     {
@@ -179,9 +188,10 @@ class Valid
     /**
      * 检测是否有效的 url 地址
      *
-     * @param  string    $value
-     * @param  boolean   $onlyHttp
-     * @return boolean
+     * @param string $value
+     * @param bool   $onlyHttp
+     *
+     * @return bool
      */
     public static function url($value, $onlyHttp = false)
     {
@@ -221,8 +231,9 @@ class Valid
     /**
      * 检测是否有效的 ip 地址
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function ip($value)
     {
@@ -232,8 +243,9 @@ class Valid
     /**
      * 检测是否有效的 ipv4 地址
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function ipv4($value)
     {
@@ -243,8 +255,9 @@ class Valid
     /**
      * 检测是否有效的 ipv6 地址
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function ipv6($value)
     {
@@ -254,8 +267,9 @@ class Valid
     /**
      * 检测是否有效的日期格式
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function date($value)
     {
@@ -275,8 +289,9 @@ class Valid
     /**
      * 检测是否为纯字母字符 [a-zA-Z]
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function alpha($value)
     {
@@ -286,8 +301,9 @@ class Valid
     /**
      * 检测是否为纯字母+数字的字符 [a-zA-Z0-9]
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function alphaNumeric($value)
     {
@@ -301,8 +317,9 @@ class Valid
     /**
      * 检测是否为纯字母+数字+下划线+中划线的字符 [a-zA-Z0-9]
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function alphaDash($value)
     {
@@ -316,8 +333,9 @@ class Valid
     /**
      * 检查字符串是否仅由数字组成
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function digit($value)
     {
@@ -331,7 +349,9 @@ class Valid
      * to allow decimal point to be locale specific.
      *
      * @param  string    input string
-     * @return boolean
+     * @param mixed $value
+     *
+     * @return bool
      */
     public static function numeric($value)
     {
@@ -345,36 +365,39 @@ class Valid
     /**
      * 检测数字是否在指定的大小范围内
      *
-     * @param  string    $value
-     * @param  integer   $min
-     * @param  integer   $max
-     * @return boolean
+     * @param string $value
+     * @param int    $min
+     * @param int    $max
+     *
+     * @return bool
      */
     public static function range($value, $min, $max)
     {
-        return ($value >= $min && $value <= $max);
+        return $value >= $min && $value <= $max;
     }
 
     /**
      * 检测数字是否在指定的大小范围内
      *
-     * @param  string    $value
-     * @param  integer   $min
-     * @param  integer   $max
-     * @return boolean
+     * @param string $value
+     * @param int    $min
+     * @param int    $max
+     *
+     * @return bool
      */
     public static function between($value, $min, $max)
     {
-        return ($value >= $min && $value <= $max);
+        return $value >= $min && $value <= $max;
     }
 
     /**
      * 检测是否大于指定的值
      *
-     * @param  integer   $value
-     * @param  integer   $min
-     * @param  boolean   $equal
-     * @return boolean
+     * @param int  $value
+     * @param int  $min
+     * @param bool $equal
+     *
+     * @return bool
      */
     public static function min($value, $min = 0, $equal = true)
     {
@@ -384,10 +407,11 @@ class Valid
     /**
      * 检测是否小于指定的值
      *
-     * @param  integer   $value
-     * @param  integer   $max
-     * @param  boolean   $equal
-     * @return boolean
+     * @param int  $value
+     * @param int  $max
+     * @param bool $equal
+     *
+     * @return bool
      */
     public static function max($value, $max = 0, $equal = true)
     {
@@ -397,10 +421,11 @@ class Valid
     /**
      * 检测数字是否满足有效的位数
      *
-     * @param  string    $value
-     * @param  integer   $places  小数点后的位数
-     * @param  integer   $digits  小数点前的位数
-     * @return boolean
+     * @param string $value
+     * @param int    $places 小数点后的位数
+     * @param int    $digits 小数点前的位数
+     *
+     * @return bool
      */
     public static function decimal($value, $places = 2, $digits = null)
     {
@@ -419,8 +444,9 @@ class Valid
     /**
      * 检测是否合法的 html color 值
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function color($value)
     {
@@ -430,8 +456,9 @@ class Valid
     /**
      * 检测是否有效的 json 数据
      *
-     * @param  string    $value
-     * @return boolean
+     * @param string $value
+     *
+     * @return bool
      */
     public static function json($value)
     {
@@ -447,13 +474,14 @@ class Valid
     /**
      * 检测数组中两个不同 key 的值是否相同
      *
-     * @param  array     $array
-     * @param  string    $field
-     * @param  string    $match
-     * @return boolean
+     * @param array  $array
+     * @param string $field
+     * @param string $match
+     *
+     * @return bool
      */
     public static function matches($array, $field, $match)
     {
-        return ($array[$field] === $array[$match]);
+        return $array[$field] === $array[$match];
     }
 }

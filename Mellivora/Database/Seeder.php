@@ -37,7 +37,8 @@ abstract class Seeder
     /**
      * Seed the given connection from the given path.
      *
-     * @param  string $class
+     * @param string $class
+     *
      * @return void
      */
     public function call($class)
@@ -53,6 +54,7 @@ abstract class Seeder
      * Run the database seeds.
      *
      * @throws \InvalidArgumentException
+     *
      * @return void
      */
     public function __invoke()

@@ -2,12 +2,10 @@
 
 namespace Mellivora\Config;
 
-use Mellivora\Config\Accessor;
 use Mellivora\Support\ServiceProvider;
 
 class ConfigServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider.
      *
@@ -24,5 +22,4 @@ class ConfigServiceProvider extends ServiceProvider
             ]);
         };
     }
-
 }

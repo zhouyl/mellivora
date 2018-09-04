@@ -2,13 +2,11 @@
 
 namespace Mellivora\Cache;
 
-use Mellivora\Cache\Manager;
 use Mellivora\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
 
 class CacheServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider.
      *

@@ -30,7 +30,8 @@ class MySqlGrammar extends Grammar
     /**
      * Compile a select query into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     public function compileSelect(Builder $query)
@@ -47,7 +48,8 @@ class MySqlGrammar extends Grammar
     /**
      * Compile a single union statement.
      *
-     * @param  array    $union
+     * @param array $union
+     *
      * @return string
      */
     protected function compileUnion(array $union)
@@ -60,7 +62,8 @@ class MySqlGrammar extends Grammar
     /**
      * Compile the random statement into SQL.
      *
-     * @param  string   $seed
+     * @param string $seed
+     *
      * @return string
      */
     public function compileRandom($seed)
@@ -71,8 +74,9 @@ class MySqlGrammar extends Grammar
     /**
      * Compile the lock into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  bool|string                       $value
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param bool|string                       $value
+     *
      * @return string
      */
     protected function compileLock(Builder $query, $value)
@@ -87,8 +91,9 @@ class MySqlGrammar extends Grammar
     /**
      * Compile an update statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $values
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $values
+     *
      * @return string
      */
     public function compileUpdate(Builder $query, $values)
@@ -136,7 +141,8 @@ class MySqlGrammar extends Grammar
     /**
      * Compile all of the columns for an update statement.
      *
-     * @param  array    $values
+     * @param array $values
+     *
      * @return string
      */
     protected function compileUpdateColumns($values)
@@ -144,17 +150,18 @@ class MySqlGrammar extends Grammar
         return collect($values)->map(function ($value, $key) {
             if ($this->isJsonSelector($key)) {
                 return $this->compileJsonUpdateColumn($key, new JsonExpression($value));
-            } else {
-                return $this->wrap($key) . ' = ' . $this->parameter($value);
             }
+
+            return $this->wrap($key) . ' = ' . $this->parameter($value);
         })->implode(', ');
     }
 
     /**
      * Prepares a JSON column being updated using the JSON_SET function.
      *
-     * @param  string                                   $key
-     * @param  \Mellivora\Database\Query\JsonExpression $value
+     * @param string                                   $key
+     * @param \Mellivora\Database\Query\JsonExpression $value
+     *
      * @return string
      */
     protected function compileJsonUpdateColumn($key, JsonExpression $value)
@@ -173,8 +180,9 @@ class MySqlGrammar extends Grammar
      *
      * Booleans, integers, and doubles are inserted into JSON updates as raw values.
      *
-     * @param  array   $bindings
-     * @param  array   $values
+     * @param array $bindings
+     * @param array $values
+     *
      * @return array
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
@@ -190,7 +198,8 @@ class MySqlGrammar extends Grammar
     /**
      * Compile a delete statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     public function compileDelete(Builder $query)
@@ -207,9 +216,10 @@ class MySqlGrammar extends Grammar
     /**
      * Compile a delete query that does not use joins.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  string                            $table
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param string                            $table
+     * @param array                             $where
+     *
      * @return string
      */
     protected function compileDeleteWithoutJoins($query, $table, $where)
@@ -233,9 +243,10 @@ class MySqlGrammar extends Grammar
     /**
      * Compile a delete query that uses joins.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  string                            $table
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param string                            $table
+     * @param array                             $where
+     *
      * @return string
      */
     protected function compileDeleteWithJoins($query, $table, $where)
@@ -248,7 +259,8 @@ class MySqlGrammar extends Grammar
     /**
      * Wrap a single string in keyword identifiers.
      *
-     * @param  string   $value
+     * @param string $value
+     *
      * @return string
      */
     protected function wrapValue($value)
@@ -270,7 +282,8 @@ class MySqlGrammar extends Grammar
     /**
      * Wrap the given JSON selector.
      *
-     * @param  string   $value
+     * @param string $value
+     *
      * @return string
      */
     protected function wrapJsonSelector($value)
@@ -287,7 +300,8 @@ class MySqlGrammar extends Grammar
     /**
      * Determine if the given string is a JSON selector.
      *
-     * @param  string $value
+     * @param string $value
+     *
      * @return bool
      */
     protected function isJsonSelector($value)

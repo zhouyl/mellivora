@@ -12,7 +12,7 @@ class HasOne extends HasOneOrMany
      *
      * Alternatively, may be a Closure to execute to retrieve default value.
      *
-     * @var \Closure|bool
+     * @var bool|\Closure
      */
     protected $withDefault;
 
@@ -29,8 +29,9 @@ class HasOne extends HasOneOrMany
     /**
      * Initialize the relation on a set of models.
      *
-     * @param  array   $models
-     * @param  string  $relation
+     * @param array  $models
+     * @param string $relation
+     *
      * @return array
      */
     public function initRelation(array $models, $relation)
@@ -45,8 +46,9 @@ class HasOne extends HasOneOrMany
     /**
      * Get the default value for this relation.
      *
-     * @param  \Mellivora\Database\Eloquent\Model        $model
-     * @return \Mellivora\Database\Eloquent\Model|null
+     * @param \Mellivora\Database\Eloquent\Model $model
+     *
+     * @return null|\Mellivora\Database\Eloquent\Model
      */
     protected function getDefaultFor(Model $model)
     {
@@ -55,7 +57,8 @@ class HasOne extends HasOneOrMany
         }
 
         $instance = $this->related->newInstance()->setAttribute(
-            $this->getForeignKeyName(), $model->getAttribute($this->localKey)
+            $this->getForeignKeyName(),
+            $model->getAttribute($this->localKey)
         );
 
         if (is_callable($this->withDefault)) {
@@ -72,9 +75,10 @@ class HasOne extends HasOneOrMany
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array                                   $models
-     * @param  \Mellivora\Database\Eloquent\Collection $results
-     * @param  string                                  $relation
+     * @param array                                   $models
+     * @param \Mellivora\Database\Eloquent\Collection $results
+     * @param string                                  $relation
+     *
      * @return array
      */
     public function match(array $models, Collection $results, $relation)
@@ -85,7 +89,8 @@ class HasOne extends HasOneOrMany
     /**
      * Return a new model instance in case the relationship does not exist.
      *
-     * @param  \Closure|bool $callback
+     * @param bool|\Closure $callback
+     *
      * @return $this
      */
     public function withDefault($callback = true)

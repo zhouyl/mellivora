@@ -21,6 +21,9 @@
         "symfony/debug": "~3.3",
         "symfony/http-foundation": "~3.3"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "~2"
+    },
     "autoload": {
         "psr-4": {
             "Mellivora\\": "Mellivora"
@@ -28,5 +31,8 @@
         "files": [
             "helpers.php"
         ]
+    },
+    "scripts": {
+        "phpcs": "./vendor/bin/php-cs-fixer fix -v --diff --dry-run;"
     }
 }

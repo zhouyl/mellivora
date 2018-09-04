@@ -9,12 +9,12 @@ use Mellivora\Helper\Protobuf\MessageWrapper;
  */
 class ProtobufHelper extends AbstractHelper
 {
-
     /**
      * 对 Protobuf Message 进行包裹，并返回包裹类
      *
-     * @param  string|object                               $message
-     * @param  string|array|null                           $data
+     * @param object|string     $message
+     * @param null|array|string $data
+     *
      * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function wrapper($message, $data = null)
@@ -25,8 +25,9 @@ class ProtobufHelper extends AbstractHelper
     /**
      * 对 Protobuf Message 进行包裹，并返回原 Message 类
      *
-     * @param  string|object                       $message
-     * @param  string|array|null                   $data
+     * @param object|string     $message
+     * @param null|array|string $data
+     *
      * @return \Google\Protobuf\Internal\Message
      */
     public function rawWrapper($message, $data = null)
@@ -37,8 +38,9 @@ class ProtobufHelper extends AbstractHelper
     /**
      * 对 Protobuf repeated 数据进行包裹，并返回数组
      *
-     * @param  string|object $message
-     * @param  array         $multiples
+     * @param object|string $message
+     * @param array         $multiples
+     *
      * @return array
      */
     public function repeatWrapper($message, array $multiples)

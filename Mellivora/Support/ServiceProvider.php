@@ -7,7 +7,6 @@ namespace Mellivora\Support;
  */
 abstract class ServiceProvider
 {
-
     /**
      * @param object $app
      */
@@ -36,5 +35,4 @@ abstract class ServiceProvider
     {
         //
     }
-
 }

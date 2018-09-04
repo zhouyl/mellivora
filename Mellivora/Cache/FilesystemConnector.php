@@ -8,7 +8,7 @@ use Symfony\Component\Cache\Simple\FilesystemCache;
 /**
  * 文件系统缓存连接器
  *
- * @link https://symfony.com/doc/current/components/cache/adapters/filesystem_adapter.html
+ * @see https://symfony.com/doc/current/components/cache/adapters/filesystem_adapter.html
  */
 class FilesystemConnector extends Connector
 {
@@ -44,5 +44,4 @@ class FilesystemConnector extends Connector
             $this->config['directory']
         );
     }
-
 }

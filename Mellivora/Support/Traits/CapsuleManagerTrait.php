@@ -7,7 +7,6 @@ use Mellivora\Support\Fluent;
 
 trait CapsuleManagerTrait
 {
-
     /**
      * The container instance.
      *
@@ -18,7 +17,8 @@ trait CapsuleManagerTrait
     /**
      * Setup the IoC container instance.
      *
-     * @param  \Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
+     *
      * @return void
      */
     protected function setupContainer(Container $container)
@@ -43,7 +43,8 @@ trait CapsuleManagerTrait
     /**
      * Set the IoC container instance.
      *
-     * @param  \Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
+     *
      * @return void
      */
     public function setContainer(Container $container)

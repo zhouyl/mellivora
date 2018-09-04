@@ -12,7 +12,6 @@ use Mellivora\Support\Traits\MagicAccess;
  */
 class Cookies implements ArrayAccess
 {
-
     use MagicAccess;
 
     /**
@@ -87,9 +86,9 @@ class Cookies implements ArrayAccess
     /**
      * ookie 设置
      *
-     * @param string  $key
-     * @param mixed   $value
-     * @param integer $expire
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $expire
      */
     protected function setCookie($key, $value = null, $expire = 0)
     {
@@ -103,7 +102,10 @@ class Cookies implements ArrayAccess
             Arr::set($_COOKIE, $key, $value);
         }
 
-        setcookie($key, $value, $expire,
+        setcookie(
+            $key,
+            $value,
+            $expire,
             $this->defaults['path'],
             $this->defaults['domain'],
             $this->defaults['secure'],
@@ -114,9 +116,10 @@ class Cookies implements ArrayAccess
     /**
      * 设置 cookie 值
      *
-     * @param  string                    $key
-     * @param  mixed                     $value
-     * @param  integer                   $minutes
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
+     *
      * @return \Mellivora\Http\Cookies
      */
     public function set($key, $value = null, $minutes = null)
@@ -137,8 +140,9 @@ class Cookies implements ArrayAccess
     /**
      * 获取 cookie 值
      *
-     * @param  array   $key
-     * @param  mixed   $default
+     * @param array $key
+     * @param mixed $default
+     *
      * @return mixed
      */
     public function get($key, $default = null)
@@ -157,8 +161,9 @@ class Cookies implements ArrayAccess
     /**
      * 判断 cookie 是否存在
      *
-     * @param  string    $key
-     * @return boolean
+     * @param string $key
+     *
+     * @return bool
      */
     public function has($key)
     {
@@ -168,7 +173,8 @@ class Cookies implements ArrayAccess
     /**
      * 删除 cookie
      *
-     * @param  string                    $key
+     * @param string $key
+     *
      * @return \Mellivora\Http\Cookies
      */
     public function delete($key)

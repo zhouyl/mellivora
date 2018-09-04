@@ -14,7 +14,8 @@ interface Job
     /**
      * Release the job back into the queue.
      *
-     * @param  int     $delay
+     * @param int $delay
+     *
      * @return mixed
      */
     public function release($delay = 0);
@@ -50,7 +51,8 @@ interface Job
     /**
      * Process an exception that caused the job to fail.
      *
-     * @param  \Throwable $e
+     * @param \Throwable $e
+     *
      * @return void
      */
     public function failed($e);
@@ -58,14 +60,14 @@ interface Job
     /**
      * The number of times to attempt a job.
      *
-     * @return int|null
+     * @return null|int
      */
     public function maxTries();
 
     /**
      * The number of seconds the job can run.
      *
-     * @return int|null
+     * @return null|int
      */
     public function timeout();
 

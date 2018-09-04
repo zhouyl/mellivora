@@ -23,7 +23,8 @@ class ConnectionFactory
     /**
      * Create a new connection factory instance.
      *
-     * @param  \Mellivora\Application\Container $container
+     * @param \Mellivora\Application\Container $container
+     *
      * @return void
      */
     public function __construct(Container $container)
@@ -34,8 +35,9 @@ class ConnectionFactory
     /**
      * Establish a PDO connection based on the configuration.
      *
-     * @param  array                            $config
-     * @param  string                           $name
+     * @param array  $config
+     * @param string $name
+     *
      * @return \Mellivora\Database\Connection
      */
     public function make(array $config, $name = null)
@@ -52,8 +54,9 @@ class ConnectionFactory
     /**
      * Parse and prepare the database configuration.
      *
-     * @param  array   $config
-     * @param  string  $name
+     * @param array  $config
+     * @param string $name
+     *
      * @return array
      */
     protected function parseConfig(array $config, $name)
@@ -64,7 +67,8 @@ class ConnectionFactory
     /**
      * Create a single database connection instance.
      *
-     * @param  array                            $config
+     * @param array $config
+     *
      * @return \Mellivora\Database\Connection
      */
     protected function createSingleConnection(array $config)
@@ -72,14 +76,19 @@ class ConnectionFactory
         $pdo = $this->createPdoResolver($config);
 
         return $this->createConnection(
-            $config['driver'], $pdo, $config['database'], $config['prefix'], $config
+            $config['driver'],
+            $pdo,
+            $config['database'],
+            $config['prefix'],
+            $config
         );
     }
 
     /**
      * Create a single database connection instance.
      *
-     * @param  array                            $config
+     * @param array $config
+     *
      * @return \Mellivora\Database\Connection
      */
     protected function createReadWriteConnection(array $config)
@@ -92,7 +101,8 @@ class ConnectionFactory
     /**
      * Create a new PDO instance for reading.
      *
-     * @param  array      $config
+     * @param array $config
+     *
      * @return \Closure
      */
     protected function createReadPdo(array $config)
@@ -103,34 +113,39 @@ class ConnectionFactory
     /**
      * Get the read configuration for a read / write connection.
      *
-     * @param  array   $config
+     * @param array $config
+     *
      * @return array
      */
     protected function getReadConfig(array $config)
     {
         return $this->mergeReadWriteConfig(
-            $config, $this->getReadWriteConfig($config, 'read')
+            $config,
+            $this->getReadWriteConfig($config, 'read')
         );
     }
 
     /**
      * Get the read configuration for a read / write connection.
      *
-     * @param  array   $config
+     * @param array $config
+     *
      * @return array
      */
     protected function getWriteConfig(array $config)
     {
         return $this->mergeReadWriteConfig(
-            $config, $this->getReadWriteConfig($config, 'write')
+            $config,
+            $this->getReadWriteConfig($config, 'write')
         );
     }
 
     /**
      * Get a read / write level configuration.
      *
-     * @param  array   $config
-     * @param  string  $type
+     * @param array  $config
+     * @param string $type
+     *
      * @return array
      */
     protected function getReadWriteConfig(array $config, $type)
@@ -143,8 +158,9 @@ class ConnectionFactory
     /**
      * Merge a configuration for a read / write connection.
      *
-     * @param  array   $config
-     * @param  array   $merge
+     * @param array $config
+     * @param array $merge
+     *
      * @return array
      */
     protected function mergeReadWriteConfig(array $config, array $merge)
@@ -155,7 +171,8 @@ class ConnectionFactory
     /**
      * Create a new Closure that resolves to a PDO instance.
      *
-     * @param  array      $config
+     * @param array $config
+     *
      * @return \Closure
      */
     protected function createPdoResolver(array $config)
@@ -168,7 +185,8 @@ class ConnectionFactory
     /**
      * Create a new Closure that resolves to a PDO instance with a specific host or an array of hosts.
      *
-     * @param  array      $config
+     * @param array $config
+     *
      * @return \Closure
      */
     protected function createPdoResolverWithHosts(array $config)
@@ -187,7 +205,8 @@ class ConnectionFactory
     /**
      * Parse the hosts configuration item into an array.
      *
-     * @param  array   $config
+     * @param array $config
+     *
      * @return array
      */
     protected function parseHosts(array $config)
@@ -204,7 +223,8 @@ class ConnectionFactory
     /**
      * Create a new Closure that resolves to a PDO instance where there is no configured host.
      *
-     * @param  array      $config
+     * @param array $config
+     *
      * @return \Closure
      */
     protected function createPdoResolverWithoutHosts(array $config)
@@ -217,8 +237,10 @@ class ConnectionFactory
     /**
      * Create a connector instance based on the configuration.
      *
-     * @param  array                                               $config
+     * @param array $config
+     *
      * @throws \InvalidArgumentException
+     *
      * @return \Mellivora\Database\Connectors\ConnectorInterface
      */
     public function createConnector(array $config)
@@ -248,12 +270,14 @@ class ConnectionFactory
     /**
      * Create a new connection instance.
      *
-     * @param  string                           $driver
-     * @param  \PDO|\Closure                    $connection
-     * @param  string                           $database
-     * @param  string                           $prefix
-     * @param  array                            $config
+     * @param string        $driver
+     * @param \Closure|\PDO $connection
+     * @param string        $database
+     * @param string        $prefix
+     * @param array         $config
+     *
      * @throws \InvalidArgumentException
+     *
      * @return \Mellivora\Database\Connection
      */
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])

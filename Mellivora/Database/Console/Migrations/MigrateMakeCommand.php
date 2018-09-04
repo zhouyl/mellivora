@@ -55,15 +55,19 @@ class MigrateMakeCommand extends BaseCommand
     /**
      * Write the migration file to disk.
      *
-     * @param  string   $name
-     * @param  string   $table
-     * @param  bool     $create
+     * @param string $name
+     * @param string $table
+     * @param bool   $create
+     *
      * @return string
      */
     protected function writeMigration($name, $table, $create)
     {
         $file = pathinfo($this->container['migration.creator']->create(
-            $name, $this->getMigrationPath(), $table, $create
+            $name,
+            $this->getMigrationPath(),
+            $table,
+            $create
         ), PATHINFO_FILENAME);
 
         $this->line("<info>Created Migration:</info> {$file}");

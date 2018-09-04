@@ -49,9 +49,10 @@ class CallQueuedListener implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  string $class
-     * @param  string $method
-     * @param  array  $data
+     * @param string $class
+     * @param string $method
+     * @param array  $data
+     *
      * @return void
      */
     public function __construct($class, $method, $data)
@@ -64,7 +65,8 @@ class CallQueuedListener implements ShouldQueue
     /**
      * Handle the queued job.
      *
-     * @param  \Mellivora\Container\Container $container
+     * @param \Mellivora\Container\Container $container
+     *
      * @return void
      */
     public function handle(Container $container)
@@ -72,19 +74,22 @@ class CallQueuedListener implements ShouldQueue
         $this->prepareData();
 
         $handler = $this->setJobInstanceIfNecessary(
-            $this->job, $container->make($this->class)
+            $this->job,
+            $container->make($this->class)
         );
 
         call_user_func_array(
-            [$handler, $this->method], $this->data
+            [$handler, $this->method],
+            $this->data
         );
     }
 
     /**
      * Set the job instance of the given class if necessary.
      *
-     * @param  \Mellivora\Support\Contracts\Queue\Job $job
-     * @param  mixed                                  $instance
+     * @param \Mellivora\Support\Contracts\Queue\Job $job
+     * @param mixed                                  $instance
+     *
      * @return mixed
      */
     protected function setJobInstanceIfNecessary(Job $job, $instance)
@@ -101,7 +106,8 @@ class CallQueuedListener implements ShouldQueue
      *
      * The event instance and the exception will be passed.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
+     *
      * @return void
      */
     public function failed($e)

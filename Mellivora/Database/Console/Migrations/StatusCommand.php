@@ -48,7 +48,8 @@ class StatusCommand extends BaseCommand
     /**
      * Get the status for the given ran migrations.
      *
-     * @param  array                           $ran
+     * @param array $ran
+     *
      * @return \Mellivora\Support\Collection
      */
     protected function getStatusFor(array $ran)

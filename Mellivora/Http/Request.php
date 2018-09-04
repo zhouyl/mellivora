@@ -2,7 +2,6 @@
 
 namespace Mellivora\Http;
 
-use Mellivora\Application\App;
 use Mellivora\Support\Arr;
 use Mellivora\Support\Str;
 use Slim\Http\Request as SlimHttpRequest;
@@ -13,7 +12,6 @@ use Slim\Http\UploadedFile;
  */
 class Request extends SlimHttpRequest
 {
-
     /**
      * @var array
      */
@@ -22,7 +20,8 @@ class Request extends SlimHttpRequest
     /**
      * 指定 headers 头部信息
      *
-     * @param  array    $headers
+     * @param array $headers
+     *
      * @return static
      */
     public function withHeaders(array $headers)
@@ -79,7 +78,8 @@ class Request extends SlimHttpRequest
     /**
      * Get the full URL for the request with the added query string parameters.
      *
-     * @param  array    $query
+     * @param array $query
+     *
      * @return string
      */
     public function fullUrlWithQuery(array $query)
@@ -93,7 +93,7 @@ class Request extends SlimHttpRequest
     /**
      * Retrieve the host component of the URI.
      *
-     * @return string The URI host.
+     * @return string the URI host
      */
     public function host()
     {
@@ -109,7 +109,7 @@ class Request extends SlimHttpRequest
     {
         $pattern = trim($this->getUri()->getPath(), '/');
 
-        return $pattern == '' ? '/' : $pattern;
+        return $pattern === '' ? '/' : $pattern;
     }
 
     /**
@@ -173,7 +173,7 @@ class Request extends SlimHttpRequest
      */
     public function pjax()
     {
-        return $this->headers->get('X-PJAX') == true;
+        return $this->headers->get('X-PJAX') === true;
     }
 
     /**
@@ -203,8 +203,9 @@ class Request extends SlimHttpRequest
 
                 // Skip RFC 1918 IP's 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/16
                 if (!preg_match('/^(?:10|172\.(?:1[6-9]|2\d|3[01])|192\.168)\./', $address)) {
-                    if (ip2long($address) != false) {
+                    if (ip2long($address) !== false) {
                         return $address;
+
                         break;
                     }
                 }
@@ -231,8 +232,9 @@ class Request extends SlimHttpRequest
     /**
      * Fetch parameter value from post data.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param string $key
+     * @param mixed  $default
+     *
      * @return mixed
      */
     public function getPostParam($key, $default = null)
@@ -263,7 +265,8 @@ class Request extends SlimHttpRequest
     /**
      * Determine if the request contains a non-empty value for an input item.
      *
-     * @param  string|array $key
+     * @param array|string $key
+     *
      * @return bool
      */
     public function has($key)
@@ -282,7 +285,8 @@ class Request extends SlimHttpRequest
     /**
      * Determine if the request contains a given input item key.
      *
-     * @param  string|array $key
+     * @param array|string $key
+     *
      * @return bool
      */
     public function exists($key)
@@ -303,7 +307,8 @@ class Request extends SlimHttpRequest
     /**
      * Determine if a cookie is set on the request.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     public function hasCookie($key)
@@ -314,7 +319,8 @@ class Request extends SlimHttpRequest
     /**
      * Determine if the uploaded data contains a file.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     public function hasFile($key)
@@ -335,7 +341,8 @@ class Request extends SlimHttpRequest
     /**
      * Get a subset containing the provided keys with values from the input data.
      *
-     * @param  array|mixed $keys
+     * @param array|mixed $keys
+     *
      * @return array
      */
     public function only($keys)
@@ -356,7 +363,8 @@ class Request extends SlimHttpRequest
     /**
      * Get all of the input except for a specified array of items.
      *
-     * @param  array|mixed $keys
+     * @param array|mixed $keys
+     *
      * @return array
      */
     public function except($keys)
@@ -373,9 +381,10 @@ class Request extends SlimHttpRequest
     /**
      * Retrieve an input item from the request.
      *
-     * @param  string            $key
-     * @param  string|array|null $default
-     * @return string|array
+     * @param string            $key
+     * @param null|array|string $default
+     *
+     * @return array|string
      */
     public function input($key = null, $default = null)
     {
@@ -385,9 +394,10 @@ class Request extends SlimHttpRequest
     /**
      * Retrieve a query string item from the request.
      *
-     * @param  string            $key
-     * @param  string|array|null $default
-     * @return string|array
+     * @param string            $key
+     * @param null|array|string $default
+     *
+     * @return array|string
      */
     public function query($key = null, $default = null)
     {
@@ -399,9 +409,10 @@ class Request extends SlimHttpRequest
     /**
      * Retrieve a post data item from the request.
      *
-     * @param  string            $key
-     * @param  string|array|null $default
-     * @return string|array
+     * @param string            $key
+     * @param null|array|string $default
+     *
+     * @return array|string
      */
     public function post($key = null, $default = null)
     {
@@ -413,9 +424,10 @@ class Request extends SlimHttpRequest
     /**
      * Retrieve a server variable from the request.
      *
-     * @param  string            $key
-     * @param  string|array|null $default
-     * @return string|array
+     * @param string            $key
+     * @param null|array|string $default
+     *
+     * @return array|string
      */
     public function server($key = null, $default = null)
     {
@@ -427,9 +439,10 @@ class Request extends SlimHttpRequest
     /**
      * Retrieve a cookie from the request.
      *
-     * @param  string            $key
-     * @param  string|array|null $default
-     * @return string|array
+     * @param string            $key
+     * @param null|array|string $default
+     *
+     * @return array|string
      */
     public function cookie($key = null, $default = null)
     {
@@ -441,9 +454,10 @@ class Request extends SlimHttpRequest
     /**
      * Retrieve a file from the request.
      *
-     * @param  string       $key
-     * @param  mixed        $default
-     * @return array|null
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return null|array
      */
     public function file($key = null, $default = null)
     {
@@ -455,7 +469,8 @@ class Request extends SlimHttpRequest
     /**
      * Intersect an array of items with the input data.
      *
-     * @param  array|mixed $keys
+     * @param array|mixed $keys
+     *
      * @return array
      */
     public function intersect($keys)
@@ -466,7 +481,8 @@ class Request extends SlimHttpRequest
     /**
      * Determine if the given input key is an empty string for "has".
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function isEmptyString($key)
@@ -519,8 +535,9 @@ class Request extends SlimHttpRequest
     /**
      * Returns the preferred language.
      *
-     * @param  array       $locales An array of ordered available locales
-     * @return string|null The preferred locale
+     * @param array $locales An array of ordered available locales
+     *
+     * @return null|string The preferred locale
      */
     public function getPreferredLanguage(array $locales = null)
     {

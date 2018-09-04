@@ -6,7 +6,6 @@ use Mellivora\Support\ServiceProvider;
 
 class CryptServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider.
      *
@@ -20,5 +19,4 @@ class CryptServiceProvider extends ServiceProvider
             return new Crypt($config->key, $config->cipher, $config->padding);
         };
     }
-
 }

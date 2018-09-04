@@ -4,7 +4,6 @@ namespace Mellivora\Console;
 
 use InvalidArgumentException;
 use Mellivora\Application\Container;
-use Mellivora\Console\Command;
 use Mellivora\Support\Facades\Facade;
 use Mellivora\Support\ServiceProvider;
 use Mellivora\Support\Traits\Singleton;
@@ -14,19 +13,14 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\OutputInterface;
 use UnexpectedValueException;
 
-/**
- * 定义 json_encode 的默认选项
- */
+// 定义 json_encode 的默认选项
 if (!defined('JSON_ENCODE_OPTION')) {
     define('JSON_ENCODE_OPTION', JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
 class App extends Application
 {
-
-    /**
-     * 使用 Singleton，让 App 支持单例调用
-     */
+    // 使用 Singleton，让 App 支持单例调用
     use Singleton;
 
     /**
@@ -178,7 +172,8 @@ class App extends Application
     /**
      * 设置异常处理 handler
      *
-     * @param  callable                 $exceptionHandler
+     * @param callable $exceptionHandler
+     *
      * @return \Mellivora\Console\App
      */
     public function setExceptionHandler(callable $exceptionHandler)

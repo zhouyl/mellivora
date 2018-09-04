@@ -27,7 +27,6 @@ use ReflectionClass;
  */
 class MessageWrapper implements ArrayAccess
 {
-
     use MagicAccess;
 
     /**
@@ -43,8 +42,9 @@ class MessageWrapper implements ArrayAccess
     /**
      * Constructor
      *
-     * @param  string|object               $message
-     * @param  string|array                $data
+     * @param object|string $message
+     * @param array|string  $data
+     *
      * @throws \InvalidArgumentException
      */
     public function __construct($message, $data = null)
@@ -76,7 +76,8 @@ class MessageWrapper implements ArrayAccess
     /**
      * 设定来源数据，可以是序列化之后的字符，也可以是数组数据
      *
-     * @param  mixed                                       $data
+     * @param mixed $data
+     *
      * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function from($data)
@@ -113,8 +114,10 @@ class MessageWrapper implements ArrayAccess
     /**
      * 为 Message 设定数据
      *
-     * @param  mixed                                       $property
-     * @param  mixed                                       $data
+     * @param mixed      $property
+     * @param mixed      $data
+     * @param null|mixed $value
+     *
      * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function set($property, $value = null)
@@ -131,7 +134,7 @@ class MessageWrapper implements ArrayAccess
             $method = 'set' . Str::studly($property);
             $value  = $this->sanitizeSetterValue($method, $value);
 
-            $this->message->$method($value);
+            $this->message->{$method}($value);
         }
 
         return $this;
@@ -140,15 +143,16 @@ class MessageWrapper implements ArrayAccess
     /**
      * 从 Message 中获取数据
      *
-     * @param  string  $property
-     * @param  mixed   $default
+     * @param string $property
+     * @param mixed  $default
+     *
      * @return mixed
      */
     public function get($property, $default = null)
     {
         if ($this->has($property)) {
             $method = 'get' . Str::studly($property);
-            $return = $this->message->$method();
+            $return = $this->message->{$method}();
 
             return is_null($return) ? $default : $return;
         }
@@ -159,8 +163,9 @@ class MessageWrapper implements ArrayAccess
     /**
      * 判断 Message 中是否存在指定的属性
      *
-     * @param  string    $key
-     * @return boolean
+     * @param string $key
+     *
+     * @return bool
      */
     public function has($key)
     {
@@ -170,7 +175,8 @@ class MessageWrapper implements ArrayAccess
     /**
      * 删除指定的属性数据，设置为 NULL
      *
-     * @param  string                                      $key
+     * @param string $key
+     *
      * @return \Mellivora\Helper\Protobuf\MessageWrapper
      */
     public function delete($key)
@@ -198,16 +204,19 @@ class MessageWrapper implements ArrayAccess
     /**
      * 允许直接调用 Message 类的方法
      *
-     * @param  string                    $method
-     * @param  array                     $args
+     * @param string $method
+     * @param array  $args
+     *
      * @throws \BadMethodCallException
+     *
      * @return mixed
      */
     public function __call($method, $args)
     {
         if (!method_exists($this->message, $method)) {
             throw new BadMethodCallException(
-                sprintf('Call to undefined method %s::%s()', get_class($this->message), $method));
+                sprintf('Call to undefined method %s::%s()', get_class($this->message), $method)
+            );
         }
 
         if (substr($method, 0, 3) === 'set') {
@@ -220,7 +229,7 @@ class MessageWrapper implements ArrayAccess
             return $this->get(substr($method, 3));
         }
 
-        return $this->message->$method(...$args);
+        return $this->message->{$method}(...$args);
     }
 
     /**
@@ -230,7 +239,8 @@ class MessageWrapper implements ArrayAccess
      *     <code>.Proto.PayCenter.StatusInfo status_info = 1;</code>
      *     <code>repeated .Proto.PayCenter.PayPaymentItem payment_list = 3;</code>
      *
-     * @param  string        $method
+     * @param string $method
+     *
      * @return array|false
      */
     protected function getSetterRestrict($method)
@@ -238,8 +248,10 @@ class MessageWrapper implements ArrayAccess
         $namespace = $this->ref->getNamespaceName();
         $document  = $this->ref->getMethod($method)->getDocComment();
 
-        $regex = sprintf('~<code>(repeated\s*)?\.?(%s\.[\w\-]+).*<\/code>~',
-            preg_quote(str_replace('\\', '.', $namespace)));
+        $regex = sprintf(
+            '~<code>(repeated\s*)?\.?(%s\.[\w\-]+).*<\/code>~',
+            preg_quote(str_replace('\\', '.', $namespace))
+        );
 
         preg_match($regex, $document, $matches);
 
@@ -256,8 +268,9 @@ class MessageWrapper implements ArrayAccess
     /**
      * 应用于 setter 方法的 value 转换
      *
-     * @param  string  $setter
-     * @param  mixed   $value
+     * @param string $setter
+     * @param mixed  $value
+     *
      * @return mixed
      */
     protected function sanitizeSetterValue($setter, $value)
@@ -296,7 +309,8 @@ class MessageWrapper implements ArrayAccess
     /**
      * 应用于 toArray 方法的 value 转换
      *
-     * @param  mixed   $value
+     * @param mixed $value
+     *
      * @return mixed
      */
     protected function sanitizeToArrayValue($value)

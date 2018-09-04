@@ -23,8 +23,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a "where date" clause.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function whereDate(Builder $query, $where)
@@ -37,9 +38,10 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a date based where clause.
      *
-     * @param  string                            $type
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $where
+     * @param string                            $type
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $where
+     *
      * @return string
      */
     protected function dateBasedWhere($type, Builder $query, $where)
@@ -52,8 +54,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile the lock into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  bool|string                       $value
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param bool|string                       $value
+     *
      * @return string
      */
     protected function compileLock(Builder $query, $value)
@@ -68,9 +71,10 @@ class PostgresGrammar extends Grammar
     /**
      * Compile an insert and get ID statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $values
-     * @param  string                            $sequence
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $values
+     * @param string                            $sequence
+     *
      * @return string
      */
     public function compileInsertGetId(Builder $query, $values, $sequence)
@@ -85,8 +89,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile an update statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $values
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $values
+     *
      * @return string
      */
     public function compileUpdate(Builder $query, $values)
@@ -108,7 +113,8 @@ class PostgresGrammar extends Grammar
     /**
      * Compile the columns for the update statement.
      *
-     * @param  array    $values
+     * @param array $values
+     *
      * @return string
      */
     protected function compileUpdateColumns($values)
@@ -124,8 +130,9 @@ class PostgresGrammar extends Grammar
     /**
      * Compile the "from" clause for an update with a join.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @return string|null
+     * @param \Mellivora\Database\Query\Builder $query
+     *
+     * @return null|string
      */
     protected function compileUpdateFrom(Builder $query)
     {
@@ -148,7 +155,8 @@ class PostgresGrammar extends Grammar
     /**
      * Compile the additional where clauses for updates with joins.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     protected function compileUpdateWheres(Builder $query)
@@ -164,7 +172,7 @@ class PostgresGrammar extends Grammar
         // strip the leading boolean we will do so when using as the only where.
         $joinWheres = $this->compileUpdateJoinWheres($query);
 
-        if (trim($baseWheres) == '') {
+        if (trim($baseWheres) === '') {
             return 'where ' . $this->removeLeadingBoolean($joinWheres);
         }
 
@@ -174,7 +182,8 @@ class PostgresGrammar extends Grammar
     /**
      * Compile the "join" clause where clauses for an update.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return string
      */
     protected function compileUpdateJoinWheres(Builder $query)
@@ -188,7 +197,7 @@ class PostgresGrammar extends Grammar
             foreach ($join->wheres as $where) {
                 $method = "where{$where['type']}";
 
-                $joinWheres[] = $where['boolean'] . ' ' . $this->$method($query, $where);
+                $joinWheres[] = $where['boolean'] . ' ' . $this->{$method}($query, $where);
             }
         }
 
@@ -198,8 +207,9 @@ class PostgresGrammar extends Grammar
     /**
      * Prepare the bindings for an update statement.
      *
-     * @param  array   $bindings
-     * @param  array   $values
+     * @param array $bindings
+     * @param array $values
+     *
      * @return array
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
@@ -217,7 +227,8 @@ class PostgresGrammar extends Grammar
     /**
      * Compile a truncate table statement into SQL.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return array
      */
     public function compileTruncate(Builder $query)
@@ -228,7 +239,8 @@ class PostgresGrammar extends Grammar
     /**
      * Wrap a single string in keyword identifiers.
      *
-     * @param  string   $value
+     * @param string $value
+     *
      * @return string
      */
     protected function wrapValue($value)
@@ -250,7 +262,8 @@ class PostgresGrammar extends Grammar
     /**
      * Wrap the given JSON selector.
      *
-     * @param  string   $value
+     * @param string $value
+     *
      * @return string
      */
     protected function wrapJsonSelector($value)
@@ -273,7 +286,8 @@ class PostgresGrammar extends Grammar
     /**
      * Wrap the attributes of the give JSON path.
      *
-     * @param  array   $path
+     * @param array $path
+     *
      * @return array
      */
     protected function wrapJsonPathAttributes($path)

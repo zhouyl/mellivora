@@ -6,7 +6,6 @@ use Mellivora\Support\ServiceProvider;
 
 class TranslatorServiceProvider extends ServiceProvider
 {
-
     /**
      * Register the service provider.
      *

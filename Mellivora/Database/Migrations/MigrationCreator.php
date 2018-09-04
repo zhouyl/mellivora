@@ -8,7 +8,6 @@ use Mellivora\Support\Str;
 
 class MigrationCreator
 {
-
     /**
      * The registered post create hooks.
      *
@@ -19,11 +18,13 @@ class MigrationCreator
     /**
      * Create a new migration at the given path.
      *
-     * @param  string       $name
-     * @param  string       $path
-     * @param  string       $table
-     * @param  bool         $create
+     * @param string $name
+     * @param string $path
+     * @param string $table
+     * @param bool   $create
+     *
      * @throws \Exception
+     *
      * @return string
      */
     public function create($name, $path, $table = null, $create = false)
@@ -51,8 +52,10 @@ class MigrationCreator
     /**
      * Ensure that a migration with the given name doesn't already exist.
      *
-     * @param  string                      $name
+     * @param string $name
+     *
      * @throws \InvalidArgumentException
+     *
      * @return void
      */
     protected function ensureMigrationDoesntAlreadyExist($name)
@@ -65,8 +68,9 @@ class MigrationCreator
     /**
      * Get the migration stub file.
      *
-     * @param  string   $table
-     * @param  bool     $create
+     * @param string $table
+     * @param bool   $create
+     *
      * @return string
      */
     protected function getStub($table, $create)
@@ -78,19 +82,19 @@ class MigrationCreator
         // We also have stubs for creating new tables and modifying existing tables
         // to save the developer some typing when they are creating a new tables
         // or modifying existing tables. We'll grab the appropriate stub here.
-        else {
-            $stub = $create ? 'create.stub' : 'update.stub';
 
-            return file_get_contents($this->stubPath() . "/{$stub}");
-        }
+        $stub = $create ? 'create.stub' : 'update.stub';
+
+        return file_get_contents($this->stubPath() . "/{$stub}");
     }
 
     /**
      * Populate the place-holders in the migration stub.
      *
-     * @param  string   $name
-     * @param  string   $stub
-     * @param  string   $table
+     * @param string $name
+     * @param string $stub
+     * @param string $table
+     *
      * @return string
      */
     protected function populateStub($name, $stub, $table)
@@ -110,7 +114,8 @@ class MigrationCreator
     /**
      * Get the class name of a migration name.
      *
-     * @param  string   $name
+     * @param string $name
+     *
      * @return string
      */
     protected function getClassName($name)
@@ -121,8 +126,9 @@ class MigrationCreator
     /**
      * Get the full path to the migration.
      *
-     * @param  string   $name
-     * @param  string   $path
+     * @param string $name
+     * @param string $path
+     *
      * @return string
      */
     protected function getPath($name, $path)
@@ -145,7 +151,8 @@ class MigrationCreator
     /**
      * Register a post migration create hook.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
+     *
      * @return void
      */
     public function afterCreate(Closure $callback)

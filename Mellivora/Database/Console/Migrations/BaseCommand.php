@@ -21,7 +21,8 @@ class BaseCommand extends Command
         }
 
         return array_merge(
-            [$this->getMigrationPath()], $this->container['migrator']->paths()
+            [$this->getMigrationPath()],
+            $this->container['migrator']->paths()
         );
     }
 

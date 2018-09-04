@@ -16,11 +16,13 @@ class ChangeColumn
     /**
      * Compile a change column command into a series of SQL statements.
      *
-     * @param  \Mellivora\Database\Schema\Grammars\Grammar $grammar
-     * @param  \Mellivora\Database\Schema\Blueprint        $blueprint
-     * @param  \Mellivora\Support\Fluent                   $command
-     * @param  \Mellivora\Database\Connection              $connection
+     * @param \Mellivora\Database\Schema\Grammars\Grammar $grammar
+     * @param \Mellivora\Database\Schema\Blueprint        $blueprint
+     * @param \Mellivora\Support\Fluent                   $command
+     * @param \Mellivora\Database\Connection              $connection
+     *
      * @throws \RuntimeException
+     *
      * @return array
      */
     public static function compile($grammar, Blueprint $blueprint, Fluent $command, Connection $connection)
@@ -33,7 +35,9 @@ class ChangeColumn
         }
 
         $tableDiff = static::getChangedDiff(
-            $grammar, $blueprint, $schema = $connection->getDoctrineSchemaManager()
+            $grammar,
+            $blueprint,
+            $schema = $connection->getDoctrineSchemaManager()
         );
 
         if ($tableDiff !== false) {
@@ -46,25 +50,28 @@ class ChangeColumn
     /**
      * Get the Doctrine table difference for the given changes.
      *
-     * @param  \Mellivora\Database\Schema\Grammars\Grammar $grammar
-     * @param  \Mellivora\Database\Schema\Blueprint        $blueprint
-     * @param  \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
-     * @return \Doctrine\DBAL\Schema\TableDiff|bool
+     * @param \Mellivora\Database\Schema\Grammars\Grammar $grammar
+     * @param \Mellivora\Database\Schema\Blueprint        $blueprint
+     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
+     *
+     * @return bool|\Doctrine\DBAL\Schema\TableDiff
      */
     protected static function getChangedDiff($grammar, Blueprint $blueprint, SchemaManager $schema)
     {
         $current = $schema->listTableDetails($grammar->getTablePrefix() . $blueprint->getTable());
 
         return (new Comparator)->diffTable(
-            $current, static::getTableWithColumnChanges($blueprint, $current)
+            $current,
+            static::getTableWithColumnChanges($blueprint, $current)
         );
     }
 
     /**
      * Get a copy of the given Doctrine table after making the column changes.
      *
-     * @param  \Mellivora\Database\Schema\Blueprint $blueprint
-     * @param  \Doctrine\DBAL\Schema\Table          $table
+     * @param \Mellivora\Database\Schema\Blueprint $blueprint
+     * @param \Doctrine\DBAL\Schema\Table          $table
+     *
      * @return \Doctrine\DBAL\Schema\Table
      */
     protected static function getTableWithColumnChanges(Blueprint $blueprint, Table $table)
@@ -92,21 +99,24 @@ class ChangeColumn
     /**
      * Get the Doctrine column instance for a column change.
      *
-     * @param  \Doctrine\DBAL\Schema\Table    $table
-     * @param  \Mellivora\Support\Fluent      $fluent
+     * @param \Doctrine\DBAL\Schema\Table $table
+     * @param \Mellivora\Support\Fluent   $fluent
+     *
      * @return \Doctrine\DBAL\Schema\Column
      */
     protected static function getDoctrineColumn(Table $table, Fluent $fluent)
     {
         return $table->changeColumn(
-            $fluent['name'], static::getDoctrineColumnChangeOptions($fluent)
+            $fluent['name'],
+            static::getDoctrineColumnChangeOptions($fluent)
         )->getColumn($fluent['name']);
     }
 
     /**
      * Get the Doctrine column change options.
      *
-     * @param  \Mellivora\Support\Fluent $fluent
+     * @param \Mellivora\Support\Fluent $fluent
+     *
      * @return array
      */
     protected static function getDoctrineColumnChangeOptions(Fluent $fluent)
@@ -123,7 +133,8 @@ class ChangeColumn
     /**
      * Get the doctrine column type.
      *
-     * @param  string                      $type
+     * @param string $type
+     *
      * @return \Doctrine\DBAL\Types\Type
      */
     protected static function getDoctrineColumnType($type)
@@ -133,16 +144,20 @@ class ChangeColumn
         switch ($type) {
             case 'biginteger':
                 $type = 'bigint';
+
                 break;
             case 'smallinteger':
                 $type = 'smallint';
+
                 break;
             case 'mediumtext':
             case 'longtext':
                 $type = 'text';
+
                 break;
             case 'binary':
                 $type = 'blob';
+
                 break;
         }
 
@@ -152,7 +167,8 @@ class ChangeColumn
     /**
      * Calculate the proper column length to force the Doctrine text type.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return int
      */
     protected static function calculateDoctrineTextLength($type)
@@ -170,8 +186,9 @@ class ChangeColumn
     /**
      * Get the matching Doctrine option for a given Fluent attribute name.
      *
-     * @param  string        $attribute
-     * @return string|null
+     * @param string $attribute
+     *
+     * @return null|string
      */
     protected static function mapFluentOptionToDoctrine($attribute)
     {
@@ -193,12 +210,13 @@ class ChangeColumn
     /**
      * Get the matching Doctrine value for a given Fluent attribute.
      *
-     * @param  string  $option
-     * @param  mixed   $value
+     * @param string $option
+     * @param mixed  $value
+     *
      * @return mixed
      */
     protected static function mapFluentValueToDoctrine($option, $value)
     {
-        return $option == 'notnull' ? !$value : $value;
+        return $option === 'notnull' ? !$value : $value;
     }
 }

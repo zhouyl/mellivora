@@ -7,12 +7,13 @@ trait CompilesInjections
     /**
      * Compile the inject statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileInject($expression)
     {
-        $segments = explode(',', preg_replace("/[\(\)\\\"\']/", '', $expression));
+        $segments = explode(',', preg_replace("/[\\(\\)\\\"\\']/", '', $expression));
 
         $variable = trim($segments[0]);
 

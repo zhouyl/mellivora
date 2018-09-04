@@ -10,12 +10,11 @@ use Symfony\Component\Cache\Exception\InvalidArgumentException;
 /**
  * 缓存连接器管理类
  *
- * @link https://symfony.com/doc/current/components/cache.html
- * @link https://symfony.com/doc/current/components/cache/cache_pools.html
+ * @see https://symfony.com/doc/current/components/cache.html
+ * @see https://symfony.com/doc/current/components/cache/cache_pools.html
  */
 class Manager
 {
-
     use LoggerAwareTrait;
 
     /**
@@ -58,8 +57,10 @@ class Manager
     /**
      * 设定默认的缓存名称
      *
-     * @param  string                                                        $name
+     * @param string $name
+     *
      * @throws \Symfony\Component\Cache\Exception\InvalidArgumentException
+     *
      * @return \Mellivora\Cache\Manager
      */
     public function setDefault($name)
@@ -68,7 +69,8 @@ class Manager
 
         if (!isset($this->drivers[$name])) {
             throw new InvalidArgumentException(
-                "Unregistered cache driver name '$name'");
+                "Unregistered cache driver name '$name'"
+            );
         }
 
         $this->default = $name;
@@ -85,7 +87,8 @@ class Manager
     {
         if (!$this->default) {
             throw new CacheException(
-                'The default cache driver is not specified');
+                'The default cache driver is not specified'
+            );
         }
 
         return $this->default;
@@ -94,7 +97,8 @@ class Manager
     /**
      * 批量设定缓存驱动配置
      *
-     * @param  array                      $drivers
+     * @param array $drivers
+     *
      * @return \Mellivora\Cache\Manager
      */
     public function setDrivers(array $drivers)
@@ -109,8 +113,9 @@ class Manager
     /**
      * 设定缓存驱动配置
      *
-     * @param  string                     $name
-     * @param  array                      $config
+     * @param string $name
+     * @param array  $config
+     *
      * @return \Mellivora\Cache\Manager
      */
     public function setDriver($name, array $config)
@@ -127,8 +132,10 @@ class Manager
     /**
      * 根据名称获取缓存构造器
      *
-     * @param  string                                                        $name
+     * @param string $name
+     *
      * @throws \Symfony\Component\Cache\Exception\InvalidArgumentException
+     *
      * @return \Mellivora\Cache\Connector
      */
     protected function getConnector($name)
@@ -137,13 +144,15 @@ class Manager
 
         if ($config === false) {
             throw new InvalidArgumentException(
-                "Unregistered cache driver name '$name'");
+                "Unregistered cache driver name '$name'"
+            );
         }
 
         if (!isset($this->connectors[$name])) {
             if (!is_subclass_of($config['connector'], Connector::class)) {
                 throw new InvalidArgumentException(
-                    $config['connector'] . ' must implement of ' . Connector::class);
+                    $config['connector'] . ' must implement of ' . Connector::class
+                );
             }
 
             $connector = new $config['connector']($config);
@@ -157,7 +166,8 @@ class Manager
     /**
      * 获取 psr-6 标准 cache 适配器
      *
-     * @param  string                                             $name
+     * @param string $name
+     *
      * @return \Symfony\Component\Cache\Adapter\AbstractAdapter
      */
     public function getCache($name)
@@ -174,7 +184,8 @@ class Manager
     /**
      * 获取 psr-16 标准 simple-cache 适配器
      *
-     * @param  string                                          $name
+     * @param string $name
+     *
      * @return \Symfony\Component\Cache\Simple\AbstractCache
      */
     public function getSimpleCache($name)

@@ -80,7 +80,8 @@ class Builder
     /**
      * Create a new Eloquent query builder instance.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return void
      */
     public function __construct(QueryBuilder $query)
@@ -91,8 +92,9 @@ class Builder
     /**
      * Register a new global scope.
      *
-     * @param  string                                      $identifier
-     * @param  \Mellivora\Database\Eloquent\Scope|\Closure $scope
+     * @param string                                      $identifier
+     * @param \Closure|\Mellivora\Database\Eloquent\Scope $scope
+     *
      * @return $this
      */
     public function withGlobalScope($identifier, $scope)
@@ -109,7 +111,8 @@ class Builder
     /**
      * Remove a registered global scope.
      *
-     * @param  \Mellivora\Database\Eloquent\Scope|string $scope
+     * @param \Mellivora\Database\Eloquent\Scope|string $scope
+     *
      * @return $this
      */
     public function withoutGlobalScope($scope)
@@ -128,7 +131,8 @@ class Builder
     /**
      * Remove all or passed registered global scopes.
      *
-     * @param  array|null $scopes
+     * @param null|array $scopes
+     *
      * @return $this
      */
     public function withoutGlobalScopes(array $scopes = null)
@@ -157,9 +161,10 @@ class Builder
     /**
      * Apply the callback's query changes if the given "value" is true.
      *
-     * @param  bool     $value
-     * @param  \Closure $callback
-     * @param  \Closure $default
+     * @param bool     $value
+     * @param \Closure $callback
+     * @param \Closure $default
+     *
      * @return $this
      */
     public function when($value, $callback, $default = null)
@@ -178,7 +183,8 @@ class Builder
     /**
      * Add a where clause on the primary key to the query.
      *
-     * @param  mixed   $id
+     * @param mixed $id
+     *
      * @return $this
      */
     public function whereKey($id)
@@ -195,10 +201,11 @@ class Builder
     /**
      * Add a basic where clause to the query.
      *
-     * @param  string|\Closure $column
-     * @param  string          $operator
-     * @param  mixed           $value
-     * @param  string          $boolean
+     * @param \Closure|string $column
+     * @param string          $operator
+     * @param mixed           $value
+     * @param string          $boolean
+     *
      * @return $this
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
@@ -219,9 +226,10 @@ class Builder
     /**
      * Add an "or where" clause to the query.
      *
-     * @param  string|\Closure                               $column
-     * @param  string                                        $operator
-     * @param  mixed                                         $value
+     * @param \Closure|string $column
+     * @param string          $operator
+     * @param mixed           $value
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function orWhere($column, $operator = null, $value = null)
@@ -232,7 +240,8 @@ class Builder
     /**
      * Create a collection of models from plain arrays.
      *
-     * @param  array                                     $items
+     * @param array $items
+     *
      * @return \Mellivora\Database\Eloquent\Collection
      */
     public function hydrate(array $items)
@@ -247,8 +256,9 @@ class Builder
     /**
      * Create a collection of models from a raw query.
      *
-     * @param  string                                    $query
-     * @param  array                                     $bindings
+     * @param string $query
+     * @param array  $bindings
+     *
      * @return \Mellivora\Database\Eloquent\Collection
      */
     public function fromQuery($query, $bindings = [])
@@ -263,8 +273,9 @@ class Builder
     /**
      * Find a model by its primary key.
      *
-     * @param  mixed   $id
-     * @param  array   $columns
+     * @param mixed $id
+     * @param array $columns
+     *
      * @return mixed
      */
     public function find($id, $columns = ['*'])
@@ -279,8 +290,9 @@ class Builder
     /**
      * Find multiple models by their primary keys.
      *
-     * @param  array                                     $ids
-     * @param  array                                     $columns
+     * @param array $ids
+     * @param array $columns
+     *
      * @return \Mellivora\Database\Eloquent\Collection
      */
     public function findMany($ids, $columns = ['*'])
@@ -295,17 +307,19 @@ class Builder
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @param  mixed                                                                        $id
-     * @param  array                                                                        $columns
+     * @param mixed $id
+     * @param array $columns
+     *
      * @throws \Mellivora\Database\Eloquent\ModelNotFoundException
-     * @return \Mellivora\Database\Eloquent\Model|\Mellivora\Database\Eloquent\Collection
+     *
+     * @return \Mellivora\Database\Eloquent\Collection|\Mellivora\Database\Eloquent\Model
      */
     public function findOrFail($id, $columns = ['*'])
     {
         $result = $this->find($id, $columns);
 
         if (is_array($id)) {
-            if (count($result) == count(array_unique($id))) {
+            if (count($result) === count(array_unique($id))) {
                 return $result;
             }
         } elseif (!is_null($result)) {
@@ -313,15 +327,17 @@ class Builder
         }
 
         throw (new ModelNotFoundException)->setModel(
-            get_class($this->model), $id
+            get_class($this->model),
+            $id
         );
     }
 
     /**
      * Find a model by its primary key or return fresh model instance.
      *
-     * @param  mixed                                $id
-     * @param  array                                $columns
+     * @param mixed $id
+     * @param array $columns
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function findOrNew($id, $columns = ['*'])
@@ -338,8 +354,9 @@ class Builder
     /**
      * Get the first record matching the attributes or instantiate it.
      *
-     * @param  array                                $attributes
-     * @param  array                                $values
+     * @param array $attributes
+     * @param array $values
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function firstOrNew(array $attributes, array $values = [])
@@ -356,8 +373,9 @@ class Builder
     /**
      * Get the first record matching the attributes or create it.
      *
-     * @param  array                                $attributes
-     * @param  array                                $values
+     * @param array $attributes
+     * @param array $values
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function firstOrCreate(array $attributes, array $values = [])
@@ -378,8 +396,9 @@ class Builder
     /**
      * Create or update a record matching the attributes, and fill it with values.
      *
-     * @param  array                                $attributes
-     * @param  array                                $values
+     * @param array $attributes
+     * @param array $values
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function updateOrCreate(array $attributes, array $values = [])
@@ -392,8 +411,9 @@ class Builder
     /**
      * Execute the query and get the first result.
      *
-     * @param  array                                            $columns
-     * @return \Mellivora\Database\Eloquent\Model|static|null
+     * @param array $columns
+     *
+     * @return null|\Mellivora\Database\Eloquent\Model|static
      */
     public function first($columns = ['*'])
     {
@@ -403,8 +423,10 @@ class Builder
     /**
      * Execute the query and get the first result or throw an exception.
      *
-     * @param  array                                                 $columns
+     * @param array $columns
+     *
      * @throws \Mellivora\Database\Eloquent\ModelNotFoundException
+     *
      * @return \Mellivora\Database\Eloquent\Model|static
      */
     public function firstOrFail($columns = ['*'])
@@ -419,9 +441,10 @@ class Builder
     /**
      * Execute the query and get the first result or call a callback.
      *
-     * @param  \Closure|array                                    $columns
-     * @param  \Closure|null                                     $callback
-     * @return \Mellivora\Database\Eloquent\Model|static|mixed
+     * @param array|\Closure $columns
+     * @param null|\Closure  $callback
+     *
+     * @return \Mellivora\Database\Eloquent\Model|mixed|static
      */
     public function firstOr($columns = ['*'], Closure $callback = null)
     {
@@ -441,7 +464,8 @@ class Builder
     /**
      * Get a single column's value from the first result of a query.
      *
-     * @param  string  $column
+     * @param string $column
+     *
      * @return mixed
      */
     public function value($column)
@@ -454,7 +478,8 @@ class Builder
     /**
      * Execute the query as a "select" statement.
      *
-     * @param  array                                              $columns
+     * @param array $columns
+     *
      * @return \Mellivora\Database\Eloquent\Collection|static[]
      */
     public function get($columns = ['*'])
@@ -474,7 +499,8 @@ class Builder
     /**
      * Get the hydrated models without eager loading.
      *
-     * @param  array                                  $columns
+     * @param array $columns
+     *
      * @return \Mellivora\Database\Eloquent\Model[]
      */
     public function getModels($columns = ['*'])
@@ -488,7 +514,8 @@ class Builder
     /**
      * Eager load the relationships for the models.
      *
-     * @param  array   $models
+     * @param array $models
+     *
      * @return array
      */
     public function eagerLoadRelations(array $models)
@@ -508,9 +535,10 @@ class Builder
     /**
      * Eagerly load the relationship on a set of models.
      *
-     * @param  array    $models
-     * @param  string   $name
-     * @param  \Closure $constraints
+     * @param array    $models
+     * @param string   $name
+     * @param \Closure $constraints
+     *
      * @return array
      */
     protected function eagerLoadRelation(array $models, $name, Closure $constraints)
@@ -529,14 +557,16 @@ class Builder
         // of models which have been eagerly hydrated and are readied for return.
         return $relation->match(
             $relation->initRelation($models, $name),
-            $relation->getEager(), $name
+            $relation->getEager(),
+            $name
         );
     }
 
     /**
      * Get the relation instance for the given relation name.
      *
-     * @param  string                                            $name
+     * @param string $name
+     *
      * @return \Mellivora\Database\Eloquent\Relations\Relation
      */
     public function getRelation($name)
@@ -567,7 +597,8 @@ class Builder
     /**
      * Get the deeply nested relations for a given top-level relation.
      *
-     * @param  string  $relation
+     * @param string $relation
+     *
      * @return array
      */
     protected function relationsNestedUnder($relation)
@@ -589,8 +620,9 @@ class Builder
     /**
      * Determine if the relationship is nested.
      *
-     * @param  string $relation
-     * @param  string $name
+     * @param string $relation
+     * @param string $name
+     *
      * @return bool
      */
     protected function isNestedUnder($relation, $name)
@@ -613,8 +645,9 @@ class Builder
     /**
      * Chunk the results of the query.
      *
-     * @param  int      $count
-     * @param  callable $callback
+     * @param int      $count
+     * @param callable $callback
+     *
      * @return bool
      */
     public function chunk($count, callable $callback)
@@ -631,7 +664,7 @@ class Builder
 
             $countResults = $results->count();
 
-            if ($countResults == 0) {
+            if ($countResults === 0) {
                 break;
             }
 
@@ -642,8 +675,8 @@ class Builder
                 return false;
             }
 
-            $page++;
-        } while ($countResults == $count);
+            ++$page;
+        } while ($countResults === $count);
 
         return true;
     }
@@ -651,10 +684,11 @@ class Builder
     /**
      * Chunk the results of a query by comparing numeric IDs.
      *
-     * @param  int         $count
-     * @param  callable    $callback
-     * @param  string      $column
-     * @param  string|null $alias
+     * @param int         $count
+     * @param callable    $callback
+     * @param string      $column
+     * @param null|string $alias
+     *
      * @return bool
      */
     public function chunkById($count, callable $callback, $column = null, $alias = null)
@@ -675,7 +709,7 @@ class Builder
 
             $countResults = $results->count();
 
-            if ($countResults == 0) {
+            if ($countResults === 0) {
                 break;
             }
 
@@ -687,7 +721,7 @@ class Builder
             }
 
             $lastId = $results->last()->{$alias};
-        } while ($countResults == $count);
+        } while ($countResults === $count);
 
         return true;
     }
@@ -707,8 +741,9 @@ class Builder
     /**
      * Execute a callback over each item while chunking.
      *
-     * @param  callable $callback
-     * @param  int      $count
+     * @param callable $callback
+     * @param int      $count
+     *
      * @return bool
      */
     public function each(callable $callback, $count = 1000)
@@ -725,8 +760,9 @@ class Builder
     /**
      * Get an array with the values of a given column.
      *
-     * @param  string                          $column
-     * @param  string|null                     $key
+     * @param string      $column
+     * @param null|string $key
+     *
      * @return \Mellivora\Support\Collection
      */
     public function pluck($column, $key = null)
@@ -750,11 +786,13 @@ class Builder
     /**
      * Paginate the given query.
      *
-     * @param  int                                                            $perPage
-     * @param  array                                                          $columns
-     * @param  string                                                         $pageName
-     * @param  int|null                                                       $page
+     * @param int      $perPage
+     * @param array    $columns
+     * @param string   $pageName
+     * @param null|int $page
+     *
      * @throws \InvalidArgumentException
+     *
      * @return \Mellivora\Support\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
@@ -776,10 +814,11 @@ class Builder
     /**
      * Paginate the given query into a simple paginator.
      *
-     * @param  int                                                 $perPage
-     * @param  array                                               $columns
-     * @param  string                                              $pageName
-     * @param  int|null                                            $page
+     * @param int      $perPage
+     * @param array    $columns
+     * @param string   $pageName
+     * @param null|int $page
+     *
      * @return \Mellivora\Support\Contracts\Pagination\Paginator
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
@@ -802,7 +841,8 @@ class Builder
     /**
      * Save a new model and return the instance.
      *
-     * @param  array                                $attributes
+     * @param array $attributes
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function create(array $attributes = [])
@@ -819,7 +859,8 @@ class Builder
     /**
      * Save a new model and return the instance. Allow mass-assignment.
      *
-     * @param  array                                $attributes
+     * @param array $attributes
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function forceCreate(array $attributes)
@@ -836,7 +877,8 @@ class Builder
     /**
      * Update a record in the database.
      *
-     * @param  array $values
+     * @param array $values
+     *
      * @return int
      */
     public function update(array $values)
@@ -847,37 +889,44 @@ class Builder
     /**
      * Increment a column's value by a given amount.
      *
-     * @param  string $column
-     * @param  int    $amount
-     * @param  array  $extra
+     * @param string $column
+     * @param int    $amount
+     * @param array  $extra
+     *
      * @return int
      */
     public function increment($column, $amount = 1, array $extra = [])
     {
         return $this->toBase()->increment(
-            $column, $amount, $this->addUpdatedAtColumn($extra)
+            $column,
+            $amount,
+            $this->addUpdatedAtColumn($extra)
         );
     }
 
     /**
      * Decrement a column's value by a given amount.
      *
-     * @param  string $column
-     * @param  int    $amount
-     * @param  array  $extra
+     * @param string $column
+     * @param int    $amount
+     * @param array  $extra
+     *
      * @return int
      */
     public function decrement($column, $amount = 1, array $extra = [])
     {
         return $this->toBase()->decrement(
-            $column, $amount, $this->addUpdatedAtColumn($extra)
+            $column,
+            $amount,
+            $this->addUpdatedAtColumn($extra)
         );
     }
 
     /**
      * Add the "updated at" column to an array of values.
      *
-     * @param  array   $values
+     * @param array $values
+     *
      * @return array
      */
     protected function addUpdatedAtColumn(array $values)
@@ -887,7 +936,8 @@ class Builder
         }
 
         return Arr::add(
-            $values, $this->model->getUpdatedAtColumn(),
+            $values,
+            $this->model->getUpdatedAtColumn(),
             $this->model->freshTimestampString()
         );
     }
@@ -921,7 +971,8 @@ class Builder
     /**
      * Register a replacement for the default delete function.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
+     *
      * @return void
      */
     public function onDelete(Closure $callback)
@@ -932,7 +983,8 @@ class Builder
     /**
      * Call the given local model scopes.
      *
-     * @param  array   $scopes
+     * @param array $scopes
+     *
      * @return mixed
      */
     public function scopes(array $scopes)
@@ -996,8 +1048,9 @@ class Builder
     /**
      * Apply the given scope on the current builder instance.
      *
-     * @param  callable $scope
-     * @param  array    $parameters
+     * @param callable $scope
+     * @param array    $parameters
+     *
      * @return mixed
      */
     protected function callScope(callable $scope, $parameters = [])
@@ -1023,8 +1076,9 @@ class Builder
     /**
      * Nest where conditions by slicing them at the given where count.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  int                               $originalWhereCount
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param int                               $originalWhereCount
+     *
      * @return void
      */
     protected function addNewWheresWithinGroup(QueryBuilder $query, $originalWhereCount)
@@ -1037,19 +1091,22 @@ class Builder
         $query->wheres = [];
 
         $this->groupWhereSliceForScope(
-            $query, array_slice($allWheres, 0, $originalWhereCount)
+            $query,
+            array_slice($allWheres, 0, $originalWhereCount)
         );
 
         $this->groupWhereSliceForScope(
-            $query, array_slice($allWheres, $originalWhereCount)
+            $query,
+            array_slice($allWheres, $originalWhereCount)
         );
     }
 
     /**
      * Slice where conditions at the given offset and add them to the query as a nested condition.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
-     * @param  array                             $whereSlice
+     * @param \Mellivora\Database\Query\Builder $query
+     * @param array                             $whereSlice
+     *
      * @return void
      */
     protected function groupWhereSliceForScope(QueryBuilder $query, $whereSlice)
@@ -1061,7 +1118,8 @@ class Builder
         // we don't add any unnecessary nesting thus keeping the query clean.
         if ($whereBooleans->contains('or')) {
             $query->wheres[] = $this->createNestedWhere(
-                $whereSlice, $whereBooleans->first()
+                $whereSlice,
+                $whereBooleans->first()
             );
         } else {
             $query->wheres = array_merge($query->wheres, $whereSlice);
@@ -1071,8 +1129,9 @@ class Builder
     /**
      * Create a where array with nested where conditions.
      *
-     * @param  array   $whereSlice
-     * @param  string  $boolean
+     * @param array  $whereSlice
+     * @param string $boolean
+     *
      * @return array
      */
     protected function createNestedWhere($whereSlice, $boolean = 'and')
@@ -1087,7 +1146,8 @@ class Builder
     /**
      * Set the relationships that should be eager loaded.
      *
-     * @param  mixed   $relations
+     * @param mixed $relations
+     *
      * @return $this
      */
     public function with($relations)
@@ -1102,7 +1162,8 @@ class Builder
     /**
      * Prevent the specified relations from being eager loaded.
      *
-     * @param  mixed   $relations
+     * @param mixed $relations
+     *
      * @return $this
      */
     public function without($relations)
@@ -1117,7 +1178,8 @@ class Builder
     /**
      * Parse a list of relations into individuals.
      *
-     * @param  array   $relations
+     * @param array $relations
+     *
      * @return array
      */
     protected function parseWithRelations(array $relations)
@@ -1134,8 +1196,8 @@ class Builder
                 list($name, $constraints) = Str::contains($name, ':')
                     ? $this->createSelectWithConstraint($name)
                     : [$name, function () {
-                    //
-                }];
+                        //
+                    }];
             }
 
             // We need to separate out any nested includes. Which allows the developers
@@ -1152,7 +1214,8 @@ class Builder
     /**
      * Create a constraint to select the given columns for the relation.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return array
      */
     protected function createSelectWithConstraint($name)
@@ -1165,8 +1228,9 @@ class Builder
     /**
      * Parse the nested relationships in a relation.
      *
-     * @param  string  $name
-     * @param  array   $results
+     * @param string $name
+     * @param array  $results
+     *
      * @return array
      */
     protected function addNestedWiths($name, $results)
@@ -1202,7 +1266,8 @@ class Builder
     /**
      * Set the underlying query builder instance.
      *
-     * @param  \Mellivora\Database\Query\Builder $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return $this
      */
     public function setQuery($query)
@@ -1235,7 +1300,8 @@ class Builder
     /**
      * Set the relationships being eagerly loaded.
      *
-     * @param  array   $eagerLoad
+     * @param array $eagerLoad
+     *
      * @return $this
      */
     public function setEagerLoads(array $eagerLoad)
@@ -1258,7 +1324,8 @@ class Builder
     /**
      * Set a model instance for the model being queried.
      *
-     * @param  \Mellivora\Database\Eloquent\Model $model
+     * @param \Mellivora\Database\Eloquent\Model $model
+     *
      * @return $this
      */
     public function setModel(Model $model)
@@ -1273,8 +1340,9 @@ class Builder
     /**
      * Extend the builder with a given callback.
      *
-     * @param  string   $name
-     * @param  \Closure $callback
+     * @param string   $name
+     * @param \Closure $callback
+     *
      * @return void
      */
     public function macro($name, Closure $callback)
@@ -1285,7 +1353,8 @@ class Builder
     /**
      * Get the given macro by name.
      *
-     * @param  string     $name
+     * @param string $name
+     *
      * @return \Closure
      */
     public function getMacro($name)
@@ -1296,8 +1365,9 @@ class Builder
     /**
      * Dynamically handle calls into the query instance.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)

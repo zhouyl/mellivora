@@ -26,7 +26,8 @@ class Manager
     /**
      * Create a new database capsule manager.
      *
-     * @param  \Mellivora\Application\Container|null $container
+     * @param null|\Mellivora\Application\Container $container
+     *
      * @return void
      */
     public function __construct(Container $container = null)
@@ -68,7 +69,8 @@ class Manager
     /**
      * Get a connection instance from the global manager.
      *
-     * @param  string                           $connection
+     * @param string $connection
+     *
      * @return \Mellivora\Database\Connection
      */
     public static function connection($connection = null)
@@ -79,8 +81,9 @@ class Manager
     /**
      * Get a fluent query builder instance.
      *
-     * @param  string                              $table
-     * @param  string                              $connection
+     * @param string $table
+     * @param string $connection
+     *
      * @return \Mellivora\Database\Query\Builder
      */
     public static function table($table, $connection = null)
@@ -91,7 +94,8 @@ class Manager
     /**
      * Get a schema builder instance.
      *
-     * @param  string                               $connection
+     * @param string $connection
+     *
      * @return \Mellivora\Database\Schema\Builder
      */
     public static function schema($connection = null)
@@ -102,7 +106,8 @@ class Manager
     /**
      * Get a registered connection instance.
      *
-     * @param  string                           $name
+     * @param string $name
+     *
      * @return \Mellivora\Database\Connection
      */
     public function getConnection($name = null)
@@ -113,8 +118,9 @@ class Manager
     /**
      * Register a connection with the manager.
      *
-     * @param  array  $config
-     * @param  string $name
+     * @param array  $config
+     * @param string $name
+     *
      * @return void
      */
     public function addConnection(array $config, $name = 'default')
@@ -146,7 +152,8 @@ class Manager
     /**
      * Set the fetch mode for the database connections.
      *
-     * @param  int     $fetchMode
+     * @param int $fetchMode
+     *
      * @return $this
      */
     public function setFetchMode($fetchMode)
@@ -169,7 +176,7 @@ class Manager
     /**
      * Get the current event dispatcher instance.
      *
-     * @return \Mellivora\Support\Contracts\Events\Dispatcher|null
+     * @return null|\Mellivora\Support\Contracts\Events\Dispatcher
      */
     public function getEventDispatcher()
     {
@@ -181,7 +188,8 @@ class Manager
     /**
      * Set the event dispatcher instance to be used by connections.
      *
-     * @param  \Mellivora\Support\Contracts\Events\Dispatcher $dispatcher
+     * @param \Mellivora\Support\Contracts\Events\Dispatcher $dispatcher
+     *
      * @return void
      */
     public function setEventDispatcher(Dispatcher $dispatcher)
@@ -192,12 +200,13 @@ class Manager
     /**
      * Dynamically pass methods to the default connection.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public static function __callStatic($method, $parameters)
     {
-        return static::connection()->$method(...$parameters);
+        return static::connection()->{$method}(...$parameters);
     }
 }

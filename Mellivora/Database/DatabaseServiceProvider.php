@@ -68,7 +68,8 @@ class DatabaseServiceProvider extends ServiceProvider
 
         $this->container['db.eloquent'] = function ($container) {
             return EloquentFactory::construct(
-                $container['db.faker'], database_path('factories')
+                $container['db.faker'],
+                database_path('factories')
             );
         };
     }

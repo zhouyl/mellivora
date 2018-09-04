@@ -14,48 +14,58 @@ class RenameColumn
     /**
      * Compile a rename column command.
      *
-     * @param  \Mellivora\Database\Schema\Grammars\Grammar $grammar
-     * @param  \Mellivora\Database\Schema\Blueprint        $blueprint
-     * @param  \Mellivora\Support\Fluent                   $command
-     * @param  \Mellivora\Database\Connection              $connection
+     * @param \Mellivora\Database\Schema\Grammars\Grammar $grammar
+     * @param \Mellivora\Database\Schema\Blueprint        $blueprint
+     * @param \Mellivora\Support\Fluent                   $command
+     * @param \Mellivora\Database\Connection              $connection
+     *
      * @return array
      */
     public static function compile(Grammar $grammar, Blueprint $blueprint, Fluent $command, Connection $connection)
     {
         $column = $connection->getDoctrineColumn(
-            $grammar->getTablePrefix() . $blueprint->getTable(), $command->from
+            $grammar->getTablePrefix() . $blueprint->getTable(),
+            $command->from
         );
 
         $schema = $connection->getDoctrineSchemaManager();
 
         return (array) $schema->getDatabasePlatform()->getAlterTableSQL(static::getRenamedDiff(
-            $grammar, $blueprint, $command, $column, $schema
+            $grammar,
+            $blueprint,
+            $command,
+            $column,
+            $schema
         ));
     }
 
     /**
      * Get a new column instance with the new column name.
      *
-     * @param  \Mellivora\Database\Schema\Grammars\Grammar $grammar
-     * @param  \Mellivora\Database\Schema\Blueprint        $blueprint
-     * @param  \Mellivora\Support\Fluent                   $command
-     * @param  \Doctrine\DBAL\Schema\Column                $column
-     * @param  \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
+     * @param \Mellivora\Database\Schema\Grammars\Grammar $grammar
+     * @param \Mellivora\Database\Schema\Blueprint        $blueprint
+     * @param \Mellivora\Support\Fluent                   $command
+     * @param \Doctrine\DBAL\Schema\Column                $column
+     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
+     *
      * @return \Doctrine\DBAL\Schema\TableDiff
      */
     protected static function getRenamedDiff(Grammar $grammar, Blueprint $blueprint, Fluent $command, Column $column, SchemaManager $schema)
     {
         return static::setRenamedColumns(
-            $grammar->getDoctrineTableDiff($blueprint, $schema), $command, $column
+            $grammar->getDoctrineTableDiff($blueprint, $schema),
+            $command,
+            $column
         );
     }
 
     /**
      * Set the renamed columns on the table diff.
      *
-     * @param  \Doctrine\DBAL\Schema\TableDiff   $tableDiff
-     * @param  \Mellivora\Support\Fluent         $command
-     * @param  \Doctrine\DBAL\Schema\Column      $column
+     * @param \Doctrine\DBAL\Schema\TableDiff $tableDiff
+     * @param \Mellivora\Support\Fluent       $command
+     * @param \Doctrine\DBAL\Schema\Column    $column
+     *
      * @return \Doctrine\DBAL\Schema\TableDiff
      */
     protected static function setRenamedColumns(TableDiff $tableDiff, Fluent $command, Column $column)

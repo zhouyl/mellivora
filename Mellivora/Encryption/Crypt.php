@@ -22,7 +22,6 @@ use UnexpectedValueException;
  */
 class Crypt implements EncryptionInterface
 {
-
     const PADDING_DEFAULT = 0;
 
     const PADDING_ANSI_X_923 = 1;
@@ -46,9 +45,9 @@ class Crypt implements EncryptionInterface
     /**
      * Constructor
      *
-     * @param string  $key
-     * @param string  $cipher
-     * @param integer $padding
+     * @param string $key
+     * @param string $cipher
+     * @param int    $padding
      */
     public function __construct($key = '', $cipher = 'aes-256-cfb', $padding = 0)
     {
@@ -59,6 +58,8 @@ class Crypt implements EncryptionInterface
 
     /**
      * Changes the padding scheme used
+     *
+     * @param mixed $scheme
      */
     public function setPadding($scheme)
     {
@@ -69,6 +70,8 @@ class Crypt implements EncryptionInterface
 
     /**
      * Sets the cipher algorithm
+     *
+     * @param mixed $cipher
      */
     public function setCipher($cipher)
     {
@@ -87,6 +90,8 @@ class Crypt implements EncryptionInterface
 
     /**
      * Sets the encryption key
+     *
+     * @param mixed $key
      */
     public function setKey($key)
     {
@@ -107,13 +112,18 @@ class Crypt implements EncryptionInterface
      * Pads texts before encryption
      *
      * @see http://www.di-mgt.com.au/cryptopad.html
+     *
+     * @param mixed $text
+     * @param mixed $mode
+     * @param mixed $blockSize
+     * @param mixed $paddingType
      */
     protected function padText($text, $mode, $blockSize, $paddingType)
     {
         $paddingSize = 0;
         $padding     = '';
 
-        if ($mode == 'cbc' || $mode == 'ecb') {
+        if ($mode === 'cbc' || $mode === 'ecb') {
             $paddingSize = $blockSize - (strlen($text) % $blockSize);
             if ($paddingSize >= 256) {
                 throw new InvalidArgumentException("Block size [$blockSize] is bigger than 256");
@@ -122,34 +132,35 @@ class Crypt implements EncryptionInterface
             switch ($paddingType) {
                 case self::PADDING_ANSI_X_923:
                     $padding = str_repeat(chr(0), $paddingSize - 1) . chr($paddingSize);
-                    break;
 
+                    break;
                 case self::PADDING_PKCS7:
                     $padding = str_repeat(chr($paddingSize), $paddingSize);
-                    break;
 
+                    break;
                 case self::PADDING_ISO_10126:
                     $padding = '';
                     foreach (range(0, $paddingSize - 2) as $i) {
                         $padding .= chr(rand());
                     }
                     $padding .= chr($paddingSize);
-                    break;
 
+                    break;
                 case self::PADDING_ISO_IEC_7816_4:
                     $padding = chr(0x80) . str_repeat(chr(0), $paddingSize - 1);
-                    break;
 
+                    break;
                 case self::PADDING_ZERO:
                     $padding = str_repeat(chr(0), $paddingSize);
-                    break;
 
+                    break;
                 case self::PADDING_SPACE:
                     $padding = str_repeat(' ', $paddingSize);
-                    break;
 
+                    break;
                 default:
                     $paddingSize = 0;
+
                     break;
             }
         }
@@ -171,14 +182,16 @@ class Crypt implements EncryptionInterface
      *
      * @param string text         Message to be unpadded
      * @param string mode         Encryption mode; unpadding is applied only in CBC or ECB mode
-     * @param int    $blockSize   Cipher block size
-     * @param int    $paddingType Padding scheme
+     * @param int   $blockSize   Cipher block size
+     * @param int   $paddingType Padding scheme
+     * @param mixed $text
+     * @param mixed $mode
      */
     protected function unpadText($text, $mode, $blockSize, $paddingType)
     {
         $paddingSize = 0;
         $length      = strlen(text);
-        if ($length > 0 && ($length % $blockSize == 0) && ($mode == 'cbc' || $mode == 'ecb')) {
+        if ($length > 0 && ($length % $blockSize === 0) && ($mode === 'cbc' || $mode === 'ecb')) {
             switch ($paddingType) {
                 case self::PADDING_ANSI_X_923:
                     $last = substr($text, $length - 1, 1);
@@ -186,58 +199,58 @@ class Crypt implements EncryptionInterface
                     if ($ord <= $blockSize) {
                         $paddingSize = $ord;
                         $padding     = str_repeat(chr(0), $paddingSize - 1) . $last;
-                        if (substr($text, $length - $paddingSize) != $padding) {
+                        if (substr($text, $length - $paddingSize) !== $padding) {
                             $paddingSize = 0;
                         }
                     }
-                    break;
 
+                    break;
                 case self::PADDING_PKCS7:
                     $last = substr($text, $length - 1, 1);
                     $ord  = (int) ord($last);
                     if ($ord <= $blockSize) {
                         $paddingSize = $ord;
                         $padding     = str_repeat(chr($paddingSize), $paddingSize);
-                        if (substr($text, $length - $paddingSize) != $padding) {
+                        if (substr($text, $length - $paddingSize) !== $padding) {
                             $paddingSize = 0;
                         }
                     }
-                    break;
 
+                    break;
                 case self::PADDING_ISO_10126:
                     $last        = substr($text, $length - 1, 1);
                     $paddingSize = (int) ord($last);
-                    break;
 
+                    break;
                 case self::PADDING_ISO_IEC_7816_4:
                     $i = $length - 1;
-                    while ($i > 0 && $text[$i] == 0x00 && $paddingSize < $blockSize) {
-                        $paddingSize++;
-                        $i--;
+                    while ($i > 0 && $text[$i] === 0x00 && $paddingSize < $blockSize) {
+                        ++$paddingSize;
+                        --$i;
                     }
-                    if ($text[$i] == 0x80) {
-                        $paddingSize++;
+                    if ($text[$i] === 0x80) {
+                        ++$paddingSize;
                     } else {
                         $paddingSize = 0;
                     }
-                    break;
 
+                    break;
                 case self::PADDING_ZERO:
                     $i = $length - 1;
-                    while ($i >= 0 && $text[$i] == 0x00 && $paddingSize <= $blockSize) {
-                        $paddingSize++;
-                        $i--;
+                    while ($i >= 0 && $text[$i] === 0x00 && $paddingSize <= $blockSize) {
+                        ++$paddingSize;
+                        --$i;
                     }
-                    break;
 
+                    break;
                 case self::PADDING_SPACE:
                     $i = $length - 1;
-                    while ($i >= 0 && $text[$i] == 0x20 && $paddingSize <= $blockSize) {
-                        $paddingSize++;
-                        $i--;
+                    while ($i >= 0 && $text[$i] === 0x20 && $paddingSize <= $blockSize) {
+                        ++$paddingSize;
+                        --$i;
                     }
-                    break;
 
+                    break;
                 default:
                     break;
             }
@@ -248,9 +261,8 @@ class Crypt implements EncryptionInterface
                 }
 
                 return '';
-            } else {
-                $paddingSize = 0;
             }
+            $paddingSize = 0;
         }
 
         if (!$paddingSize) {
@@ -266,6 +278,9 @@ class Crypt implements EncryptionInterface
      * <code>
      * $encrypted = $crypt->encrypt("Ultra-secret text", "encrypt password");
      * </code>
+     *
+     * @param mixed      $text
+     * @param null|mixed $key
      */
     public function encrypt($text, $key = null)
     {
@@ -300,7 +315,7 @@ class Crypt implements EncryptionInterface
         $iv          = openssl_random_pseudo_bytes($ivSize);
         $paddingType = $this->padding;
 
-        if ($paddingType != 0 && ($mode == 'cbc' || $mode == 'ecb')) {
+        if ($paddingType !== 0 && ($mode === 'cbc' || $mode === 'ecb')) {
             $padded = $this->padText($text, $mode, $blockSize, $paddingType);
         } else {
             $padded = $text;
@@ -315,6 +330,9 @@ class Crypt implements EncryptionInterface
      * <code>
      * echo $crypt->decrypt($encrypted, "decrypt password");
      * </code>
+     *
+     * @param mixed      $text
+     * @param null|mixed $key
      */
     public function decrypt($text, $key = null)
     {
@@ -350,7 +368,7 @@ class Crypt implements EncryptionInterface
 
         $paddingType = $this->padding;
 
-        if ($mode == 'cbc' || $mode == 'ecb') {
+        if ($mode === 'cbc' || $mode === 'ecb') {
             return $this->unpadText($decrypted, $mode, $blockSize, $paddingType);
         }
 
@@ -359,10 +377,14 @@ class Crypt implements EncryptionInterface
 
     /**
      * Encrypts a text returning the result as a base64 string
+     *
+     * @param mixed      $text
+     * @param null|mixed $key
+     * @param mixed      $safe
      */
     public function encryptBase64($text, $key = null, $safe = false)
     {
-        if ($safe == true) {
+        if ($safe === true) {
             return strtr(base64_encode($this->encrypt($text, $key)), '+/', '-_');
         }
 
@@ -371,10 +393,14 @@ class Crypt implements EncryptionInterface
 
     /**
      * Decrypt a text that is coded as a base64 string
+     *
+     * @param mixed      $text
+     * @param null|mixed $key
+     * @param mixed      $safe
      */
     public function decryptBase64($text, $key = null, $safe = false)
     {
-        if ($safe == true) {
+        if ($safe === true) {
             return $this->decrypt(base64_decode(strtr($text, '-_', '+/')), $key);
         }
 

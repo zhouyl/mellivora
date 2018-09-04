@@ -50,7 +50,8 @@ trait HasTimestamps
     /**
      * Set the value of the "created at" attribute.
      *
-     * @param  mixed   $value
+     * @param mixed $value
+     *
      * @return $this
      */
     public function setCreatedAt($value)
@@ -63,7 +64,8 @@ trait HasTimestamps
     /**
      * Set the value of the "updated at" attribute.
      *
-     * @param  mixed   $value
+     * @param mixed $value
+     *
      * @return $this
      */
     public function setUpdatedAt($value)

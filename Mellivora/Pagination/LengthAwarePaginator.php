@@ -31,11 +31,12 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     /**
      * Create a new paginator instance.
      *
-     * @param  mixed    $items
-     * @param  int      $total
-     * @param  int      $perPage
-     * @param  int|null $currentPage
-     * @param  array    $options       (path, query, fragment, pageName)
+     * @param mixed    $items
+     * @param int      $total
+     * @param int      $perPage
+     * @param null|int $currentPage
+     * @param array    $options     (path, query, fragment, pageName)
+     *
      * @return void
      */
     public function __construct($items, $total, $perPage, $currentPage = null, array $options = [])
@@ -47,7 +48,7 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
         $this->total       = $total;
         $this->perPage     = $perPage;
         $this->lastPage    = (int) ceil($total / $perPage);
-        $this->path        = $this->path != '/' ? rtrim($this->path, '/') : $this->path;
+        $this->path        = $this->path !== '/' ? rtrim($this->path, '/') : $this->path;
         $this->currentPage = $this->setCurrentPage($currentPage, $this->pageName);
         $this->items       = $items instanceof Collection ? $items : Collection::make($items);
     }
@@ -55,8 +56,9 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     /**
      * Get the current page for the request.
      *
-     * @param  int    $currentPage
-     * @param  string $pageName
+     * @param int    $currentPage
+     * @param string $pageName
+     *
      * @return int
      */
     protected function setCurrentPage($currentPage, $pageName)
@@ -69,8 +71,9 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     /**
      * Render the paginator using the given view.
      *
-     * @param  string   $view
-     * @param  array    $data
+     * @param string $view
+     * @param array  $data
+     *
      * @return string
      */
     public function links($view = null, $data = [])
@@ -81,8 +84,9 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     /**
      * Render the paginator using the given view.
      *
-     * @param  string   $view
-     * @param  array    $data
+     * @param string $view
+     * @param array  $data
+     *
      * @return string
      */
     public function render($view = null, $data = [])
@@ -144,7 +148,7 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     /**
      * Get the URL for the next page.
      *
-     * @return string|null
+     * @return null|string
      */
     public function nextPageUrl()
     {
@@ -196,7 +200,8 @@ class LengthAwarePaginator extends AbstractPaginator implements Arrayable, Array
     /**
      * Convert the object to its JSON representation.
      *
-     * @param  int      $options
+     * @param int $options
+     *
      * @return string
      */
     public function toJson($options = 0)

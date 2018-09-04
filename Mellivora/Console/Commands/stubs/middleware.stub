@@ -8,7 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class DummyClass
 {
-
     /**
      * @param \Mellivora\Application\Container $container
      */
@@ -25,9 +24,10 @@ class DummyClass
     /**
      * Invoke middleware
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request
-     * @param  \Psr\Http\Message\ResponseInterface      $response
-     * @param  \Closure                                $next
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Closure                                 $next
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)

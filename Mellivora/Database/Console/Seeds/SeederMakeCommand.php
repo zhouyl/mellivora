@@ -50,7 +50,7 @@ class SeederMakeCommand extends GeneratorCommand
     /**
      * Get the name suffix
      *
-     * @return string|false
+     * @return false|string
      */
     protected function getNameSuffix()
     {
@@ -60,7 +60,8 @@ class SeederMakeCommand extends GeneratorCommand
     /**
      * Get the destination class path.
      *
-     * @param  string   $name
+     * @param string $name
+     *
      * @return string
      */
     protected function getPath($name)
@@ -71,7 +72,8 @@ class SeederMakeCommand extends GeneratorCommand
     /**
      * Parse the class name and format according to the root namespace.
      *
-     * @param  string   $name
+     * @param string $name
+     *
      * @return string
      */
     protected function qualifyClass($name)

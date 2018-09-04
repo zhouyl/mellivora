@@ -7,45 +7,49 @@ trait CompilesAuthorizations
     /**
      * Compile the can statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileCan($expression)
     {
-        return "<?php if (app(\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
+        return "<?php if (app(\\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
     }
 
     /**
      * Compile the cannot statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileCannot($expression)
     {
-        return "<?php if (app(\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
+        return "<?php if (app(\\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
     }
 
     /**
      * Compile the else-can statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileElsecan($expression)
     {
-        return "<?php elseif (app(\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
+        return "<?php elseif (app(\\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->check{$expression}): ?>";
     }
 
     /**
      * Compile the else-cannot statements into valid PHP.
      *
-     * @param  string   $expression
+     * @param string $expression
+     *
      * @return string
      */
     protected function compileElsecannot($expression)
     {
-        return "<?php elseif (app(\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
+        return "<?php elseif (app(\\Mellivora\\Contracts\\Auth\\Access\\Gate::class)->denies{$expression}): ?>";
     }
 
     /**

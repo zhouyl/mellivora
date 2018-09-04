@@ -17,7 +17,8 @@ trait ManagesLoops
     /**
      * Add new loop to the stack.
      *
-     * @param  \Countable|array $data
+     * @param array|\Countable $data
+     *
      * @return void
      */
     public function addLoop($data)
@@ -32,7 +33,7 @@ trait ManagesLoops
             'remaining' => isset($length) ? $length : null,
             'count'     => $length,
             'first'     => true,
-            'last'      => isset($length) ? $length == 1 : null,
+            'last'      => isset($length) ? $length === 1 : null,
             'depth'     => count($this->loopsStack) + 1,
             'parent'    => $parent ? (object) $parent : null,
         ];
@@ -50,9 +51,9 @@ trait ManagesLoops
         $this->loopsStack[$index] = array_merge($this->loopsStack[$index], [
             'iteration' => $loop['iteration'] + 1,
             'index'     => $loop['iteration'],
-            'first'     => $loop['iteration'] == 0,
+            'first'     => $loop['iteration'] === 0,
             'remaining' => isset($loop['count']) ? $loop['remaining'] - 1 : null,
-            'last'      => isset($loop['count']) ? $loop['iteration'] == $loop['count'] - 1 : null,
+            'last'      => isset($loop['count']) ? $loop['iteration'] === $loop['count'] - 1 : null,
         ]);
     }
 
@@ -69,7 +70,7 @@ trait ManagesLoops
     /**
      * Get an instance of the last loop in the stack.
      *
-     * @return \stdClass|null
+     * @return null|\stdClass
      */
     public function getLastLoop()
     {

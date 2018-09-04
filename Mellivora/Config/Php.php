@@ -12,7 +12,8 @@ class Php extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string               $file
+     * @param string $file
+     *
      * @throws \RuntimeExceptionn
      */
     public function __construct($file)

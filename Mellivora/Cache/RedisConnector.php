@@ -8,11 +8,10 @@ use Symfony\Component\Cache\Simple\RedisCache;
 /**
  * redis 缓存连接器
  *
- * @link https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html
+ * @see https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html
  */
 class RedisConnector extends Connector
 {
-
     /**
      * 配置参数
      *
@@ -32,10 +31,15 @@ class RedisConnector extends Connector
     public function getCacheAdapter()
     {
         $client = RedisAdapter::createConnection(
-            $this->config['dsn'], $this->config['options']);
+            $this->config['dsn'],
+            $this->config['options']
+        );
 
         return new RedisAdapter(
-            $client, $this->config['namespace'], $this->config['lifetime']);
+            $client,
+            $this->config['namespace'],
+            $this->config['lifetime']
+        );
     }
 
     /**
@@ -44,10 +48,14 @@ class RedisConnector extends Connector
     public function getSimpleCacheAdapter()
     {
         $client = RedisCache::createConnection(
-            $this->config['dsn'], $this->config['options']);
+            $this->config['dsn'],
+            $this->config['options']
+        );
 
         return new RedisCache(
-            $client, $this->config['namespace'], $this->config['lifetime']);
+            $client,
+            $this->config['namespace'],
+            $this->config['lifetime']
+        );
     }
-
 }

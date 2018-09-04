@@ -132,7 +132,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Create a new Eloquent model instance.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     public function __construct(array $attributes = [])
@@ -203,8 +204,10 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Fill the model with an array of attributes.
      *
-     * @param  array                                                  $attributes
+     * @param array $attributes
+     *
      * @throws \Mellivora\Database\Eloquent\MassAssignmentException
+     *
      * @return $this
      */
     public function fill(array $attributes)
@@ -230,7 +233,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Fill the model with an array of attributes. Force mass assignment.
      *
-     * @param  array   $attributes
+     * @param array $attributes
+     *
      * @return $this
      */
     public function forceFill(array $attributes)
@@ -243,7 +247,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Remove the table name from a given key.
      *
-     * @param  string   $key
+     * @param string $key
+     *
      * @return string
      */
     protected function removeTableFromKey($key)
@@ -254,8 +259,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Create a new instance of the given model.
      *
-     * @param  array    $attributes
-     * @param  bool     $exists
+     * @param array $attributes
+     * @param bool  $exists
+     *
      * @return static
      */
     public function newInstance($attributes = [], $exists = false)
@@ -277,8 +283,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Create a new model instance that is existing.
      *
-     * @param  array       $attributes
-     * @param  string|null $connection
+     * @param array       $attributes
+     * @param null|string $connection
+     *
      * @return static
      */
     public function newFromBuilder($attributes = [], $connection = null)
@@ -295,7 +302,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Begin querying the model on a given connection.
      *
-     * @param  string|null                            $connection
+     * @param null|string $connection
+     *
      * @return \Mellivora\Database\Eloquent\Builder
      */
     public static function on($connection = null)
@@ -325,7 +333,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Get all of the models from the database.
      *
-     * @param  array|mixed                                        $columns
+     * @param array|mixed $columns
+     *
      * @return \Mellivora\Database\Eloquent\Collection|static[]
      */
     public static function all($columns = ['*'])
@@ -338,7 +347,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Begin querying a model with eager loading.
      *
-     * @param  array|string                                  $relations
+     * @param array|string $relations
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public static function with($relations)
@@ -351,7 +361,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Eager load relations on the model.
      *
-     * @param  array|string $relations
+     * @param array|string $relations
+     *
      * @return $this
      */
     public function load($relations)
@@ -368,9 +379,10 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Increment a column's value by a given amount.
      *
-     * @param  string $column
-     * @param  int    $amount
-     * @param  array  $extra
+     * @param string $column
+     * @param int    $amount
+     * @param array  $extra
+     *
      * @return int
      */
     protected function increment($column, $amount = 1, array $extra = [])
@@ -381,9 +393,10 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Decrement a column's value by a given amount.
      *
-     * @param  string $column
-     * @param  int    $amount
-     * @param  array  $extra
+     * @param string $column
+     * @param int    $amount
+     * @param array  $extra
+     *
      * @return int
      */
     protected function decrement($column, $amount = 1, array $extra = [])
@@ -394,10 +407,11 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Run the increment or decrement method on the model.
      *
-     * @param  string $column
-     * @param  int    $amount
-     * @param  array  $extra
-     * @param  string $method
+     * @param string $column
+     * @param int    $amount
+     * @param array  $extra
+     * @param string $method
+     *
      * @return int
      */
     protected function incrementOrDecrement($column, $amount, $extra, $method)
@@ -411,21 +425,23 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $this->incrementOrDecrementAttributeValue($column, $amount, $method);
 
         return $query->where(
-            $this->getKeyName(), $this->getKey()
+            $this->getKeyName(),
+            $this->getKey()
         )->{$method}($column, $amount, $extra);
     }
 
     /**
      * Increment the underlying attribute value and sync with original.
      *
-     * @param  string $column
-     * @param  int    $amount
-     * @param  string $method
+     * @param string $column
+     * @param int    $amount
+     * @param string $method
+     *
      * @return void
      */
     protected function incrementOrDecrementAttributeValue($column, $amount, $method)
     {
-        $this->{$column} = $this->{$column}+($method == 'increment' ? $amount : $amount * -1);
+        $this->{$column} = $this->{$column} + ($method === 'increment' ? $amount : $amount * -1);
 
         $this->syncOriginalAttribute($column);
     }
@@ -433,8 +449,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Update the model in the database.
      *
-     * @param  array  $attributes
-     * @param  array  $options
+     * @param array $attributes
+     * @param array $options
+     *
      * @return bool
      */
     public function update(array $attributes = [], array $options = [])
@@ -477,7 +494,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Save the model to the database.
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return bool
      */
     public function save(array $options = [])
@@ -519,8 +537,10 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Save the model to the database using transaction.
      *
-     * @param  array        $options
+     * @param array $options
+     *
      * @throws \Throwable
+     *
      * @return bool
      */
     public function saveOrFail(array $options = [])
@@ -533,7 +553,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Perform any actions that are necessary after the model is saved.
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return void
      */
     protected function finishSave(array $options)
@@ -550,7 +571,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Perform a model update operation.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder $query
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     *
      * @return bool
      */
     protected function performUpdate(Builder $query)
@@ -586,7 +608,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Set the keys for a save update query.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder   $query
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     *
      * @return \Mellivora\Database\Eloquent\Builder
      */
     protected function setKeysForSaveQuery(Builder $query)
@@ -611,7 +634,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Perform a model insert operation.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder $query
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     *
      * @return bool
      */
     protected function performInsert(Builder $query)
@@ -662,8 +686,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Insert the given attributes and set the ID on the model.
      *
-     * @param  \Mellivora\Database\Eloquent\Builder $query
-     * @param  array                                $attributes
+     * @param \Mellivora\Database\Eloquent\Builder $query
+     * @param array                                $attributes
+     *
      * @return void
      */
     protected function insertAndSetId(Builder $query, $attributes)
@@ -676,7 +701,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Destroy the models for the given IDs.
      *
-     * @param  array|int $ids
+     * @param array|int $ids
+     *
      * @return int
      */
     public static function destroy($ids)
@@ -691,11 +717,11 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         // We will actually pull the models from the database table and call delete on
         // each of them individually so that their events get fired properly with a
         // correct set of attributes in case the developers wants to check these.
-        $key = with($instance = new static )->getKeyName();
+        $key = with($instance = new static)->getKeyName();
 
         foreach ($instance->whereIn($key, $ids)->get() as $model) {
             if ($model->delete()) {
-                $count++;
+                ++$count;
             }
         }
 
@@ -706,7 +732,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      * Delete the model from the database.
      *
      * @throws \Exception
-     * @return bool|null
+     *
+     * @return null|bool
      */
     public function delete()
     {
@@ -747,7 +774,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      *
      * This method protects developers from running forceDelete when trait is missing.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function forceDelete()
     {
@@ -808,7 +835,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Get a new query instance without a given scope.
      *
-     * @param  \Mellivora\Database\Eloquent\Scope|string $scope
+     * @param \Mellivora\Database\Eloquent\Scope|string $scope
+     *
      * @return \Mellivora\Database\Eloquent\Builder
      */
     public function newQueryWithoutScope($scope)
@@ -821,7 +849,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  \Mellivora\Database\Query\Builder             $query
+     * @param \Mellivora\Database\Query\Builder $query
+     *
      * @return \Mellivora\Database\Eloquent\Builder|static
      */
     public function newEloquentBuilder($query)
@@ -839,14 +868,17 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         $connection = $this->getConnection();
 
         return new QueryBuilder(
-            $connection, $connection->getQueryGrammar(), $connection->getPostProcessor()
+            $connection,
+            $connection->getQueryGrammar(),
+            $connection->getPostProcessor()
         );
     }
 
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param  array                                     $models
+     * @param array $models
+     *
      * @return \Mellivora\Database\Eloquent\Collection
      */
     public function newCollection(array $models = [])
@@ -857,11 +889,12 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Create a new pivot model instance.
      *
-     * @param  \Mellivora\Database\Eloquent\Model             $parent
-     * @param  array                                          $attributes
-     * @param  string                                         $table
-     * @param  bool                                           $exists
-     * @param  string|null                                    $using
+     * @param \Mellivora\Database\Eloquent\Model $parent
+     * @param array                              $attributes
+     * @param string                             $table
+     * @param bool                               $exists
+     * @param null|string                        $using
+     *
      * @return \Mellivora\Database\Eloquent\Relations\Pivot
      */
     public function newPivot(Model $parent, array $attributes, $table, $exists, $using = null)
@@ -883,8 +916,10 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Convert the model instance to JSON.
      *
-     * @param  int                                                  $options
+     * @param int $options
+     *
      * @throws \Mellivora\Database\Eloquent\JsonEncodingException
+     *
      * @return string
      */
     public function toJson($options = 0)
@@ -911,8 +946,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Reload a fresh model instance from the database.
      *
-     * @param  array|string  $with
-     * @return static|null
+     * @param array|string $with
+     *
+     * @return null|static
      */
     public function fresh($with = [])
     {
@@ -929,7 +965,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Clone the model into a new, non-existing instance.
      *
-     * @param  array|null                           $except
+     * @param null|array $except
+     *
      * @return \Mellivora\Database\Eloquent\Model
      */
     public function replicate(array $except = null)
@@ -941,10 +978,11 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         ];
 
         $attributes = Arr::except(
-            $this->attributes, $except ? array_unique(array_merge($except, $defaults)) : $defaults
+            $this->attributes,
+            $except ? array_unique(array_merge($except, $defaults)) : $defaults
         );
 
-        return tap(new static , function ($instance) use ($attributes) {
+        return tap(new static, function ($instance) use ($attributes) {
             $instance->setRawAttributes($attributes);
 
             $instance->setRelations($this->relations);
@@ -954,7 +992,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Determine if two models have the same ID and belong to the same table.
      *
-     * @param  \Mellivora\Database\Eloquent\Model $model
+     * @param \Mellivora\Database\Eloquent\Model $model
+     *
      * @return bool
      */
     public function is(Model $model)
@@ -987,7 +1026,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Set the connection associated with the model.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return $this
      */
     public function setConnection($name)
@@ -1000,7 +1040,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Resolve a connection instance.
      *
-     * @param  string|null                      $connection
+     * @param null|string $connection
+     *
      * @return \Mellivora\Database\Connection
      */
     public static function resolveConnection($connection = null)
@@ -1021,7 +1062,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Set the connection resolver instance.
      *
-     * @param  \Mellivora\Database\ConnectionResolverInterface $resolver
+     * @param \Mellivora\Database\ConnectionResolverInterface $resolver
+     *
      * @return void
      */
     public static function setConnectionResolver(Resolver $resolver)
@@ -1056,7 +1098,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Set the table associated with the model.
      *
-     * @param  string  $table
+     * @param string $table
+     *
      * @return $this
      */
     public function setTable($table)
@@ -1079,7 +1122,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Set the primary key for the model.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return $this
      */
     public function setKeyName($key)
@@ -1122,7 +1166,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Set whether IDs are incrementing.
      *
-     * @param  bool    $value
+     * @param bool $value
+     *
      * @return $this
      */
     public function setIncrementing($value)
@@ -1175,7 +1220,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Set the number of models to return per page.
      *
-     * @param  int     $perPage
+     * @param int $perPage
+     *
      * @return $this
      */
     public function setPerPage($perPage)
@@ -1188,7 +1234,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Dynamically retrieve attributes on the model.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function __get($key)
@@ -1199,8 +1246,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Dynamically set attributes on the model.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return void
      */
     public function __set($key, $value)
@@ -1211,52 +1259,57 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Determine if the given attribute exists.
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists($offset)
     {
-        return isset($this->$offset);
+        return isset($this->{$offset});
     }
 
     /**
      * Get the value for a given offset.
      *
-     * @param  mixed   $offset
+     * @param mixed $offset
+     *
      * @return mixed
      */
     public function offsetGet($offset)
     {
-        return $this->$offset;
+        return $this->{$offset};
     }
 
     /**
      * Set the value for a given offset.
      *
-     * @param  mixed  $offset
-     * @param  mixed  $value
+     * @param mixed $offset
+     * @param mixed $value
+     *
      * @return void
      */
     public function offsetSet($offset, $value)
     {
-        $this->$offset = $value;
+        $this->{$offset} = $value;
     }
 
     /**
      * Unset the value for a given offset.
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
+     *
      * @return void
      */
     public function offsetUnset($offset)
     {
-        unset($this->$offset);
+        $this->{$offset} = null;
     }
 
     /**
      * Determine if an attribute or relation exists on the model.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     public function __isset($key)
@@ -1267,7 +1320,8 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Unset an attribute on the model.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return void
      */
     public function __unset($key)
@@ -1278,29 +1332,31 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     /**
      * Handle dynamic method calls into the model.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)
     {
         if (in_array($method, ['increment', 'decrement'])) {
-            return $this->$method(...$parameters);
+            return $this->{$method}(...$parameters);
         }
 
-        return $this->newQuery()->$method(...$parameters);
+        return $this->newQuery()->{$method}(...$parameters);
     }
 
     /**
      * Handle dynamic static method calls into the method.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public static function __callStatic($method, $parameters)
     {
-        return (new static )->$method(...$parameters);
+        return (new static )->{$method}(...$parameters);
     }
 
     /**

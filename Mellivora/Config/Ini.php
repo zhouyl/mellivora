@@ -10,8 +10,9 @@ class Ini extends NativeArray
     /**
      * 构造方法
      *
-     * @param  string                             $file
-     * @param  integer                            $mode   INI_SCANNER_NORMAL|INI_SCANNER_RAW
+     * @param string $file
+     * @param int    $mode INI_SCANNER_NORMAL|INI_SCANNER_RAW
+     *
      * @throws \Mellivora\Config\ParseException
      */
     public function __construct($file, $mode = INI_SCANNER_RAW)
@@ -20,6 +21,7 @@ class Ini extends NativeArray
 
         if ($data === false) {
             $error = error_get_last();
+
             throw new ParseException($error);
         }
 
@@ -58,6 +60,9 @@ class Ini extends NativeArray
      *      ],
      * ];
      * </code>
+     *
+     * @param mixed $path
+     * @param mixed $value
      */
     protected function parseIniString($path, $value)
     {
@@ -77,7 +82,8 @@ class Ini extends NativeArray
     /**
      * php 对 ini 的解释有不到位的地方，部分值转换需要手动处理
      *
-     * @param  mixed   $ini
+     * @param mixed $ini
+     *
      * @return mixed
      */
     protected function cast($ini)
@@ -91,16 +97,19 @@ class Ini extends NativeArray
         if (is_string($ini)) {
             if (in_array(strtolower($ini), ['true', 'yes', 'on'])) {
                 return true;
-            } elseif (in_array(strtolower($ini), ['false', 'no', 'off'])) {
+            }
+            if (in_array(strtolower($ini), ['false', 'no', 'off'])) {
                 return false;
-            } elseif (in_array(strtolower($ini), ['', 'null'])) {
+            }
+            if (in_array(strtolower($ini), ['', 'null'])) {
                 return null;
-            } elseif (is_numeric($ini)) {
+            }
+            if (is_numeric($ini)) {
                 if (preg_match('/[.]+/', $ini)) {
-                    return (double) $ini;
-                } else {
-                    return (integer) $ini;
+                    return (float) $ini;
                 }
+
+                return (int) $ini;
             }
         }
 

@@ -5,7 +5,6 @@ namespace Mellivora\Validation;
 use BadMethodCallException;
 use Closure;
 use Mellivora\Support\Arr;
-use Mellivora\Validation\Valid;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -35,7 +34,6 @@ use ReflectionMethod;
  */
 class Validator
 {
-
     /**
      * 待校验数据
      *
@@ -60,7 +58,8 @@ class Validator
     /**
      * 工厂方法，快速创建一个数据校验器
      *
-     * @param  array                             $data
+     * @param array $data
+     *
      * @return \Mellivora\Validation\Validator
      */
     public static function factory(array $data)
@@ -81,10 +80,11 @@ class Validator
     /**
      * 新增校验规则
      *
-     * @param  string                            $field
-     * @param  callable                          $rule
-     * @param  mixed                             $params
-     * @param  string|null                       $message
+     * @param string      $field
+     * @param callable    $rule
+     * @param mixed       $params
+     * @param null|string $message
+     *
      * @return \Mellivora\Validation\Validator
      */
     public function rule($field, callable $rule, $params = null, $message = null)
@@ -102,7 +102,7 @@ class Validator
     /**
      * 检查校验结果是否存在错误
      *
-     * @return boolean
+     * @return bool
      */
     public function check()
     {
@@ -119,7 +119,7 @@ class Validator
             $value = Arr::get($this->data, $field);
 
             // 当规则为非空校验时，如果值为空，则不进行判断
-            if ($rule != $required && !Valid::required($value)) {
+            if ($rule !== $required && !Valid::required($value)) {
                 continue;
             }
 
@@ -136,9 +136,10 @@ class Validator
     /**
      * 获得有效的验证参数
      *
-     * @param  mixed   $params
-     * @param  mixed   $rule
-     * @param  mixed   $value
+     * @param mixed $params
+     * @param mixed $rule
+     * @param mixed $value
+     *
      * @return array
      */
     protected function normalizeParams($params, $rule, $value)
@@ -222,9 +223,11 @@ class Validator
     /**
      * 通过魔术方法，调用 Valid 类进行校验
      *
-     * @param  string                            $method
-     * @param  array                             $arguments
+     * @param string $method
+     * @param array  $arguments
+     *
      * @throws \BadMethodCallException
+     *
      * @return \Mellivora\Validation\Validator
      */
     public function __call($method, array $arguments)

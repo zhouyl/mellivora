@@ -8,11 +8,10 @@ use Symfony\Component\Cache\Simple\MemcachedCache;
 /**
  * memcached 缓存连接器
  *
- * @link https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html
+ * @see https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html
  */
 class MemcachedConnector extends Connector
 {
-
     /**
      * 配置参数
      *
@@ -36,10 +35,15 @@ class MemcachedConnector extends Connector
     public function getCacheAdapter()
     {
         $client = MemcachedAdapter::createConnection(
-            $this->config['servers'], $this->config['options']);
+            $this->config['servers'],
+            $this->config['options']
+        );
 
         return new MemcachedAdapter(
-            $client, $this->config['namespace'], $this->config['lifetime']);
+            $client,
+            $this->config['namespace'],
+            $this->config['lifetime']
+        );
     }
 
     /**
@@ -48,10 +52,14 @@ class MemcachedConnector extends Connector
     public function getSimpleCacheAdapter()
     {
         $client = MemcachedCache::createConnection(
-            $this->config['servers'], $this->config['options']);
+            $this->config['servers'],
+            $this->config['options']
+        );
 
         return new MemcachedCache(
-            $client, $this->config['namespace'], $this->config['lifetime']);
+            $client,
+            $this->config['namespace'],
+            $this->config['lifetime']
+        );
     }
-
 }

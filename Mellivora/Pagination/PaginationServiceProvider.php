@@ -6,12 +6,12 @@ use Mellivora\Support\ServiceProvider;
 
 class PaginationServiceProvider extends ServiceProvider
 {
-
     /**
      * Register a view file namespace.
      *
-     * @param  string $path
-     * @param  string $namespace
+     * @param string $path
+     * @param string $namespace
+     *
      * @return void
      */
     protected function loadViewsFrom($path, $namespace)

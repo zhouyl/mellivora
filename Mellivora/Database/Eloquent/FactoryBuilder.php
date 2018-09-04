@@ -55,7 +55,7 @@ class FactoryBuilder
      *
      * @var null|int
      */
-    protected $amount = null;
+    protected $amount;
 
     /**
      * Create an new builder instance.

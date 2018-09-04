@@ -24,7 +24,6 @@ $fixers = [
     ],
     'escape_implicit_backslashes'  => true,
     'explicit_indirect_variable'   => true,
-    'explicit_string_variable' => false,
     'fully_qualified_strict_types' => true,
     'heredoc_to_nowdoc'            => true,
     'list_syntax'                  => [
@@ -78,7 +77,6 @@ $fixers = [
     'php_unit_test_case_static_method_calls'      => [
         'call_type' => 'this',
     ],
-    'php_unit_test_class_requires_covers'           => false,
     'phpdoc_add_missing_param_annotation'           => true,
     'phpdoc_align'                                  => true,
     'phpdoc_no_empty_return'                        => false,
@@ -94,9 +92,7 @@ $fixers = [
     'string_line_ending'                            => true,
     'trailing_comma_in_multiline_array'             => true,
     'yoda_style'                                    => false,
-    'ordered_class_elements'                      => false,
-    'no_empty_comment'=> false,
-    'no_null_property_initialization'=> false,
+    'no_empty_comment'                              => false,
 ];
 
 $finder = PhpCsFixer\Finder::create()

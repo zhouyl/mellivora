@@ -2,6 +2,7 @@
     "name": "mellivora/mellivora",
     "type": "library",
     "description": "Mellivora PHP Framework",
+    "version": "8.0.0",
     "keywords": ["framework", "micro", "slim", "laravel", "symfony", "mellivora", "claw"],
     "homepage": "https://github.com/zhouyl/mellivora",
     "license": "MIT",
@@ -12,17 +13,23 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
-        "slim/slim": "^3.8",
-        "doctrine/inflector": "^1.1",
-        "symfony/cache": "~3.3",
-        "symfony/console": "~3.3",
-        "symfony/debug": "~3.3",
-        "symfony/http-foundation": "~3.3",
-        "nesbot/carbon": "^2.35"
+        "php": "^8.3",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "slim/slim": "4.*",
+        "guzzlehttp/psr7": "^2.7",
+        "illuminate/database": "^11.17",
+        "illuminate/view": "^11.17",
+        "illuminate/collections": "^11.17",
+        "illuminate/encryption": "^11.17",
+        "illuminate/events": "^11.17",
+        "illuminate/pagination": "^11.17",
+        "illuminate/support": "^11.17",
+        "illuminate/contracts": "^11.17",
+        "illuminate/console": "^11.17"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "~2"
+        "friendsofphp/php-cs-fixer": "^3.4"
     },
     "autoload": {
         "psr-4": {
@@ -33,6 +40,14 @@
         ]
     },
     "scripts": {
-        "phpcs": "./vendor/bin/php-cs-fixer fix -v --diff --dry-run;"
-    }
+        "phpcs": "./vendor/bin/php-cs-fixer fix -v --diff --dry-run;",
+        "phpcs-fix": "./vendor/bin/php-cs-fixer fix -v;"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
